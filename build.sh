@@ -1,5 +1,5 @@
 #!/bin/sh
-cd ../
-mkdir output
-cp -R ./frontend/* ./output
-cp -R ./output ./frontend/b
+set -e
+
+mkdir -p output
+cp -R ./* ./output
