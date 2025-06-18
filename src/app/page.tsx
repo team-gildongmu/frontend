@@ -1,10 +1,13 @@
-import styles from "./page.module.css";
+"use client";
+
+import { useGetTestDataQuery } from "@/queries/test/useGetTestData";
 
 export default function Home() {
+  // const { data } = useGetTestDataQuery();
   return (
-    <div className={styles.page}>
-      <main className={styles.main}></main>
-      <footer className={styles.footer}></footer>
-    </div>
+    <>
+      <h1>길동무</h1>
+      {/* {data} */}
+    </>
   );
 }

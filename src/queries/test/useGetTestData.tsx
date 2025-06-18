@@ -1,7 +1,7 @@
 import { getTestData } from "@/api/test";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-export const useGetUserAccessibleQuery = () => {
+export const useGetTestDataQuery = () => {
   return useQuery({
     queryKey: ["testData"],
     queryFn: () => getTestData(),
