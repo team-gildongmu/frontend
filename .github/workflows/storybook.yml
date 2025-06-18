@@ -4,7 +4,7 @@ run-name: ${{ github.actor }}의 스토리북 배포
 on:
   pull_request:
     branches:
-      - develop
+      - feature/#1
 
 jobs:
   storybook:
