@@ -2,6 +2,9 @@ name: Storybook Deployment
 run-name: ${{ github.actor }}의 스토리북 배포
 
 on:
+  push:
+    branches:
+      - feature/#1
   pull_request:
     branches:
       - feature/#1
