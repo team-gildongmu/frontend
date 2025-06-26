@@ -18,7 +18,7 @@ export default function RootLayout({
         <QueryProvider>
           <main
             style={{
-              maxWidth: "780px",
+              maxWidth: "390px",
               width: "100%",
               margin: "0 auto",
               padding: "20px",
