@@ -13,8 +13,10 @@ const Default = styled(Div)`
 
 const Font = styled(Default)``;
 
-const fonts = {
-  noto_300: Noto_Sans_KR({ weight: "300" }),
-};
+export const noto_300 = Noto_Sans_KR({
+  weight: "300",
+  subsets: ["latin"],
+});
+const fonts = { noto_300 };
 
 export { Font, fonts };
