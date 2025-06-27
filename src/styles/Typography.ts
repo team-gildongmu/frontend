@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Div } from "@/styles/BaseStyledTags";
-
+import { Noto_Sans_KR } from "next/font/google";
 
 const Default = styled(Div)`
   white-space: pre-line;
@@ -13,4 +13,8 @@ const Default = styled(Div)`
 
 const Font = styled(Default)``;
 
-export { Font };
+const fonts = {
+  noto_300: Noto_Sans_KR({ weight: "300" }),
+};
+
+export { Font, fonts };

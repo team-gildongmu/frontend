@@ -19,7 +19,9 @@ import {
   position,
   space,
   typography,
+  variant
 } from "styled-system";
+import { Config } from "./FontVariants";
 
 export interface ITypoProps {
   typo?: string;
@@ -34,7 +36,8 @@ const styles = compose(
   border,
   space,
   typography,
-  background
+  background,
+  variant(Config),
 );
 export interface ITagProps
   extends ColorProps,

@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import QueryProvider from "@/providers/QueryProvider";
+import { fonts } from "@/styles/Typography";
 
 export const metadata: Metadata = {
   title: "길동무",
@@ -14,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body>
+      <body className={fonts.noto_300.className}>
         <QueryProvider>
           <main
             style={{
