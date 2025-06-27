@@ -61,10 +61,6 @@ const Img = styled.img<ITagProps>`
   ${styles}
 `;
 
-const Video = styled.video<ITagProps>`
-  ${styles}
-`;
-
 const Span = styled.span<ITagProps>`
   ${styles}
 `;
@@ -140,5 +136,4 @@ export {
   Span,
   TextArea,
   Ul,
-  Video,
 };
