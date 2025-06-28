@@ -11,7 +11,7 @@ export default meta;
 export const AllTypes = () => {
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: "15px" }}>
-      {Object.entries(fonts).map(([name, value]) => (
+      {Object.entries(fonts).map(([name]) => (
         <div key={name} style={{ width: "120px", textAlign: "center" }}></div>
       ))}
     </div>
