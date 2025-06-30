@@ -12,7 +12,7 @@ const config: StorybookConfig = {
     "@storybook/addon-a11y",
   ],
   framework: {
-    name: "@storybook/nextjs", // Webpack 기반 Next.js Storybook 설정
+    name: "@storybook/nextjs",
     options: {},
   },
   staticDirs: [
