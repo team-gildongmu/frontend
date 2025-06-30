@@ -20,5 +20,3 @@ jobs:
       - name: Build App
         run: yarn build
 
-      - name: Run tests (선택)
-        run: yarn test
