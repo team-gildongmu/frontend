@@ -1,12 +1,11 @@
-name: Deploy
+name: Build and Deploy
 
 on:
   push:
-    branches:
-      - main
+  pull_request:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,11 +18,12 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Build project
+      - name: Build App
         run: yarn build
 
+      # 실배포는 main 브랜치에 push될 때만 실행
       - name: Push to another repository
-        id: push_directory
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
