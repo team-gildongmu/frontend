@@ -2,7 +2,6 @@ name: Storybook Build and Deploy
 
 on:
   push:
-  pull_request:
 
 jobs:
   storybook:
@@ -22,27 +21,19 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      # main이 아닌 브랜치에 push될 때만 빌드
       - name: Build Storybook
+        if: github.ref != 'refs/heads/main'
         run: yarn build-storybook
 
       - name: Build App
+        if: github.ref != 'refs/heads/main'
         run: yarn build
 
-      # PR일 때는 Chromatic 배포는 하지 않고 빌드만 검증
-
-      # main 브랜치에 push된 경우에만 Chromatic에 Storybook 배포
+      # main 브랜치에 push될 때만 배포
       - name: Publish to Chromatic
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main'
         uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      # PR일 때 Storybook URL 코멘트 (빌드만 하므로 실제 URL은 없을 수도 있음)
-      - name: Comment PR with Storybook URL
-        if: github.event_name == 'pull_request'
-        uses: thollander/actions-comment-pull-request@v1
-        with:
-          message: "✅ Storybook 빌드 완료되었습니다."
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

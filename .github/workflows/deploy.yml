@@ -11,15 +11,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Remove .git directory to prevent repo corruption
-        run: rm -rf .git
+      - name: Remove .git directory and workflows to prevent repo corruption and double build
+        run: |
+          rm -rf .git
+          rm -rf .github/workflows
 
       - name: Sync entire repo to personal fork using cpina
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.PERSONAL_AUTO_ACTION_TOKEN }}
         with:
-          source-directory: "."  # 레포 전체 (BUT .git 제거 후 복사)
+          source-directory: "."  # 레포 전체 (BUT .git, .github/workflows 제거 후 복사)
           destination-github-username: "kelly6226"
           destination-repository-name: "frontend"
           user-email: ${{ secrets.EMAIL }}
