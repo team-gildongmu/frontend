@@ -17,7 +17,7 @@ jobs:
       - name: Sync entire repo to personal fork using cpina
         uses: cpina/github-action-push-to-another-repository@main
         env:
-          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
+          API_TOKEN_GITHUB: ${{ secrets.PERSONAL_AUTO_ACTION_TOKEN }}
         with:
           source-directory: "."  # 레포 전체 (BUT .git 제거 후 복사)
           destination-github-username: "kelly6226"
