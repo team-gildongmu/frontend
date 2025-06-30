@@ -17,5 +17,5 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "${{ secrets.EMAIL }}"
-          git remote add personal https://kelly6226:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/kelly6226/frontend.git
+          git remote add personal https://kelly6226:${{ secrets.AUTO_ACTIONS }}@github.com/kelly6226/frontend.git
           git push personal main --force
