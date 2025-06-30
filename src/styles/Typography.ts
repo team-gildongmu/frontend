@@ -1,3 +1,5 @@
+'use client'
+
 import styled from "styled-components";
 import { Div } from "@/styles/BaseStyledTags";
 import { Noto_Sans_KR } from "next/font/google";

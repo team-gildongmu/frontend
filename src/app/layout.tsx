@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 import type { Metadata } from "next";
-import QueryProvider from "@/providers/QueryProvider";
-import { fonts } from "@/styles/Typography";
+import { Providers } from "@/providers/Providers";
+import ClientLayout from "@/styles/ClientLayout";
 
 export const metadata: Metadata = {
   title: "길동무",
@@ -15,20 +15,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className={fonts.noto_300.className}>
-        <QueryProvider>
-          <main
-            style={{
-              maxWidth: "780px",
-              width: "100%",
-              margin: "0 auto",
-              padding: "20px",
-              minHeight: "100vh",
-            }}
-          >
-            {children}
-          </main>
-        </QueryProvider>
+      <body>
+        <ClientLayout>
+          <Providers>
+            <main
+              style={{
+                maxWidth: "780px",
+                width: "100%",
+                margin: "0 auto",
+                padding: "20px",
+                minHeight: "100vh",
+              }}
+            >
+              {children}
+            </main>
+          </Providers>
+        </ClientLayout>
       </body>
     </html>
   );
