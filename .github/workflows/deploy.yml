@@ -1,4 +1,4 @@
-name: Sync main to personal fork
+name: Sync main to personal fork with cpina
 
 on:
   push:
@@ -10,12 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Push organization main to personal repo main
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "${{ secrets.EMAIL }}"
-          git remote add personal https://kelly6226:${{ secrets.AUTO_ACTIONS }}@github.com/kelly6226/frontend.git
-          git push personal main --force
+      - name: Sync entire repo to personal fork using cpina
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        with:
+          source-directory: "."  # 레포 전체
+          destination-github-username: "kelly6226"
+          destination-repository-name: "frontend"
+          user-email: ${{ secrets.EMAIL }}
+          commit-message: "Sync main from organization repo: ${{ github.sha }}"
+          target-branch: main
