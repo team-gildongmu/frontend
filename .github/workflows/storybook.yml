@@ -1,9 +1,6 @@
 name: Storybook Deployment
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -11,8 +8,6 @@ on:
 jobs:
   storybook:
     runs-on: ubuntu-latest
-    outputs:
-      status: ${{ job.status }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -20,19 +15,23 @@ jobs:
           fetch-depth: 0
 
       - name: Cache dependencies
-        id: cache
         uses: actions/cache@v3
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-storybook
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install
 
+      - name: Build Storybook
+        run: yarn build-storybook
+
+      - name: Build App
+        run: yarn build
+
       - name: Publish to Chromatic
-        id: chromatic
         uses: chromaui/action@v1
+        if: github.event_name == 'pull_request' # PR에서만 Chromatic 실행
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
