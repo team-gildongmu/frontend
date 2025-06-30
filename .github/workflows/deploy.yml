@@ -18,8 +18,10 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Build App
-        run: yarn build
+      - name: Build and export static site
+        run: |
+          yarn build
+          yarn export
 
       # 실배포는 main 브랜치에 push될 때만 실행
       - name: Push to another repository
@@ -28,7 +30,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
         with:
-          source-directory: "output"
+          source-directory: "out"
           destination-github-username: "kelly6226"
           destination-repository-name: "frontend"
           user-email: ${{ secrets.EMAIL }}
