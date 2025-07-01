@@ -5,6 +5,7 @@ export const Header = () => <HeaderContainer>헤더 영역입니다</HeaderConta
 const HeaderContainer = styled.header`
   width: 100%;
   max-width: 780px;
+  height: 41px;
   background-color: beige;
   position: fixed;
   top: 0;

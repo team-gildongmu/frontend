@@ -8,7 +8,8 @@ export default function Footer() {
 const FooterContainer = styled.footer`
   width: 100%;
   max-width: 780px;
-  background-color: blueviolet;
+  height: 47px;
+  background-color: skyblue;
   position: fixed;
   bottom: 0;
   z-index: 100;
