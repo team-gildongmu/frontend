@@ -1,7 +1,8 @@
-"use client";
-
+import { CenterColumn } from "@/styles/BaseComponents";
 import React from "react";
 
 export default function LoginScreen() {
-  return <div>LoginScreen</div>;
+  return <CenterColumn>
+    
+  </CenterColumn>;
 }
