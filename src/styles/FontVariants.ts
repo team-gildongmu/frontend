@@ -5,6 +5,18 @@ interface ITypoProps {
 const Config = {
   prop: "typo",
   variants: {
+    m01_bold_m: { // Main Logo
+      fontFamily: "Nunito-Extra, sans-serif", 
+      fontWeight: "700",
+      fontSize: "35px",
+      lineHeight: "normal",
+    },
+    m01_m: { // Header-logo
+      fontFamily: "Nunito-Extra, sans-serif", 
+      fontWeight: "400",
+      fontSize: "12px",
+      lineHeight: "normal",
+    },
     c01_m: { // 캡션 주석등
       fontFamily: "Noto Sans KR, sans-serif",
       fontWeight: "500",
