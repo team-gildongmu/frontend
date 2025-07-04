@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Providers } from "@/providers/Providers";
 import ClientLayout from "@/styles/ClientLayout";
 import { Layout } from "@/component/common/Layout";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "길동무",
@@ -19,7 +20,9 @@ export default function RootLayout({
       <body>
         <ClientLayout>
           <Providers>
-            <Layout>{children}</Layout>
+            <Suspense>
+              <Layout>{children}</Layout>
+            </Suspense>
           </Providers>
         </ClientLayout>
       </body>
