@@ -1,5 +1,6 @@
 import { CenterColumn } from "@/styles/BaseComponents";
 import { Img } from "@/styles/BaseStyledTags";
+import { Font } from "@/styles/Typography";
 import React from "react";
 
 export default function LoginScreen() {
@@ -11,6 +12,7 @@ export default function LoginScreen() {
 
   return (
     <CenterColumn>
+      <Font typo="m01_bold_m" color="blue_500">My Road</Font>
       <Img
         src="/login/kakao_login_ko.png"
         width="80%"
