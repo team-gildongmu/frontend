@@ -1,4 +1,4 @@
-import { CenterColumn } from "@/styles/BaseComponents";
+import { CenterColumn, Column } from "@/styles/BaseComponents";
 import { Img } from "@/styles/BaseStyledTags";
 import { Font } from "@/styles/Typography";
 import React from "react";
@@ -11,13 +11,17 @@ export default function LoginScreen() {
   };
 
   return (
-    <CenterColumn>
-      <Font typo="m01_bold_m" color="blue_500">My Road</Font>
-      <Img
-        src="/login/kakao_login_ko.png"
-        width="80%"
-        onClick={onClickKakaoLogin}
-      />
-    </CenterColumn>
+    <Column width="100%" height="100%">
+      <CenterColumn pt="106px" gridGap="28px">
+        <Font typo="m01_bold_m" color="blue_500">
+          My Road
+        </Font>
+        <Img
+          src="/login/kakao_login_ko.png"
+          width="80%"
+          onClick={onClickKakaoLogin}
+        />
+      </CenterColumn>
+    </Column>
   );
 }
