@@ -1,36 +1,29 @@
-name: Deploy
+name: Sync main to personal fork with cpina
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
 
 jobs:
-  build:
+  sync:
     runs-on: ubuntu-latest
-    container: pandoc/latex
     steps:
-      - uses: actions/checkout@v2
-      - name: Install mustache (to update the date)
-        run: apk add ruby && gem install mustache
+      - uses: actions/checkout@v4
 
-      - name: creates output
-        run: sh ./build.sh
+      - name: Remove .git directory and workflows to prevent repo corruption and double build
+        run: |
+          rm -rf .git
+          rm -rf .github/workflows
 
-      - name: Pushes to another repository
-        id: push_directory
+      - name: Sync entire repo to personal fork using cpina
         uses: cpina/github-action-push-to-another-repository@main
-
         env:
-          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
-
+          API_TOKEN_GITHUB: ${{ secrets.PERSONAL_AUTO_ACTION_TOKEN }}
         with:
-          source-directory: "output"
+          source-directory: "."  # 레포 전체 (BUT .git, .github/workflows 제거 후 복사)
           destination-github-username: "kelly6226"
           destination-repository-name: "frontend"
           user-email: ${{ secrets.EMAIL }}
-          commit-message: ${{ github.event.commits[0].message }}
-
+          commit-message: "Sync main from organization repo: ${{ github.sha }}"
           target-branch: main
-
-      - name: Test get variable exported by push-to-another-repository
-        run: echo $DESTINATION_CLONED_DIRECTORY

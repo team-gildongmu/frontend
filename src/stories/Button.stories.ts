@@ -1,7 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
-import { fn } from "storybook/test";
-
+import type { Meta, StoryObj } from "@storybook/nextjs";
 import { Button } from "./Button";
 
 const meta = {
@@ -14,7 +11,7 @@ const meta = {
   argTypes: {
     backgroundColor: { control: "color" },
   },
-  args: { onClick: fn() },
+  args: {},
 } satisfies Meta<typeof Button>;
 
 export default meta;

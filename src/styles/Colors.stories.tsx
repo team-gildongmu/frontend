@@ -1,5 +1,5 @@
 import React from "react";
-import type { Meta } from "@storybook/nextjs-vite";
+import type { Meta } from "@storybook/nextjs";
 import colors from "@/styles/Colors";
 
 const meta: Meta = {
