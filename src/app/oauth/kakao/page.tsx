@@ -8,3 +8,4 @@ export default function KakaoLogin() {
 
   return <div>code 입니다. {code}</div>;
 }
+
