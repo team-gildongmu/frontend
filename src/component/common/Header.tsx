@@ -1,22 +1,36 @@
-import {HeaderContainer, LanguageBtn} from "./Header.styles"
-import Image from "next/image"
+import { useState } from "react";
+import { HeaderContainer, LanguageBtn, HeaderLogo, Depth } from "./Header.styles";
+import Image from "next/image";
 
-export const Header = () => (
-  <HeaderContainer>
-    <h1>My Road</h1>
-    <ul>
-      <li className="btn__depth">
-        <LanguageBtn>
-         <Image src="/language-button/language-button(ko).png" alt="logo" width={100} height={100}/>
-        </LanguageBtn>
-      </li>
-      <li className="depth">
-        <a href="">중국어</a>
-        <a href="">한국어</a>
-        <a href="">영어</a>
-      </li>
-    </ul>
-  </HeaderContainer>
-)
+export const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
+  const toggleTrigger = () => {
+    setIsOpen((prev) => !prev);
+  };
 
+  return (
+    <HeaderContainer>
+      <HeaderLogo>My Road</HeaderLogo>
+      <ul>
+        <li className="btn_depth">
+          <LanguageBtn onClick={toggleTrigger}>
+            <Image
+              src="/language-button/language-button(ko).png"
+              alt="logo"
+              width={40}
+              height={40}
+            />
+          </LanguageBtn>
+        </li>
+        {isOpen && (
+          <Depth>
+            <div>중국어</div>
+            <div>한국어</div>
+            <div>영어</div>
+          </Depth>
+        )}
+      </ul>
+    </HeaderContainer>
+  );
+};

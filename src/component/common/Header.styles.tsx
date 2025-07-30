@@ -3,20 +3,34 @@ import styled from "styled-components"
 export const HeaderContainer = styled.header`
   width: 100%;
   max-width: 780px;
-  height: 41px;
-  background-color: beige;
+  background-color: #fff;
   position: fixed;
   top: 0;
   z-index: 9999;
   display: flex;
   justify-content: space-between;
-  padding: 0 20px;
+  align-items: center;
+  padding: 8px 20px;
 `;
+
+export const HeaderLogo = styled.h1`
+ font-weight: extra-bold;
+ font-size: 15px;
+ color: #0047AB;
+`
 
 export const LanguageBtn = styled.button`
   border: none;
   width: 23px;
   height: auto;
   display: block;
-  
+  position: relative;
+`
+export const Depth = styled.li`
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  position: absolute;
+  top: 58px;
+  right:0;
 `
