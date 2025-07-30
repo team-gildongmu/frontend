@@ -34,3 +34,17 @@ export const Depth = styled.li`
   top: 58px;
   right:0;
 `
+
+export const DepthBtn = styled.button`
+  display: block;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #999;
+  padding: 3px 0;
+
+  &:hover {
+    text-decoration: underline;
+    color: black;
+  }
+`

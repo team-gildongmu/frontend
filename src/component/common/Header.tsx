@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HeaderContainer, LanguageBtn, HeaderLogo, Depth } from "./Header.styles";
+import { HeaderContainer, LanguageBtn, HeaderLogo, Depth, DepthBtn } from "./Header.styles";
 import Image from "next/image";
 
 export const Header = () => {
@@ -8,6 +8,11 @@ export const Header = () => {
   const toggleTrigger = () => {
     setIsOpen((prev) => !prev);
   };
+  
+  const languageChange = () => {
+    // 언어 변경시에 UI 변경 코드 삽입
+  }
+
 
   return (
     <HeaderContainer>
@@ -25,9 +30,9 @@ export const Header = () => {
         </li>
         {isOpen && (
           <Depth>
-            <div>중국어</div>
-            <div>한국어</div>
-            <div>영어</div>
+            <DepthBtn onClick={languageChange}>중국어</DepthBtn>
+            <DepthBtn onClick={languageChange}>한국어</DepthBtn>
+            <DepthBtn onClick={languageChange}>영어</DepthBtn>
           </Depth>
         )}
       </ul>
