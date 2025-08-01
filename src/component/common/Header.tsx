@@ -11,14 +11,14 @@ export const Header = () => {
   
   const languageChange = () => {
     // 언어 변경시에 UI 변경 코드 삽입
+    setIsOpen(false)
   }
 
 
   return (
     <HeaderContainer>
       <HeaderLogo>My Road</HeaderLogo>
-      <ul>
-        <li className="btn_depth">
+        <div>
           <LanguageBtn onClick={toggleTrigger}>
             <Image
               src="/language-button/language-button(ko).png"
@@ -27,7 +27,7 @@ export const Header = () => {
               height={40}
             />
           </LanguageBtn>
-        </li>
+        </div>
         {isOpen && (
           <Depth>
             <DepthBtn onClick={languageChange}>중국어</DepthBtn>
@@ -35,7 +35,6 @@ export const Header = () => {
             <DepthBtn onClick={languageChange}>영어</DepthBtn>
           </Depth>
         )}
-      </ul>
     </HeaderContainer>
   );
 };

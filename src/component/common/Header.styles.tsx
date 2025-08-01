@@ -26,7 +26,7 @@ export const LanguageBtn = styled.button`
   display: block;
   position: relative;
 `
-export const Depth = styled.li`
+export const Depth = styled.ul`
   background-color: #fff;
   border: 1px solid #ddd;
   padding: 5px 10px;
@@ -35,7 +35,7 @@ export const Depth = styled.li`
   right:0;
 `
 
-export const DepthBtn = styled.button`
+export const DepthBtn = styled.li`
   display: block;
   border: none;
   background: none;
