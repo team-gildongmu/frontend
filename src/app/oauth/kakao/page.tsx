@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { usePostUserMutation } from "@/queries/auth/usePostUserMutation";
+import { routes } from "@/utils/routes";
 
 export default function KakaoLogin() {
   const searchParams = useSearchParams();
@@ -14,8 +15,7 @@ export default function KakaoLogin() {
     if (code) {
       postUserMutation(code);
     }
-    router.push("/");
-
+    router.push(routes.home);
   }, [code]);
 
   return <div>code 입니다. {code}</div>;
