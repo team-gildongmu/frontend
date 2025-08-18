@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { useShallow } from 'zustand/react/shallow';
-import { tokenStorage } from '@/utils/tokenStorage';
+import Cookies from 'js-cookie';
+import { C } from '@/constants/storage';
 import { KakaoLoginResponse } from '@/types/auth';
 
 interface AuthState {
@@ -25,7 +26,6 @@ const useAuthStore = create<AuthState>()(
       isLoading: true,
 
       login: (userData: KakaoLoginResponse) => {
-        tokenStorage.setTokens(userData.accessToken);
         set({
           user: userData.user,
           isAuthenticated: true,
@@ -33,12 +33,10 @@ const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        tokenStorage.clearTokens();
         set({
           user: null,
           isAuthenticated: false,
         });
-        window.location.href = '/login';
       },
 
       setUser: (user) => {
@@ -53,10 +51,8 @@ const useAuthStore = create<AuthState>()(
       },
 
       initialize: () => {
-        const hasTokens = tokenStorage.hasTokens();
-        if (hasTokens) {
-          // 여기서 사용자 정보를 가져오는 API를 호출할 수 있습니다
-          // 현재는 토큰만 확인하고 인증 상태를 true로 설정
+        const hasToken = !!Cookies.get(C.AUTH_TOKEN_KEY);
+        if (hasToken) {
           set({
             isAuthenticated: true,
             isLoading: false,
@@ -74,7 +70,6 @@ const useAuthStore = create<AuthState>()(
   ),
 );
 
-// 효율적인 selector hooks
 export const useAuthUser = () => useAuthStore(useShallow((store) => store.user));
 export const useAuthStatus = () => useAuthStore(useShallow((store) => store.isAuthenticated));
 export const useAuthLoading = () => useAuthStore(useShallow((store) => store.isLoading));

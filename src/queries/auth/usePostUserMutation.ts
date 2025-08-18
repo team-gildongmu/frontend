@@ -1,16 +1,16 @@
 import { getKakaoLogin } from "@/api/auth";
 import { useMutation } from "@tanstack/react-query";
-import { useAuthActions } from "@/stores/authStore";
+import useAuth from "@/hooks/useAuth";
 
 export const usePostUserMutation = () => {
-  const { login } = useAuthActions();
+  const { authorize } = useAuth();
 
   return useMutation({
     mutationKey: ["fetchUser"],
     mutationFn: (code: string) => getKakaoLogin(code),
     onSuccess: (res) => {
       if (res.success && res.data) {
-        login(res.data);
+        authorize(res.data.user, res.data.accessToken);
         console.log("로그인 성공, 토큰 저장 완료");
       }
     },

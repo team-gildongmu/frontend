@@ -1,5 +1,6 @@
 import axios from "axios";
-import { tokenStorage } from "@/utils/tokenStorage";
+import Cookies from "js-cookie";
+import { C } from "@/constants/storage";
 
 export const baseApi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -8,7 +9,7 @@ export const baseApi = axios.create({
 
 baseApi.interceptors.request.use(
   (config) => {
-    const accessToken = tokenStorage.getAccessToken();
+    const accessToken = Cookies.get(C.AUTH_TOKEN_KEY);
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -23,8 +24,7 @@ baseApi.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
-      // 토큰이 만료된 경우 로그아웃 처리
-      tokenStorage.clearTokens();
+      Cookies.remove(C.AUTH_TOKEN_KEY, { path: '/' });
       window.location.href = '/login';
     }
 
