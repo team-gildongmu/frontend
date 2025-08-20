@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-// import { Home, Star, Settings, MessageCircle } from 'lucide-react'
 import * as S from './CarouselTabs.styles'
 
 type TabItem = {

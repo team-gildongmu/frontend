@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
     overflow-x: auto;
     padding: 0.5rem;
     border-bottom: #999;
+    white-space: nowrap;
     -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
