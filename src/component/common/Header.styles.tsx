@@ -10,7 +10,7 @@ export const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 20px;
+  padding: 2px 20px;
 `;
 
 export const HeaderLogo = styled.h1`

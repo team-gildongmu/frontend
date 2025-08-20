@@ -4,7 +4,7 @@ export const FooterContainer = styled.footer`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 70px;
+  height: 47px;
   max-width: 780px;
 
   background-color: white;
@@ -33,7 +33,6 @@ export const NavItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 6px;
   font-size: 12px;
   color: #666;
 `;
@@ -45,7 +44,7 @@ export const Icon = styled.div<{ $index: number; $active: boolean }>`
   background-size: 123px 48px;
   background-position: ${({ $index, $active }) =>
     `-${$index * 24}px ${$active ? "0" : "24px"}`};
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 `;
 
 export const Label = styled.span<{$active: boolean}>`
