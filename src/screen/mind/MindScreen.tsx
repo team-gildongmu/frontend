@@ -1,12 +1,17 @@
 import CarouselTabs from "@/component/mind/CarouselTabs";
-import { MindCard } from "@/component/mind/MindCard";
+import MindCardWrap from "@/component/mind/MindCardWrap";
+import styled from "styled-components";
+
+const MindWrap = styled.div`
+    height: 100%;
+    width: 100%;
+`
 
 export default function MindScreen () {
-// screen 단위에서 어떻게 보일지 만들어 주면 됨
     return(
-        <>
+        <MindWrap>
             <CarouselTabs />
-            <MindCard/>
-        </>
+            <MindCardWrap/>
+        </MindWrap>
     )   
 }
