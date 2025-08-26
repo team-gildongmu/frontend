@@ -19,7 +19,7 @@ export default function useAuth() {
     });
   };
 
-  const logout = async (redirect = "/") => {
+  const logout = (redirect = "/") => {
     removeCookie(C.AUTH_TOKEN_KEY, { path: "/" });
 
     window.location.replace(redirect);
