@@ -9,7 +9,7 @@ import { KakaoLoginResponse } from "@/types/auth";
 
 export const getKakaoLogin = async (
   code: string
-): Promise<APIResponse<KakaoLoginResponse>> => {
+): Promise<KakaoLoginResponse> => {
   try {
     const response = await baseApi.post<APIResponse<KakaoLoginResponse>>(
       "/auth/kakao/callback",
@@ -17,7 +17,7 @@ export const getKakaoLogin = async (
         code,
       }
     );
-    return response.data;
+    return response.data as unknown as KakaoLoginResponse;
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);
