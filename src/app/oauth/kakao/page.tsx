@@ -14,7 +14,7 @@ export default function KakaoLogin() {
     if (code) {
       postUserMutation(code);
     }
-    // router.push("/");
+    router.push("/");
   }, [code]);
 
   return <></>;
