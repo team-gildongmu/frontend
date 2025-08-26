@@ -9,10 +9,9 @@ export const usePostUserMutation = () => {
     mutationKey: ["fetchUser"],
     mutationFn: (code: string) => getKakaoLogin(code),
     onSuccess: (res) => {
-      if (res.success && res.data) {
-        authorize(res.data.accessToken);
-        console.log("로그인 성공, 토큰 저장 완료");
-      }
+      authorize(res.access_token);
+      
+      console.log("로그인 성공, 토큰 저장 완료");
     },
   });
 };
