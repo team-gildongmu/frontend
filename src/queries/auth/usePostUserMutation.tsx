@@ -10,8 +10,6 @@ export const usePostUserMutation = () => {
     mutationFn: (code: string) => getKakaoLogin(code),
     onSuccess: (res) => {
       authorize(res.access_token);
-      
-      console.log("로그인 성공, 토큰 저장 완료");
     },
   });
 };
