@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { CenterColumn, Column } from "@/styles/BaseComponents";
+import { Column } from "@/styles/BaseComponents";
 
 import Category from "@/component/myroad/list/Category";
 import ListItem from "@/component/myroad/list/ListItem";

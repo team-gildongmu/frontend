@@ -7,8 +7,9 @@ import React from "react";
 export default function TagWrapper({ tags }: { tags: string[] }) {
   return (
     <Row width="100%" flexWrap="wrap" gridGap="5px">
-      {tags.map((tag) => (
+      {tags.map((tag, index) => (
         <Div
+          key={index}
           backgroundColor={colors.yellow_300}
           borderRadius="10px"
           padding="4px"
