@@ -25,15 +25,15 @@ export const LanguageBtn = styled.button`
   height: auto;
   display: block;
   position: relative;
-`
+`;
 export const Depth = styled.ul`
   background-color: #fff;
   border: 1px solid #ddd;
   padding: 5px 10px;
   position: absolute;
   top: 58px;
-  right:0;
-`
+  right: 0;
+`;
 
 export const DepthBtn = styled.li`
   display: block;
@@ -47,4 +47,4 @@ export const DepthBtn = styled.li`
     text-decoration: underline;
     color: black;
   }
-`
+`;
