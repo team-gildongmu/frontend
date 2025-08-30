@@ -66,6 +66,10 @@ export default function Category() {
       px="15px"
       gridGap="6px"
       overflow="auto"
+      position="sticky"
+      top="0"
+      zIndex="10"
+      backgroundColor="white"
     >
       {categories.map((category) => (
         <CenterColumn

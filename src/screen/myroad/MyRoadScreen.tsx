@@ -8,6 +8,9 @@ export default function MyRoadScreen() {
   return (
     <CenterColumn width="100%" height="100%">
       <Category />
+      <CenterColumn width="100%" height="100%">
+        qldjTdma
+      </CenterColumn>
     </CenterColumn>
   );
 }
