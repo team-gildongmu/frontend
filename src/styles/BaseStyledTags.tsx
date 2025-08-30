@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import styled, { css } from "styled-components";
 import {
@@ -21,7 +21,7 @@ import {
   position,
   space,
   typography,
-  variant
+  variant,
 } from "styled-system";
 import { Config } from "./FontVariants";
 
@@ -39,7 +39,7 @@ const styles = compose(
   space,
   typography,
   background,
-  variant(Config),
+  variant(Config)
 );
 export interface ITagProps
   extends ColorProps,
@@ -128,17 +128,4 @@ export function withStyle<T = object>(Component: React.ComponentType<T>) {
   `;
 }
 
-export {
-  A,
-  Button,
-  Div,
-  I,
-  Img,
-  Input,
-  Li,
-  Ol,
-  Option,
-  Span,
-  TextArea,
-  Ul,
-};
+export { A, Button, Div, I, Img, Input, Li, Ol, Option, Span, TextArea, Ul };

@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const HeaderContainer = styled.header`
   width: 100%;
@@ -11,13 +11,14 @@ export const HeaderContainer = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 8px 20px;
+  height: 41px;
 `;
 
 export const HeaderLogo = styled.h1`
- font-weight: extra-bold;
- font-size: 15px;
- color: #0047AB;
-`
+  font-weight: extra-bold;
+  font-size: 15px;
+  color: #0047ab;
+`;
 
 export const LanguageBtn = styled.button`
   border: none;
@@ -25,15 +26,15 @@ export const LanguageBtn = styled.button`
   height: auto;
   display: block;
   position: relative;
-`
+`;
 export const Depth = styled.ul`
   background-color: #fff;
   border: 1px solid #ddd;
   padding: 5px 10px;
   position: absolute;
   top: 58px;
-  right:0;
-`
+  right: 0;
+`;
 
 export const DepthBtn = styled.li`
   display: block;
@@ -47,4 +48,4 @@ export const DepthBtn = styled.li`
     text-decoration: underline;
     color: black;
   }
-`
+`;

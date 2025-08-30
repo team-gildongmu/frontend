@@ -12,6 +12,7 @@
     "chromatic": "npx chromatic --project-token=chpt_78d51c6a0390b0f"
   },
   "dependencies": {
+    "@iconify/react": "^6.0.0",
     "@storybook/blocks": "^9.0.0-alpha.17",
     "@tanstack/react-query": "^5.80.7",
     "axios": "^1.10.0",
@@ -21,6 +22,7 @@
     "react-dom": "^19.0.0",
     "styled-components": "^6.1.18",
     "styled-system": "^5.1.5",
+    "swiper": "^11.2.10",
     "zustand": "^5.0.8"
   },
   "devDependencies": {

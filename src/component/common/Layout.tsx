@@ -20,7 +20,7 @@ const Main = styled.main`
   flex-direction: column;
   max-width: 780px;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   margin: 0 auto;
   position: relative;
 `;
@@ -31,6 +31,6 @@ const ContentContainer = styled(CenterColumn)`
   max-width: 780px;
   overflow-y: auto;
   padding-top: 41px; /* 실제 헤더 높이에 맞게 조정 필요 */
-  padding-bottom: 47px; /* 실제 헤더 높이에 맞게 조정 필요 */
+  padding-bottom: 70px; /* 실제 탭바 높이에 맞게 조정 필요 */
   min-height: 0;
 `;
