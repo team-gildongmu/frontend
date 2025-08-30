@@ -2,10 +2,7 @@ import { Icon as IconifyIcon } from "@iconify/react";
 import styled from "styled-components";
 import { ITagProps } from "@/styles/BaseStyledTags";
 
-// styled-system과 호환되는 Icon 컴포넌트
-const StyledIcon = styled(IconifyIcon)<ITagProps>`
-  /* styled-system props가 자동으로 적용됩니다 */
-`;
+const StyledIcon = styled(IconifyIcon)<ITagProps>``;
 
 interface IconProps extends ITagProps {
   icon: string;

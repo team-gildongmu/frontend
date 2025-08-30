@@ -14,8 +14,9 @@ const Default = styled(Div)`
   letter-spacing: -0.1px;
 `;
 
-const Font = styled(Default)<{ $active?: boolean }>`
-  color: ${({ $active }) => ($active ? colors.blue_500 : colors.gray_300)};
+const Font = styled(Default)<{ $active?: boolean; color?: string }>`
+  color: ${({ color, $active }) =>
+    color || ($active ? colors.blue_500 : colors.gray_300)};
 `;
 
 export const noto_kr = Noto_Sans_KR({
