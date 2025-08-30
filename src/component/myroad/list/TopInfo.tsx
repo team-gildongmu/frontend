@@ -3,6 +3,7 @@ import { Row } from "@/styles/BaseComponents";
 import { Font } from "@/styles/Typography";
 import colors from "@/styles/Colors";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 interface TopInfoProps {
   title: string;
@@ -10,6 +11,10 @@ interface TopInfoProps {
 }
 
 export default function TopInfo({ title, detailId }: TopInfoProps) {
+  const router = useRouter();
+  const onClickDetail = () => {
+    router.push(`/myroad/${detailId}`);
+  };
   return (
     <Row
       width="100%"
@@ -39,9 +44,11 @@ export default function TopInfo({ title, detailId }: TopInfoProps) {
         borderRadius="999px"
         padding="4px"
         flexShrink="0"
+        onClick={onClickDetail}
+        style={{ cursor: "pointer" }}
       >
         <Font typo="c01_m" color="blue_500">
-          상세코스 {detailId}
+          상세코스
         </Font>
         <Icon
           icon="line-md:logout"
