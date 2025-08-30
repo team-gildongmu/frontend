@@ -1,10 +1,12 @@
 import { Column } from "@/styles/BaseComponents";
-import { Font } from "@/styles/Typography";
-import Image from "next/image";
+
 import React from "react";
+
 import colors from "@/styles/Colors";
+
 import TopInfo from "@/component/myroad/list/TopInfo";
-import ImgSwiper from "./ImgSwiper";
+import ImgSwiper from "@/component/myroad/list/ImgSwiper";
+import TagWrapper from "@/component/myroad/list/TagWrapper";
 
 interface ListItemData {
   id: number;
@@ -32,23 +34,7 @@ export default function ListItem({
     >
       <TopInfo title={listItemData.title} detailId={listItemData.detailId} />
       <ImgSwiper img={listItemData.img} />
-      <Column width="100%" maxWidth="100%" flexShrink={0}>
-        <Font
-          typo="l01_m"
-          color="gray_500"
-          overflow="hidden"
-          display="-webkit-box"
-          style={{
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical" as any,
-            wordBreak: "break-word",
-            whiteSpace: "normal",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {listItemData.tags.join(" ")}
-        </Font>
-      </Column>
+      <TagWrapper tags={listItemData.tags} />
     </Column>
   );
 }
