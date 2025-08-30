@@ -62,7 +62,7 @@ export default function Category() {
     <Row
       height="47px"
       width="100%"
-      border={`1px solid ${colors.gray_300}`}
+      borderY={`1px solid ${colors.gray_300}`}
       px="15px"
       gridGap="6px"
       overflow="auto"
