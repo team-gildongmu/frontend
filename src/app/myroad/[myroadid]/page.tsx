@@ -1,13 +1,15 @@
 import React from "react";
 
 interface MyRoadDetailPageProps {
-  params: {
+  params: Promise<{
     myroadid: string;
-  };
+  }>;
 }
 
-export default function MyRoadDetailPage({ params }: MyRoadDetailPageProps) {
-  const { myroadid } = params;
+export default async function MyRoadDetailPage({
+  params,
+}: MyRoadDetailPageProps) {
+  const { myroadid } = await params;
 
   return (
     <div>
