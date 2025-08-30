@@ -20,7 +20,7 @@ const Main = styled.main`
   flex-direction: column;
   max-width: 780px;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   margin: 0 auto;
   position: relative;
 `;
