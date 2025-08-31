@@ -94,7 +94,7 @@ export default function Category() {
           />
 
           <Font
-            typo="c02_m"
+            typo="c01_m"
             color="gray_300"
             $active={selectedCategory.id === category.id}
           >
