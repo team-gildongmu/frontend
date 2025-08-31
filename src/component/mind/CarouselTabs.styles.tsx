@@ -1,10 +1,11 @@
 import styled, { css } from 'styled-components'
+import colors from '@/styles/Colors'
 
 export const Wrapper = styled.div`
     width: 100%;
-    background-color: #999;
     overflow-x: auto;
-    padding: 0.5rem;
+    padding: .5rem;
+    background-color: #888;
     border-bottom: #999;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
@@ -25,6 +26,7 @@ export const Icon = styled.div`
   height: 16px;
   background-color: yellow;
 `
+// icon 에 맞는 이미지 사이즈로
 
 export const TabButton = styled.button<{ isActive: boolean }>`
   display: inline-flex;
@@ -34,17 +36,17 @@ export const TabButton = styled.button<{ isActive: boolean }>`
   border-radius: 9999px;
   font-size: 14px;
   white-space: nowrap;
-  border: 1px solid #d1d5db;
+  border: 1px solid ${colors.gray_200};
   background-color: white;
-  color: #4b5563;
+  color: #999;
   transition: all 0.2s;
 
   ${(props) =>
     props.isActive &&
     css`
-      background-color: #3b82f6;
+      background-color: ${colors.blue_500};
       color: white;
-      border-color: #3b82f6;
+      border-color: ${colors.blue_500};
     `}
 
   &:hover {
