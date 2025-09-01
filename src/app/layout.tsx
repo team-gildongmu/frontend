@@ -8,6 +8,9 @@ import { Suspense } from "react";
 export const metadata: Metadata = {
   title: "길동무",
   description: "길동무 프론트엔드 페이지입니다",
+  icons: {
+    icon: "/seoImage.png",
+  },
 };
 
 export default function RootLayout({
