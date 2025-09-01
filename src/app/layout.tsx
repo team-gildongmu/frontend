@@ -11,6 +11,17 @@ export const metadata: Metadata = {
   icons: {
     icon: "/seoImage.png",
   },
+  openGraph: {
+    title: "길동무",
+    description: "길동무 프론트엔드 페이지입니다",
+    images: ["/seoImage.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "길동무",
+    description: "길동무 프론트엔드 페이지입니다",
+    images: ["/seoImage.png"],
+  },
 };
 
 export default function RootLayout({
