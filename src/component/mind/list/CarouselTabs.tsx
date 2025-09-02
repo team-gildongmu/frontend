@@ -27,7 +27,7 @@ export default function CarouselTabs() {
         {tabs.map((tab) => (
           <S.TabButton
             key={tab.id}
-            isActive={tab.id === activeTab}
+            $isActive={tab.id == activeTab}
             onClick={() => setActiveTab(tab.id)}
           >
             {tab.icon}

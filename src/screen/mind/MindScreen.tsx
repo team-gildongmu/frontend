@@ -1,5 +1,5 @@
-import CarouselTabs from "@/component/mind/CarouselTabs";
-import MindCardWrap from "@/component/mind/MindCardWrap";
+import CarouselTabs from "@/component/mind/list/CarouselTabs";
+import MindCardWrap from "@/component/mind/list/MindCardWrap";
 import styled from "styled-components";
 
 const MindWrap = styled.div`

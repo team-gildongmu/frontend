@@ -5,8 +5,8 @@ export const Wrapper = styled.div`
     width: 100%;
     overflow-x: auto;
     padding: .5rem;
-    background-color: #888;
-    border-bottom: #999;
+    border-bottom: 1px solid #999;
+    border-top: 1px solid #999;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
 
@@ -28,7 +28,7 @@ export const Icon = styled.div`
 `
 // icon 에 맞는 이미지 사이즈로
 
-export const TabButton = styled.button<{ isActive: boolean }>`
+export const TabButton = styled.button<{ $isActive: boolean }>`
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -42,7 +42,7 @@ export const TabButton = styled.button<{ isActive: boolean }>`
   transition: all 0.2s;
 
   ${(props) =>
-    props.isActive &&
+    props.$isActive &&
     css`
       background-color: ${colors.blue_500};
       color: white;
