@@ -18,6 +18,9 @@ export const HeaderLogo = styled.h1`
  font: ${Config.variants.m01_bold_m}
  color: #0047AB;
 `
+  padding: 8px 20px;
+  height: 41px;
+`;
 
 export const LanguageBtn = styled.button`
   border: none;
