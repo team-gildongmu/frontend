@@ -1,7 +1,18 @@
-export default function MindDetail () {
+"use client"
+interface Props {
+  id: number;
+}
+
+export default function MindDetail ({id}: Props) {
     return (
-      <>
-        <p>잘보이나 확인중</p>
-      </>
+      <div>
+        <ul>
+          <li>
+            <button>뒤로가기</button>
+            <title></title>
+          </li>
+        </ul>
+        <h4>{id}</h4>
+      </div>
     )
 }

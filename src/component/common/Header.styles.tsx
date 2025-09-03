@@ -1,3 +1,4 @@
+import { Config } from "@/styles/FontVariants";
 import styled from "styled-components"
 
 export const HeaderContainer = styled.header`
@@ -14,8 +15,7 @@ export const HeaderContainer = styled.header`
 `;
 
 export const HeaderLogo = styled.h1`
- font-weight: extra-bold;
- font-size: 15px;
+ font: ${Config.variants.m01_bold_m}
  color: #0047AB;
 `
 

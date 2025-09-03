@@ -1,9 +1,13 @@
 import MindDetail from "@/component/mind/detail/MindDetail";
 
-export default function MindDetailScreen() {
+interface Props {
+  id: number;
+}
+
+export default function MindDetailScreen({id}: Props) {
   return(
     <>
-        <MindDetail/>
+        <MindDetail id={id}/>
     </>
     )
 }

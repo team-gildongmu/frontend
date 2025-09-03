@@ -4,17 +4,26 @@ import * as C from "./MindCard.styles"
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function MindCard(){
+type MindCardProps = {
+  id: number;
+  title: string;
+  date: string;
+  weather: string;
+  image: string;
+};
+
+
+export function MindCard({ id, title, date, weather, image }: MindCardProps){
     const router = useRouter();
     const [open, setOpen] = useState(false);
 
     return(
             <C.Wrap>
                 <C.TitleWrap>
-                    <C.Title__l onClick={() => (router.push(`/mind/${2}`))}>
-                        <C.Title>📖 강릉에서의 멈춤</C.Title>
+                    <C.Title__l onClick={() => (router.push(`/mind/${id}`))}>
+                        <C.Title>{title}</C.Title>
                         <C.Date>
-                            <span>2025년 6월 5일, 맑음 ☀️</span>
+                            <span>{date}, {weather}</span>
                         </C.Date>
                     </C.Title__l>
                     <C.Title__r>
@@ -29,11 +38,8 @@ export function MindCard(){
                     </C.Title__r>
                 </C.TitleWrap>
                 <Image
-                    src="/mind-test-image/mind-test-image.png"
-                    width={500}
-                    height={300}
-                    alt="일기 사진"
-                    onClick={() => (router.push(`/mind/${2}`))}
+                    src={image} width={500} height={300} alt="일기 사진" 
+                    onClick={() => (router.push(`/mind/${id}`))}
                     />
             </C.Wrap>
     )

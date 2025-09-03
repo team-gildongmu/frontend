@@ -1,7 +1,8 @@
-"use client"
-
 import MindDetailScreen from "@/screen/mind/MindDetailScreen";
 
-export default function MindDetail(id: number) {
-  return <MindDetailScreen />;
+type PageProps  = Promise<{id: string}>
+
+export default async function MindDetail({ params }: {params:  PageProps}) {
+  const {id} = await params;
+  return <MindDetailScreen id={Number(id)}/>;
 }
