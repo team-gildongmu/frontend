@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import { Config } from "@/styles/FontVariants";
+import styled from "styled-components"
 
 export const HeaderContainer = styled.header`
   width: 100%;
@@ -10,14 +11,12 @@ export const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 20px;
-  height: 41px;
+  padding: 2px 20px;
 `;
 
 export const HeaderLogo = styled.h1`
-  font-weight: extra-bold;
-  font-size: 15px;
-  color: #0047ab;
+ font: ${Config.variants.m01_bold_m}
+ color: #0047AB;
 `;
 
 export const LanguageBtn = styled.button`
@@ -27,6 +26,7 @@ export const LanguageBtn = styled.button`
   display: block;
   position: relative;
 `;
+
 export const Depth = styled.ul`
   background-color: #fff;
   border: 1px solid #ddd;

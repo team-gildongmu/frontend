@@ -30,7 +30,7 @@ const ContentContainer = styled(CenterColumn)`
   width: 100%;
   max-width: 780px;
   overflow-y: auto;
-  padding-top: 41px; /* 실제 헤더 높이에 맞게 조정 필요 */
-  padding-bottom: 70px; /* 실제 탭바 높이에 맞게 조정 필요 */
+  padding-top: 47px; 
+  padding-bottom: 47px;
   min-height: 0;
 `;

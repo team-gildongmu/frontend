@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { HeaderContainer, LanguageBtn, HeaderLogo, Depth, DepthBtn } from "./Header.styles";
 import Image from "next/image";
+import Link from "next/link";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const toggleTrigger = () => {
-    setIsOpen((prev) => !prev);
-  };
-  
   const languageChange = () => {
     // 언어 변경시에 UI 변경 코드 삽입
     setIsOpen(false)
@@ -17,9 +13,9 @@ export const Header = () => {
 
   return (
     <HeaderContainer>
-      <HeaderLogo>My Road</HeaderLogo>
+      <HeaderLogo><Link href="/">My Road</Link></HeaderLogo>
         <div>
-          <LanguageBtn onClick={toggleTrigger}>
+          <LanguageBtn onClick={() => setIsOpen((prev) => !prev)}>
             <Image
               src="/language-button/language-button(ko).png"
               alt="logo"
