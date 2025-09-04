@@ -22,6 +22,19 @@ export const Title__l = styled.div`
 export const Title = styled.h4`
    font: ${Config.variants.l01_bold_m}
 `
+
+export const ScoreWrap = styled.h4`
+  display: flex;
+  gap: 4px;
+`
+
+export const Score = styled.span<{ filled: boolean }>`
+  font-size: 20px;
+  color: ${({ filled }) =>
+    filled ? colors.red_300 : colors.gray_500};
+  transition: color 0.2s ease-in-out;
+`;
+
 export const Date = styled.div`
     font: ${Config.variants.l01_m}
 `
