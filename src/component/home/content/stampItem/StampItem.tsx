@@ -1,5 +1,5 @@
 import { CenterColumn } from "@/styles/BaseComponents";
-import { Div, Img } from "@/styles/BaseStyledTags";
+import { Img } from "@/styles/BaseStyledTags";
 import { Font } from "@/styles/Typography";
 import React from "react";
 interface StampItemData {
