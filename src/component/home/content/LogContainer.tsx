@@ -12,6 +12,8 @@ export default function LogContainer() {
         "https://image.chosun.com/sitedata/image/201706/09/2017060903013_0.jpg",
       ],
       title: "🎨 루브르 박물관 관람 가이드",
+      description:
+        "루브르 박물관 관람 가이드루브르 박물관 관람 가이드루브르 박물관 관람 가이드루브르 박물관 관람 가이드",
       tags: [
         "#힐링",
         "#도심속",
@@ -33,6 +35,8 @@ export default function LogContainer() {
         "https://ojsfile.ohmynews.com/PHT_IMG_FILE/2023/1108/IE003225955_PHT.jpg",
       ],
       title: "서울 도심 속 가이드",
+      description:
+        "서울 도심 속 가이드서울 도심 속 가이드서울 도심 속 가이드서울 도심 속 가이드",
       tags: ["#혼자만의 시간", "#드라이브"],
       detailId: "14",
     },
@@ -45,6 +49,7 @@ export default function LogContainer() {
         "https://ojsfile.ohmynews.com/PHT_IMG_FILE/2023/1108/IE003225955_PHT.jpg",
       ],
       title: "홍콩 야경",
+      description: "",
       tags: ["#홍콩", "#혼자만의 시간"],
       detailId: "34",
     },
@@ -56,6 +61,7 @@ export default function LogContainer() {
       ],
       title:
         "바다 여행 긴 제목 예시 바다 여행 긴 제목 예시바다 여행 긴 제목 예시바다 여행 긴 제목 예시바다 여행 긴 제목 예시바다 여행 긴 제목 예시바다 여행 긴 제목 예시바다 여행 긴 제목 예시바다 여행 긴 제목 예시바다 여행 긴 제목 예시",
+      description: "디스크립션",
       tags: ["#혼자만의 시간", "#드라이브"],
       detailId: "2",
     },
@@ -68,8 +74,12 @@ export default function LogContainer() {
       gridTemplateColumns="repeat(2, 1fr)"
       gridGap="4px"
     >
-      {listItemData.map((item) => (
-        <ListItem key={item.id} listItemData={item} isMain={true} />
+      {listItemData.map((item, index) => (
+        <ListItem
+          key={`log-${item.id}-${index}`}
+          listItemData={item}
+          isMain={true}
+        />
       ))}
     </Grid>
   );
