@@ -1,10 +1,7 @@
 "use client";
 
-// 메인 홈 페이지
+import HomeScreen from "@/screen/home/HomeScreen";
+
 export default function Home() {
-  return (
-    <>
-      <h1>길동무</h1>
-    </>
-  );
+  return <HomeScreen />;
 }
