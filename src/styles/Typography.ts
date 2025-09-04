@@ -7,7 +7,7 @@ import colors from "./Colors";
 
 const Default = styled(Div)`
   white-space: pre-line;
-  font-family: "Noto Sans KR", sans-serif;
+
   word-break: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
