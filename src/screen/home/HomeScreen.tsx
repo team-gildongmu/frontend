@@ -20,7 +20,7 @@ export default function HomeScreen() {
   }, [currentTab]);
 
   const renderContent = () => {
-    switch (currentTab) {
+    switch (selectedTab) {
       case "review":
         return <ReviewContainer />;
       case "log":

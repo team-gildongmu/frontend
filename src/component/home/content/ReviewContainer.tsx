@@ -1,6 +1,6 @@
 import React from "react";
 import ReviewItem from "./reviewItem/ReviewItem";
-import { Column, Grid } from "@/styles/BaseComponents";
+import { Grid } from "@/styles/BaseComponents";
 
 export default function ReviewContainer() {
   const reviewItemData = [
