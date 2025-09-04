@@ -8,6 +8,7 @@ import TopInfo from "@/component/myroad/list/TopInfo";
 import ImgSwiper from "@/component/myroad/list/ImgSwiper";
 import TagWrapper from "@/component/myroad/list/TagWrapper";
 import Image from "next/image";
+import { Font } from "@/styles/Typography";
 
 interface ListItemData {
   id: number;
@@ -51,6 +52,26 @@ export default function ListItem({
         />
       ) : (
         <ImgSwiper img={listItemData.img} />
+      )}
+      {isMain && (
+        <Font
+          typo="c02_s"
+          color="black"
+          overflow="hidden"
+          m="5px 0"
+          display="-webkit-box"
+          style={{
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            wordBreak: "break-word",
+            whiteSpace: "normal",
+            textOverflow: "ellipsis",
+          }}
+        >
+          너무 좋습니다 간만에 산의 정기를 마시며 쉬고, 해안가를 걸어서 너무
+          좋았습니다. 해안가를 걸어서 너무 좋았습니다. 좋아요 좋아요 다음에 또
+          갈게요
+        </Font>
       )}
       <TagWrapper tags={listItemData.tags} isMain={isMain} />
     </Column>

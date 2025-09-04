@@ -67,8 +67,13 @@ const Config = {
       fontSize: "9px",
       lineHeight: "normal",
     },
+    c02_s: {
+      fontFamily: "Noto Sans KR, sans-serif",
+      fontWeight: "400",
+      fontSize: "7px",
+      lineHeight: "normal",
+    },
     c03_m: {
-      // 카테고리 텍스트
       fontFamily: "Noto Sans KR, sans-serif",
       fontWeight: "400",
       fontSize: "5px",
