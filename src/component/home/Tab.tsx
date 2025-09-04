@@ -6,13 +6,14 @@ import { styled } from "styled-components";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface TabProps {
-  selectedTab: string;
   setSelectedTab: (tab: string) => void;
 }
 
-export default function Tab({ selectedTab, setSelectedTab }: TabProps) {
+export default function Tab({ setSelectedTab }: TabProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const currentTab = searchParams.get("tab") || "review";
 
   const tabs = [
     { label: "후기", value: "review" },
@@ -20,8 +21,8 @@ export default function Tab({ selectedTab, setSelectedTab }: TabProps) {
     { label: "스탬프", value: "stamp" },
   ];
 
-  const onClickTab = (label: string, value: string) => {
-    setSelectedTab(label);
+  const onClickTab = (value: string) => {
+    setSelectedTab(value);
 
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", value);
@@ -44,8 +45,8 @@ export default function Tab({ selectedTab, setSelectedTab }: TabProps) {
           key={tab.value}
           typo="c01_m"
           color="gray_300"
-          onClick={() => onClickTab(tab.label, tab.value)}
-          $active={selectedTab === tab.label}
+          onClick={() => onClickTab(tab.value)}
+          $active={currentTab === tab.value}
         >
           {tab.label}
         </TabItem>

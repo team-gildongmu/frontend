@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
-import { CenterColumn } from "@/styles/BaseComponents";
+import { Column } from "@/styles/BaseComponents";
 import { Header } from "@/component/common/Header";
 import Footer from "@/component/common/Footer";
 
@@ -25,7 +25,7 @@ const Main = styled.main`
   position: relative;
 `;
 
-const ContentContainer = styled(CenterColumn)`
+const ContentContainer = styled(Column)`
   flex: 1;
   width: 100%;
   max-width: 780px;
@@ -33,4 +33,5 @@ const ContentContainer = styled(CenterColumn)`
   padding-top: 41px; /* 실제 헤더 높이에 맞게 조정 필요 */
   padding-bottom: 70px; /* 실제 탭바 높이에 맞게 조정 필요 */
   min-height: 0;
+  align-items: stretch;
 `;
