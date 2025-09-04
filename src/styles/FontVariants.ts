@@ -19,6 +19,13 @@ const Config = {
       fontSize: "12px",
       lineHeight: "normal",
     },
+    m01_sb_m: {
+      // Header-logo
+      fontFamily: "Noto Sans KR, sans-serif",
+      fontWeight: "700",
+      fontSize: "12px",
+      lineHeight: "normal",
+    },
     c01_m: {
       // 캡션 주석등
       fontFamily: "Noto Sans KR, sans-serif",
