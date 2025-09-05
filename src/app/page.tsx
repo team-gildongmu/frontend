@@ -1,5 +1,3 @@
-"use client";
-
 import HomeScreen from "@/screen/home/HomeScreen";
 
 export default function Home() {
