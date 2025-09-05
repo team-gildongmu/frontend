@@ -24,7 +24,12 @@ export default function BannerSection() {
   ];
 
   return (
-    <StyledSwiperContainer width="100%" position="relative" pt="15px">
+    <StyledSwiperContainer
+      width="100%"
+      position="relative"
+      pt="15px"
+      overflow="hidden"
+    >
       <Swiper
         modules={[Pagination, Autoplay]}
         slidesPerView="auto"
