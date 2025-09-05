@@ -12,6 +12,7 @@ export const HeaderContainer = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 2px 20px;
+  height: 47px;
 `;
 
 export const HeaderLogo = styled.h1`
