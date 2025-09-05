@@ -1,5 +1,9 @@
 import HomeScreen from "@/screen/home/HomeScreen";
 
-export default function Home() {
-  return <HomeScreen />;
+type Props = {
+  searchParams: { tab?: string }
+}
+
+export default function Home({ searchParams }: Props) {
+  return <HomeScreen searchParams={searchParams} />;
 }

@@ -1,20 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-
+import React, { useState, useEffect } from "react";
 import { Column } from "@/styles/BaseComponents";
-
 import BannerSection from "@/component/home/BannerSection";
 import Tab from "@/component/home/Tab";
 import LogContainer from "@/component/home/content/LogContainer";
 import StampContainer from "@/component/home/content/StampContainer";
 import ReviewContainer from "@/component/home/content/ReviewContainer";
 
-export default function HomeScreen() {
-  const searchParams = useSearchParams();
-  const currentTab = searchParams.get("tab") || "review";
+type Props = {
+  searchParams: { tab?: string }
+}
 
+export default function HomeScreen({ searchParams }: Props) {
+  const currentTab = searchParams.tab || "review";
   const [selectedTab, setSelectedTab] = useState(currentTab);
 
   useEffect(() => {
