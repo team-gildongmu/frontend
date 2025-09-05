@@ -1,25 +1,30 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Column } from "@/styles/BaseComponents";
-
 import BannerSection from "@/component/home/BannerSection";
 import Tab from "@/component/home/Tab";
 import LogContainer from "@/component/home/content/LogContainer";
 import StampContainer from "@/component/home/content/StampContainer";
 import ReviewContainer from "@/component/home/content/ReviewContainer";
 
-export default function HomeScreen() {
-  const searchParams = useSearchParams();
-  const currentTab = searchParams.get("tab") || "review";
+type Props = {
+  searchParams: { tab?: string }
+}
 
-  const [selectedTab, setSelectedTab] = useState(currentTab);
+export default function HomeScreen({ searchParams }: Props) {
+  const router = useRouter();
+  const [selectedTab, setSelectedTab] = useState("review");
 
   useEffect(() => {
-    setSelectedTab(currentTab);
-  }, [currentTab]);
+    const tab = searchParams.tab || "review";
+    setSelectedTab(tab);
+    
+    if (!searchParams.tab) {
+      router.replace("/?tab=review");
+    }
+  }, [searchParams.tab, router]);
 
   const renderContent = () => {
     switch (selectedTab) {

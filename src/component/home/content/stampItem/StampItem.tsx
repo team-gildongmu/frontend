@@ -1,6 +1,6 @@
 import { CenterColumn } from "@/styles/BaseComponents";
-import { Img } from "@/styles/BaseStyledTags";
 import { Font } from "@/styles/Typography";
+import Image from "next/image";
 import React from "react";
 interface StampItemData {
   id: number;
@@ -26,16 +26,17 @@ export default function StampItem({ item }: { item: StampItemData }) {
           {item.info}
         </Font>
         {item.hasPassStamp && (
-          <Img
+          <Image
             src="/home/stamp/passedIcon.svg"
-            width="80%"
-            height="80%"
-            position="absolute"
-            top="0"
-            left="0"
-            right="0"
-            bottom="0"
-            margin="auto"
+            alt="통과 스탬프"
+            fill
+            style={{
+              objectFit: "contain",
+              objectPosition: "center",
+              imageRendering: "crisp-edges",
+            }}
+            priority
+            unoptimized={true}
           />
         )}
       </CenterColumn>
