@@ -1,4 +1,3 @@
-// screen/home/HomeScreen.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -11,23 +10,21 @@ import StampContainer from "@/component/home/content/StampContainer";
 import ReviewContainer from "@/component/home/content/ReviewContainer";
 
 type Props = {
-  searchParams: { tab?: string };
-};
+  searchParams: { tab?: string }
+}
 
 export default function HomeScreen({ searchParams }: Props) {
   const router = useRouter();
-  const currentTab = searchParams.tab || "review";
-  const [selectedTab, setSelectedTab] = useState(currentTab);
+  const [selectedTab, setSelectedTab] = useState("review");
 
   useEffect(() => {
+    const tab = searchParams.tab || "review";
+    setSelectedTab(tab);
+    
     if (!searchParams.tab) {
       router.replace("/?tab=review");
     }
   }, [searchParams.tab, router]);
-
-  useEffect(() => {
-    setSelectedTab(currentTab);
-  }, [currentTab]);
 
   const renderContent = () => {
     switch (selectedTab) {
