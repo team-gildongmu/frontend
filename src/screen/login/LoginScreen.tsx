@@ -1,3 +1,5 @@
+"use client"
+
 import { CenterColumn, Column } from "@/styles/BaseComponents";
 import { Img } from "@/styles/BaseStyledTags";
 import { Font } from "@/styles/Typography";

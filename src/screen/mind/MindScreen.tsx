@@ -1,3 +1,5 @@
+"use client"
+
 import CarouselTabs from "@/component/mind/list/CarouselTabs";
 import MindCardWrap from "@/component/mind/list/MindCardWrap";
 import styled from "styled-components";
