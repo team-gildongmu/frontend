@@ -4,6 +4,7 @@ import { CenterColumn, Row } from "@/styles/BaseComponents";
 import { Font } from "@/styles/Typography";
 import colors from "@/styles/Colors";
 import Icon from "@/component/common/IconifyIcon";
+import { Z_INDEX } from "@/styles/ZIndex";
 
 export default function Category() {
   const [selectedCategory, setSelectedCategory] = useState({ id: 1 });
@@ -68,7 +69,7 @@ export default function Category() {
       overflow="auto"
       position="sticky"
       top="0"
-      zIndex="10"
+      zIndex={Z_INDEX.TAB}
       backgroundColor="white"
     >
       {categories.map((category) => (

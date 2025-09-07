@@ -2,6 +2,7 @@ import { CenterColumn } from "@/styles/BaseComponents";
 import { Font } from "@/styles/Typography";
 import Image from "next/image";
 import React from "react";
+import { Z_INDEX } from "@/styles/ZIndex";
 interface StampItemData {
   id: number;
   info: string;
@@ -21,7 +22,7 @@ export default function StampItem({ item }: { item: StampItemData }) {
         <Font
           typo="c01_m"
           color="black"
-          style={{ zIndex: 1, position: "relative" }}
+          style={{ zIndex: Z_INDEX.CONTENT, position: "relative" }}
         >
           {item.info}
         </Font>

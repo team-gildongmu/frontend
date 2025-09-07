@@ -4,6 +4,7 @@ import { Font } from "@/styles/Typography";
 import React from "react";
 import { styled } from "styled-components";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Z_INDEX } from "@/styles/ZIndex";
 
 interface TabProps {
   setSelectedTab: (tab: string) => void;
@@ -37,7 +38,7 @@ export default function Tab({ setSelectedTab }: TabProps) {
       overflow="auto"
       position="sticky"
       top="0"
-      zIndex="10"
+      zIndex={Z_INDEX.TAB}
       backgroundColor="white"
     >
       {tabs.map((tab) => (

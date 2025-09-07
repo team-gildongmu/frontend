@@ -1,11 +1,36 @@
-import { CenterColumn } from "@/styles/BaseComponents";
 import React from "react";
 import Calendar from "react-calendar";
+import styled from "styled-components";
+import Modal from "@/component/common/Modal";
 
-export default function MyRoadCalendar() {
+const CalendarWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+interface MyRoadCalendarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function MyRoadCalendar({
+  isOpen,
+  onClose,
+}: MyRoadCalendarProps) {
   return (
-    <CenterColumn width="100%" height="100%" p="10px">
-      <Calendar />
-    </CenterColumn>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="캘린더 등록"
+      width="90%"
+      height="80%"
+      maxWidth="500px"
+    >
+      <CalendarWrapper>
+        <Calendar />
+      </CalendarWrapper>
+    </Modal>
   );
 }
