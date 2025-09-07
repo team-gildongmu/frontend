@@ -9,6 +9,15 @@ import { Button } from "@/styles/BaseStyledTags";
 import Icon from "@/component/common/IconifyIcon";
 
 export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
+  const calendarInfo = [
+    {
+      id: 1,
+      date: "2025-01-01",
+      title: "캘린더 등록",
+      description: "캘린더 등록",
+    },
+  ];
+
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   return (
@@ -28,10 +37,12 @@ export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
           캘린더 등록하기
         </Font>
       </Button>
-      <MyRoadCalendar
-        isOpen={isCalendarOpen}
-        onClose={() => setIsCalendarOpen(false)}
-      />
+      {isCalendarOpen && (
+        <MyRoadCalendar
+          isOpen={isCalendarOpen}
+          onClose={() => setIsCalendarOpen(false)}
+        />
+      )}
     </CenterColumn>
   );
 }
