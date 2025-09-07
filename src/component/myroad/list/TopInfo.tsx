@@ -73,8 +73,8 @@ export default function TopInfo({ title, detailId, isMain }: TopInfoProps) {
         </Font>
         <Icon
           icon="line-md:logout"
-          width={isMain ? 5 : 10}
-          height={isMain ? 5 : 10}
+          width="10"
+          height="10"
           color={colors.blue_500}
         />
       </Row>
