@@ -1,7 +1,11 @@
-"use client";
-
 import HomeScreen from "@/screen/home/HomeScreen";
 
-export default function Home() {
-  return <HomeScreen />;
+type Props = {
+  searchParams: Promise<{ tab?: string }>;
+};
+
+export default async function Home({ searchParams }: Props) {
+  const resolvedSearchParams = await searchParams;
+
+  return <HomeScreen searchParams={resolvedSearchParams} />;
 }

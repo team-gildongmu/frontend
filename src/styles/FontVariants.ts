@@ -77,13 +77,13 @@ const Config = {
     c02_s: {
       fontFamily: "Noto Sans KR, sans-serif",
       fontWeight: "400",
-      fontSize: "7px",
+      fontSize: "8px",
       lineHeight: "normal",
     },
     c03_m: {
       fontFamily: "Noto Sans KR, sans-serif",
       fontWeight: "400",
-      fontSize: "5px",
+      fontSize: "7px",
       lineHeight: "normal",
     },
   },
