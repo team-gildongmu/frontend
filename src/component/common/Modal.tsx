@@ -1,9 +1,10 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 import Icon from "@/component/common/IconifyIcon";
-import { Button } from "@/styles/BaseStyledTags";
-import { CenterColumn } from "@/styles/BaseComponents";
+import { Button, Div } from "@/styles/BaseStyledTags";
+import { CenterColumn, Column, Row } from "@/styles/BaseComponents";
 import { Z_INDEX } from "@/styles/ZIndex";
+import { Font } from "@/styles/Typography";
 
 interface ModalProps {
   isOpen: boolean;
@@ -46,12 +47,18 @@ export default function Modal({
         onClick={(e) => e.stopPropagation()}
       >
         <Header>
-          {title && <Title>{title}</Title>}
+          {title && (
+            <Font typo="t01_m" color="black">
+              {title}
+            </Font>
+          )}
           <CloseButton onClick={onClose}>
             <Icon icon="mdi:close" width="24" height="24" color="#666" />
           </CloseButton>
         </Header>
-        <Content>{children}</Content>
+        <Div flex="1" overflow="auto">
+          {children}
+        </Div>
       </ModalContainer>
     </FullScreenOverlay>
   );
@@ -67,7 +74,7 @@ const FullScreenOverlay = styled(CenterColumn)`
   z-index: ${Z_INDEX.MODAL};
 `;
 
-const ModalContainer = styled.div<{
+const ModalContainer = styled(Column)<{
   width?: string;
   height?: string;
   maxWidth?: string;
@@ -81,23 +88,13 @@ const ModalContainer = styled.div<{
   background-color: white;
   border-radius: 12px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 `;
 
-const Header = styled.div`
-  display: flex;
+const Header = styled(Row)`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-`;
-
-const Title = styled.h2`
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
 `;
 
 const CloseButton = styled(Button)`
@@ -113,9 +110,4 @@ const CloseButton = styled(Button)`
   &:hover {
     background-color: #f5f5f5;
   }
-`;
-
-const Content = styled.div`
-  flex: 1;
-  overflow: auto;
 `;
