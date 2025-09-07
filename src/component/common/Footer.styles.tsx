@@ -1,3 +1,4 @@
+import { Z_INDEX } from "@/styles/ZIndex";
 import styled from "styled-components";
 
 export const FooterContainer = styled.footer`
@@ -12,7 +13,7 @@ export const FooterContainer = styled.footer`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: ${Z_INDEX.FOOTER};
 
   ul {
     display: flex;
@@ -47,7 +48,7 @@ export const Icon = styled.div<{ $index: number; $active: boolean }>`
   margin-bottom: 2px;
 `;
 
-export const Label = styled.span<{$active: boolean}>`
-    display: inline-block;
-    font-color: ${($active) => `${$active ? "#0047AB" : "#888888"}`};
-`
+export const Label = styled.span<{ $active: boolean }>`
+  display: inline-block;
+  font-color: ${($active) => `${$active ? "#0047AB" : "#888888"}`};
+`;
