@@ -140,8 +140,9 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
   );
 };
 
+const isDev = process.env.NODE_ENV === "development";
 export const baseApi = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: isDev ? "/api" : process.env.NEXT_PUBLIC_BASE_URL,
   withCredentials: true,
 });
 

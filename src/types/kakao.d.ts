@@ -1,5 +1,4 @@
-// src/types/global.d.ts
-export {};
+import type { kakao } from "./kakao";
 
 declare global {
   interface Window {
