@@ -30,13 +30,5 @@ export default function useAuth() {
     window.location.replace(redirect);
   };
 
-  const getNewAccessToken = () => {
-    const refreshToken = cookies[C.REFRESH_TOKEN_KEY];
-    if (!refreshToken) {
-      return null;
-    }
-    return refreshToken;
-  };
-
   return { getUserToken, authorize, logout };
 }
