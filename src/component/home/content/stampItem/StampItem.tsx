@@ -5,8 +5,8 @@ import React from "react";
 import { Z_INDEX } from "@/styles/ZIndex";
 interface StampItemData {
   id: number;
-  info: string;
-  hasPassStamp: boolean;
+  title: string;
+  is_stamped: boolean;
 }
 
 export default function StampItem({ item }: { item: StampItemData }) {
@@ -24,9 +24,9 @@ export default function StampItem({ item }: { item: StampItemData }) {
           color="black"
           style={{ zIndex: Z_INDEX.CONTENT, position: "relative" }}
         >
-          {item.info}
+          {item.title}
         </Font>
-        {item.hasPassStamp && (
+        {item.is_stamped && (
           <Image
             src="/home/stamp/passedIcon.svg"
             alt="통과 스탬프"
