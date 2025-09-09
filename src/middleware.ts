@@ -10,8 +10,9 @@ export async function middleware(req: NextRequest) {
   const isHomePage = currentPath === "/";
 
   // 보호된 라우트 체크 (notAuthGuardedRoutes에 해당하지 않는 라우트)
-  const isProtectedRoute = !isHomePage && !notAuthGuardedRoutes.some((path) => currentPath.startsWith(path));
-  
+  const isProtectedRoute =
+    !isHomePage &&
+    !notAuthGuardedRoutes.some((path) => currentPath.startsWith(path));
 
   try {
     // 1. 로그인하지 않은 유저가 보호된 라우트 접근 시 → 로그인 페이지로
