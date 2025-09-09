@@ -1,9 +1,10 @@
 // src/types/global.d.ts
-export {}; // 반드시 있어야 함
+export {};
 
 declare global {
   interface Window {
     kakao: typeof kakao;
+    selectLocation?: (locationId: number) => void;
   }
 }
 

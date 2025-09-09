@@ -46,21 +46,30 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
     refreshSubscribers = [];
   };
 
+  interface RefreshResponse {
+    access_token?: string;
+    data?: { access_token?: string };
+  }
+
   const refreshAccessToken = async (): Promise<string> => {
     // refresh 토큰은 쿠키로 전송되므로 body 필요 없음
-    const response = await axiosInstance.post("/auth/refresh", null, {
-      withCredentials: true,
-      // 이 요청 자체가 다시 403으로 떨어져도 재귀 방지
-      headers: { "X-Refresh-Attempt": "true" },
-    });
+    const response = await axiosInstance.post<RefreshResponse>(
+      "/auth/refresh",
+      null,
+      {
+        withCredentials: true,
+        // 이 요청 자체가 다시 403으로 떨어져도 재귀 방지
+        headers: { "X-Refresh-Attempt": "true" },
+      }
+    );
 
     // 백엔드 응답 형태에 맞춰 access_token 추출
-    const data: any = response?.data ?? response;
-    const newAccessToken: string =
-      data?.access_token ?? data?.data?.access_token;
-    if (!newAccessToken) {
+    const data: RefreshResponse = response.data;
+    const maybeToken = data?.access_token ?? data?.data?.access_token;
+    if (!maybeToken) {
       throw new Error("Failed to refresh access token: empty token");
     }
+    const newAccessToken: string = maybeToken;
 
     // 쿠키에 저장
     setCookie(C.AUTH_TOKEN_KEY, newAccessToken);
