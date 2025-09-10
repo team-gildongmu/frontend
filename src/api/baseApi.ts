@@ -167,7 +167,7 @@ console.log('🔧 BaseAPI Config:', {
 });
 
 export const baseApi = axios.create({
-  baseURL: apiBase ? "/api" : (isDev ? "/api" : apiBase),
+  baseURL: "/api", // 프록시 사용 (next.config.js에서 활성화됨)
   withCredentials: true,
 });
 
