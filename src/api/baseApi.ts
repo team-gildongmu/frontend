@@ -63,9 +63,17 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
   }
 
   const refreshAccessToken = async (): Promise<string> => {
-    // refresh 토큰은 쿠키로 전송되므로 body 필요 없음
-    const response = await axiosInstance.post<RefreshResponse>(
-      "/auth/refresh",
+    // 토큰 갱신만 프록시 사용 (쿠키 전송 보장)
+    const refreshUrl = "/api/auth/refresh";
+    console.log("🔄 토큰 갱신 요청:", refreshUrl);
+
+    const proxyAxios = axios.create({
+      baseURL: "",
+      withCredentials: true,
+    });
+
+    const response = await proxyAxios.post<RefreshResponse>(
+      refreshUrl,
       null,
       {
         withCredentials: true,
@@ -143,7 +151,10 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
           originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
           return axiosInstance(originalRequest);
         } catch (refreshError) {
-          const error = refreshError instanceof Error ? refreshError : new Error(String(refreshError));
+          const error =
+            refreshError instanceof Error
+              ? refreshError
+              : new Error(String(refreshError));
           onRefreshFailed(error);
           return Promise.reject(refreshError);
         } finally {
@@ -156,18 +167,10 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
   );
 };
 
-// 프록시를 사용하여 same-origin으로 요청 (쿠키 전송 문제 해결)
-const isDev = process.env.NODE_ENV === "development";
 const apiBase = process.env.NEXT_PUBLIC_BASE_URL;
 
-console.log('🔧 BaseAPI Config:', {
-  isDev,
-  apiBase,
-  useProxy: !!apiBase
-});
-
 export const baseApi = axios.create({
-  baseURL: apiBase ? "/api" : (isDev ? "/api" : apiBase),
+  baseURL: apiBase,
   withCredentials: true,
 });
 
