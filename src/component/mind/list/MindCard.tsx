@@ -3,7 +3,6 @@ import Image from "next/image"
 import * as C from "./MindCard.styles"
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import colors from "@/styles/Colors";
 
 type MindCardProps = {
   id: number;
