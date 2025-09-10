@@ -36,19 +36,30 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
 
   let isRefreshing = false;
   let refreshSubscribers: Array<(token: string) => void> = [];
+  let refreshFailureSubscribers: Array<(error: Error) => void> = [];
 
   const subscribeTokenRefresh = (callback: (token: string) => void) => {
     refreshSubscribers.push(callback);
   };
 
+  const subscribeTokenRefreshFailure = (callback: (error: Error) => void) => {
+    refreshFailureSubscribers.push(callback);
+  };
+
   const onRefreshed = (token: string) => {
     refreshSubscribers.forEach((callback) => callback(token));
     refreshSubscribers = [];
+    refreshFailureSubscribers = [];
+  };
+
+  const onRefreshFailed = (error: Error) => {
+    refreshFailureSubscribers.forEach((callback) => callback(error));
+    refreshSubscribers = [];
+    refreshFailureSubscribers = [];
   };
 
   interface RefreshResponse {
     access_token?: string;
-    data?: { access_token?: string };
   }
 
   const refreshAccessToken = async (): Promise<string> => {
@@ -65,7 +76,7 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
 
     // 백엔드 응답 형태에 맞춰 access_token 추출
     const data: RefreshResponse = response.data;
-    const maybeToken = data?.access_token ?? data?.data?.access_token;
+    const maybeToken = data?.access_token;
     if (!maybeToken) {
       throw new Error("Failed to refresh access token: empty token");
     }
@@ -111,11 +122,14 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
 
         if (isRefreshing) {
           // 이미 갱신 중이면 토큰 갱신 완료를 대기 후 재시도
-          return new Promise((resolve) => {
+          return new Promise((resolve, reject) => {
             subscribeTokenRefresh((newToken: string) => {
               if (!originalRequest.headers) originalRequest.headers = {};
               originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
               resolve(axiosInstance(originalRequest));
+            });
+            subscribeTokenRefreshFailure((error: Error) => {
+              reject(error);
             });
           });
         }
@@ -129,6 +143,8 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
           originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
           return axiosInstance(originalRequest);
         } catch (refreshError) {
+          const error = refreshError instanceof Error ? refreshError : new Error(String(refreshError));
+          onRefreshFailed(error);
           return Promise.reject(refreshError);
         } finally {
           isRefreshing = false;
