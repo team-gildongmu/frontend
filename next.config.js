@@ -20,10 +20,11 @@ const nextConfig = {
     if (apiBase) {
       const dest = apiBase.replace(/\/$/, "");
       console.log('🔧 Next.js Config - Proxy destination:', dest);
+      
       return [
         {
-          source: "/api/:path*",
-          destination: `${dest}/:path*`,
+          source: "/api/auth/refresh", // 토큰 갱신만 프록시
+          destination: `${dest}/auth/refresh`,
         },
       ];
     }
