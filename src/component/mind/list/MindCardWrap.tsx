@@ -13,6 +13,7 @@ export default function MindCardWrap () {
         {
             "id": 1,
             "title": "📖 강릉에서의 멈춤",
+            "score": 4,
             "date": "2025-06-05",
             "weather": "맑음 ☀️",
             "image": "/mind-test-image/mind-test-image.png"
@@ -20,6 +21,7 @@ export default function MindCardWrap () {
         {
             "id": 2,
             "title": "📖 제주 바닷가 산책",
+            "score": 3,
             "date": "2025-06-06",
             "weather": "흐림 ☁️",
             "image": "/mind-test-image/mind-test-image.png"
@@ -27,6 +29,7 @@ export default function MindCardWrap () {
         {
             "id": 3,
             "title": "📖 서울 카페 탐방",
+            "score": 2,
             "date": "2025-06-07",
             "weather": "비 🌧️",
             "image": "/mind-test-image/mind-test-image.png"
@@ -34,6 +37,7 @@ export default function MindCardWrap () {
         {
             "id": 4,
             "title": "📖 산책 중의 깨달음",
+            "score": 5,
             "date": "2025-06-08",
             "weather": "맑음 ☀️",
             "image": "/mind-test-image/mind-test-image.png"
@@ -41,6 +45,7 @@ export default function MindCardWrap () {
         {
             "id": 5,
             "title": "📖 도서관에서의 집중",
+            "score": 3,
             "date": "2025-06-09",
             "weather": "흐림 ☁️",
             "image": "/mind-test-image/mind-test-image.png"
@@ -48,18 +53,21 @@ export default function MindCardWrap () {
         {
             "id": 6,
             "title": "📖 친구와의 만남",
+            "score": 5,
             "date": "2025-06-10",
             "weather": "맑음 ☀️",
             "image": "/mind-test-image/mind-test-image.png"
-        }]
+        }
+    ]
 
     return (
         <MindScreenWrap>
-            {data.map(({ id, title, date, weather, image }) => (
+            {data.map(({ id, title, score, date, weather, image }) => (
                 <MindCard
                     key={id}
                     id={id}
                     title={title}
+                    score={score}
                     date={date}
                     weather={weather}
                     image={image}

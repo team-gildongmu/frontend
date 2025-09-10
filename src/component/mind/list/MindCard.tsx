@@ -7,13 +7,14 @@ import { useRouter } from "next/navigation";
 type MindCardProps = {
   id: number;
   title: string;
+  score: number;
   date: string;
   weather: string;
   image: string;
 };
 
 
-export function MindCard({ id, title, date, weather, image }: MindCardProps){
+export function MindCard({ id, title, score, date, weather, image }: MindCardProps){
     const router = useRouter();
     const [open, setOpen] = useState(false);
 
@@ -22,6 +23,13 @@ export function MindCard({ id, title, date, weather, image }: MindCardProps){
                 <C.TitleWrap>
                     <C.Title__l onClick={() => (router.push(`/mind/${id}`))}>
                         <C.Title>{title}</C.Title>
+                        <C.ScoreWrap>
+                            {[...Array(5)].map((_, index) => (
+                                <C.Score key={index} filled={index < score}>
+                                ★
+                                </C.Score>
+                            ))}
+                        </C.ScoreWrap>
                         <C.Date>
                             <span>{date}, {weather}</span>
                         </C.Date>
