@@ -15,8 +15,11 @@ const nextConfig = {
   },
   async rewrites() {
     const apiBase = process.env.NEXT_PUBLIC_BASE_URL || "";
+    console.log('🔧 Next.js Config - API Base URL:', apiBase);
+    
     if (apiBase) {
       const dest = apiBase.replace(/\/$/, "");
+      console.log('🔧 Next.js Config - Proxy destination:', dest);
       return [
         {
           source: "/api/:path*",
@@ -24,6 +27,8 @@ const nextConfig = {
         },
       ];
     }
+    
+    console.log('⚠️ Next.js Config - No API Base URL found, no proxy configured');
     return [];
   },
 };
