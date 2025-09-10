@@ -9,7 +9,7 @@ export const usePostUserMutation = () => {
     mutationKey: ["fetchUser"],
     mutationFn: (code: string) => getKakaoLogin(code),
     onSuccess: (res) => {
-      authorize(res.access_token);
+      authorize(res.access_token, res.refresh_token);
     },
   });
 };

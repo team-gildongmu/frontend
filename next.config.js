@@ -13,6 +13,20 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    const isDev = process.env.NODE_ENV === "development";
+    const apiBase = process.env.NEXT_PUBLIC_BASE_URL || "";
+    if (isDev && apiBase) {
+      const dest = apiBase.replace(/\/$/, "");
+      return [
+        {
+          source: "/api/:path*",
+          destination: `${dest}/:path*`,
+        },
+      ];
+    }
+    return [];
+  },
 };
 
 module.exports = nextConfig;

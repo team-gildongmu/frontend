@@ -9,7 +9,7 @@ export default function useAuth() {
     return authToken;
   };
 
-  const authorize = (token: string) => {
+  const authorize = (token: string, refreshToken: string) => {
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
 
@@ -17,11 +17,16 @@ export default function useAuth() {
       path: "/",
       expires: expirationDate,
     });
+
+    setCookie(C.REFRESH_TOKEN_KEY, refreshToken, {
+      path: "/",
+      expires: expirationDate,
+    });
   };
 
   const logout = (redirect = "/") => {
     removeCookie(C.AUTH_TOKEN_KEY, { path: "/" });
-
+    removeCookie(C.REFRESH_TOKEN_KEY, { path: "/" });
     window.location.replace(redirect);
   };
 

@@ -1,5 +1,6 @@
 import { Config } from "@/styles/FontVariants";
-import styled from "styled-components"
+import { Z_INDEX } from "@/styles/ZIndex";
+import styled from "styled-components";
 
 export const HeaderContainer = styled.header`
   width: 100%;
@@ -7,11 +8,12 @@ export const HeaderContainer = styled.header`
   background-color: #fff;
   position: fixed;
   top: 0;
-  z-index: 9999;
+  z-index: ${Z_INDEX.HEADER};
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 2px 20px;
+  height: 47px;
 `;
 
 export const HeaderLogo = styled.h1`

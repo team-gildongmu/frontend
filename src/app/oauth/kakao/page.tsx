@@ -8,7 +8,8 @@ export default function KakaoLogin() {
   const code = searchParams.get("code");
   const router = useRouter();
 
-  const { mutate: postUserMutation } = usePostUserMutation();
+  const { mutate: postUserMutation, isPending: isPostUserLoading } =
+    usePostUserMutation();
 
   useEffect(() => {
     if (code) {
@@ -17,5 +18,5 @@ export default function KakaoLogin() {
     router.push("/");
   }, [code, postUserMutation, router]);
 
-  return <></>;
+  return <>{isPostUserLoading ? <div>Loading...</div> : <></>}</>;
 }
