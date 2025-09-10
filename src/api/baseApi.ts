@@ -156,9 +156,9 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
   );
 };
 
-const isDev = process.env.NODE_ENV === "development";
+// 프록시를 사용하여 same-origin으로 요청 (쿠키 전송 문제 해결)
 export const baseApi = axios.create({
-  baseURL: isDev ? "/api" : process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: "/api", // 항상 프록시 사용
   withCredentials: true,
 });
 
