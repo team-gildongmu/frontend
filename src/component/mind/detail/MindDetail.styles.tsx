@@ -4,8 +4,7 @@ import { styled } from "styled-components"
 
 export const Container = styled.ul`
     width: 100%;
-    max-width: 400px
-    background-color: yellow;
+    max-width: 500px;
     margin: 0 auto;
     box-sizing: border-box;
 
@@ -67,7 +66,7 @@ export const ContentWrap = styled.li`
 `
 
 export const Content = styled.p`
-    width: 300px;
+    width: 400px;
     white-space: pre-wrap;
     word-break: break-word;
     overflow-wrap: break-word;
