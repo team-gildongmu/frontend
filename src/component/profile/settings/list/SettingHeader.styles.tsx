@@ -7,7 +7,7 @@ export const Wrap = styled.div`
     margin: 10px 0;
     align-items: center;
 `
-export const BackButton = styled.button`
+export const Button = styled.button`
     background : none;
     color: inherit;
     border: none;
