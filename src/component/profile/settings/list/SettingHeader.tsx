@@ -5,9 +5,6 @@ import colors from "@/styles/Colors";
 
 export default function SettingHeader () {
     const router = useRouter();
-    const toggleAlert = () => {
-        console.log("알람 설정 해제")
-    }
 
     return (
         <P.Wrap>
@@ -21,7 +18,7 @@ export default function SettingHeader () {
                 />
             </P.Button>
             <P.NickName>설정</P.NickName>
-            <P.Button onClick={() => toggleAlert()}>
+            <P.Button onClick={() => alert("알림설정해제되었습니다.")}>
                  <Icon  
                     icon="tdesign:notification-filled"
                     width={30}
