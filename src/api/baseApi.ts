@@ -65,7 +65,6 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
   const refreshAccessToken = async (): Promise<string> => {
     // 토큰 갱신만 프록시 사용 (쿠키 전송 보장)
     const refreshUrl = "/api/auth/refresh";
-    console.log("🔄 토큰 갱신 요청:", refreshUrl);
 
     const proxyAxios = axios.create({
       baseURL: "",
