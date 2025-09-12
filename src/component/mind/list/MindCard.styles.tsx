@@ -77,7 +77,7 @@ export const Delete = styled.li`
   padding: 5px 12px;
   border-radius: 8px;
   cursor: pointer;
-  color: red;
+  color: ${colors.red_500};
 
   &:hover {
     background: #f5f5f5;
