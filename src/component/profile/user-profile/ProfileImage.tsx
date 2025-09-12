@@ -3,9 +3,7 @@ import * as P from "./ProfileImage.styles"
 import Image from "next/image"
 
 type Props = {
-    // user 정보를 상태관리 하는 게 있으면 그걸로 하고, 
-    // 없으면 userInfo 를 받아오긴 해야함
-    //해당 유저의 고유 id 나 뭔가를 받아온 후 이미지를 꺼내서 사용하던가. 해야함.
+    //해당 유저의 고유 id 나 뭔가를 받아온 후 이미지를 꺼내서 사용하던가.
     userInfo: number;
     image: string;
 }

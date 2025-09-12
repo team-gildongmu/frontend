@@ -1,6 +1,5 @@
 import Icon from "@/component/common/IconifyIcon";
 import colors from "@/styles/Colors";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 
@@ -13,15 +12,15 @@ export default function ListItem({ label, index }: Props) {
     const router = useRouter();
   return (
     <Item onClick={() => router.push(index)}>
-            <p>{label}</p>
-            <span>
-            <Icon  
-                icon="tdesign:chevron-right"
-                width={30}
-                height={30}
-                color={colors.gray_500}
-                />
-            </span>
+      <p>{label}</p>
+      <span>
+      <Icon  
+        icon="tdesign:chevron-right"
+        width={30}
+        height={30}
+        color={colors.gray_500}
+        />
+      </span>
     </Item>
   );
 }
