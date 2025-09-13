@@ -1,7 +1,7 @@
 import { Grid } from "@/styles/BaseComponents";
 import React from "react";
 import StampItem from "./stampItem/StampItem";
-import useGetMyStampsQuery from "@/queries/travel/useGetMyStamps";
+import useGetMyStampsQuery from "@/queries/stamps/useGetMyStamps";
 
 export default function StampContainer() {
   // todo: 가데이터 제거

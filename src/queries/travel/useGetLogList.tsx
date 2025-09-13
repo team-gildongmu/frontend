@@ -1,13 +1,13 @@
-import { getMyStamps } from "@/api/travel";
+import { getLogList } from "@/api/travel";
 import useAuth from "@/hooks/useAuth";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-export default function useGetMyStampsQuery() {
+export default function useGetLogListQuery() {
   const { getUserToken } = useAuth();
 
   return useQuery({
-    queryKey: ["myStamps"],
-    queryFn: () => getMyStamps(),
+    queryKey: ["logList"],
+    queryFn: () => getLogList(),
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60,
     enabled: !!getUserToken(),

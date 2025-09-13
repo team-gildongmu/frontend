@@ -1,14 +1,13 @@
-import { MyStampsResponse } from "@/types/travel";
 import { baseApi } from "@/api/baseApi";
 
 /**
- * @getMyStamps 스탬프 조회 api
- * @returns {Promise<MyStampsResponse>} - 스탬프 데이터 응답
+ * @getLogList 확정 로그 조회 api
+ * @returns {Promise<any>} - 확정 로그 데이터 응답
  */
 
-export const getMyStamps = async (): Promise<MyStampsResponse> => {
+export const getLogList = async (): Promise<any> => {
   try {
-    const response = await baseApi.get<MyStampsResponse>("/travel/my_stamps");
+    const response = await baseApi.get<any>("/travel/log/list");
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
