@@ -4,6 +4,7 @@ import { Font } from "@/styles/Typography";
 import colors from "@/styles/Colors";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 interface TopInfoProps {
   title: string;
@@ -13,6 +14,7 @@ interface TopInfoProps {
 
 export default function TopInfo({ title, detailId, isMain }: TopInfoProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const onClickDetail = () => {
     router.push(`/myroad/${detailId}`);
   };
@@ -69,7 +71,7 @@ export default function TopInfo({ title, detailId, isMain }: TopInfoProps) {
         style={{ cursor: "pointer" }}
       >
         <Font typo={isMain ? "c03_m" : "c01_m"} color="blue_500">
-          상세코스
+          {t("myroad.detailCourse")}
         </Font>
         <Icon
           icon="line-md:logout"

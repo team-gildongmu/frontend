@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { CenterColumn, Column } from "@/styles/BaseComponents";
 import { Img } from "@/styles/BaseStyledTags";

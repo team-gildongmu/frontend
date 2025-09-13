@@ -1,0 +1,50 @@
+{
+  "navigation": {
+    "main": "メイン",
+    "search": "検索",
+    "myroad": "マイロード",
+    "mind": "マインド",
+    "profile": "プロフィール"
+  },
+  "stamp": {
+    "noStamps": "まだスタンプがありません。"
+  },
+  "tabs": {
+    "review": "レビュー",
+    "log": "確認ログ",
+    "stamp": "スタンプ"
+  },
+  "myroad": {
+    "detailCourse": "詳細コース",
+    "viewRouteOnMap": "地図でルートを見る",
+    "map": "地図",
+    "calendar": {
+      "title": "日付選択",
+      "selectDate": "日付を選択してください",
+      "selectDateRange": "日付範囲を選択",
+      "selectedDate": "選択された日付",
+      "reviewDescription": "この旅行の詳細なレビューを確認してください",
+      "viewDetailReview": "詳細レビューを見る",
+      "noTravelOnDate": "選択した日付に旅行がありません",
+      "selectOtherDate": "他の日付を選択してください",
+      "cancel": "キャンセル",
+      "confirm": "確認",
+      "weekdays": ["日", "月", "火", "水", "木", "金", "土"],
+      "months": [
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月",
+        "9月",
+        "10月",
+        "11月",
+        "12月"
+      ],
+      "yearSuffix": "年"
+    }
+  }
+}

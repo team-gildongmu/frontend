@@ -9,7 +9,7 @@ const Config = {
       // Main Logo
       fontFamily: "Nunito-Extra, sans-serif",
       fontWeight: "700",
-      fontSize: "35px",
+      fontSize: "25px",
       lineHeight: "normal",
     },
     m01_m: {
@@ -84,6 +84,12 @@ const Config = {
       fontFamily: "Noto Sans KR, sans-serif",
       fontWeight: "400",
       fontSize: "9px",
+      lineHeight: "normal",
+    },
+    c04_m: {
+      fontFamily: "Noto Sans KR, sans-serif",
+      fontWeight: "400",
+      fontSize: "12px",
       lineHeight: "normal",
     },
   },

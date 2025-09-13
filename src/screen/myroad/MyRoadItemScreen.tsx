@@ -8,14 +8,18 @@ import MyRoadMap from "@/component/myroad/listItem/MyRoadMap";
 import { Font } from "@/styles/Typography";
 import { Button } from "@/styles/BaseStyledTags";
 import Icon from "@/component/common/IconifyIcon";
+import ListContainer from "@/component/myroad/listItem/ListContainer";
+import { useTranslation } from "react-i18next";
 
 export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const { t } = useTranslation();
 
+  console.log(myroadid);
   return (
     <CenterColumn>
-      <p>Detail ID: {myroadid}</p>
+      <ListContainer />
       <Button
         display="flex"
         flexDirection="row"
@@ -37,13 +41,17 @@ export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
         flexDirection="row"
         alignItems="center"
         gridGap="5px"
+        backgroundColor="white"
+        border="1px solid #000"
+        borderRadius="10px"
+        padding="10px"
         onClick={() => {
           setIsMapOpen(!isMapOpen);
         }}
       >
         <Icon icon="mdi:map" width="20" height="20" />
         <Font typo="c02_m" color="black">
-          위치 지도열기
+          {t("myroad.viewRouteOnMap")}
         </Font>
       </Button>
       <MyRoadCalendar

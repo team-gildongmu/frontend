@@ -1,14 +1,29 @@
-import { MyStampsResponse } from "@/types/travel";
 import { baseApi } from "@/api/baseApi";
 
+// 여행 로그 데이터 타입 정의
+interface TravelLog {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  images: string[];
+}
+
+interface TravelLogResponse {
+  data: TravelLog[];
+  message: string;
+  status: number;
+}
+
 /**
- * @getMyStamps 스탬프 조회 api
- * @returns {Promise<MyStampsResponse>} - 스탬프 데이터 응답
+ * @getLogList 확정 로그 조회 api
+ * @returns {Promise<TravelLogResponse>} - 확정 로그 데이터 응답
  */
 
-export const getMyStamps = async (): Promise<MyStampsResponse> => {
+export const getLogList = async (): Promise<TravelLogResponse> => {
   try {
-    const response = await baseApi.get<MyStampsResponse>("/travel/my_stamps");
+    const response = await baseApi.get<TravelLogResponse>("/travel/log/list");
     return response.data;
   } catch (error) {
     if (error instanceof Error) {

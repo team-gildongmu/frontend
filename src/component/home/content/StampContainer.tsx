@@ -1,7 +1,9 @@
 import { Grid } from "@/styles/BaseComponents";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import StampItem from "./stampItem/StampItem";
-import useGetMyStampsQuery from "@/queries/travel/useGetMyStamps";
+import useGetMyStampsQuery from "@/queries/stamps/useGetMyStamps";
+import Empty from "@/component/common/Empty";
 
 export default function StampContainer() {
   // todo: 가데이터 제거
@@ -39,7 +41,12 @@ export default function StampContainer() {
   //     hasPassStamp: false,
   //   },
   // ];
-  const { data: myStamps } = useGetMyStampsQuery();
+  const { t } = useTranslation();
+  const { data: myStamps, isLoading } = useGetMyStampsQuery();
+
+  if (myStamps?.stamps.length === 0 || isLoading) {
+    return <Empty text={t("stamp.noStamps")} />;
+  }
 
   return (
     <Grid width="100%" height="100%" gridTemplateColumns="repeat(2, 1fr)">

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Image from "next/image";
 import Modal from "@/component/common/Modal";
 
 interface Location {
@@ -28,7 +29,13 @@ export default function MapSelectedLoactionModal({
       maxWidth="500px"
     >
       <DetailWrapper>
-        <img src={selectedLocation.image} alt={selectedLocation.title} />
+        <Image
+          src={selectedLocation.image}
+          alt={selectedLocation.title}
+          width={500}
+          height={300}
+          style={{ width: "100%", height: "auto" }}
+        />
         <h3>{selectedLocation.title}</h3>
         <p>{selectedLocation.description}</p>
       </DetailWrapper>

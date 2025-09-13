@@ -1,0 +1,50 @@
+{
+  "navigation": {
+    "main": "메인",
+    "search": "검색",
+    "myroad": "마이로드",
+    "mind": "마음길",
+    "profile": "내정보"
+  },
+  "stamp": {
+    "noStamps": "아직 스탬프가 없습니다."
+  },
+  "tabs": {
+    "review": "후기",
+    "log": "확정로그",
+    "stamp": "스탬프"
+  },
+  "myroad": {
+    "detailCourse": "상세코스",
+    "viewRouteOnMap": "지도로 경로보기",
+    "map": "지도",
+    "calendar": {
+      "title": "날짜 선택",
+      "selectDate": "날짜를 선택해주세요",
+      "selectDateRange": "날짜 범위 선택",
+      "selectedDate": "선택된 날짜",
+      "reviewDescription": "이 여행의 상세한 후기를 확인해보세요",
+      "viewDetailReview": "상세 후기 보기",
+      "noTravelOnDate": "선택한 날짜에 여행이 없습니다",
+      "selectOtherDate": "다른 날짜를 선택해보세요",
+      "cancel": "취소",
+      "confirm": "확인",
+      "weekdays": ["일", "월", "화", "수", "목", "금", "토"],
+      "months": [
+        "1월",
+        "2월",
+        "3월",
+        "4월",
+        "5월",
+        "6월",
+        "7월",
+        "8월",
+        "9월",
+        "10월",
+        "11월",
+        "12월"
+      ],
+      "yearSuffix": "년"
+    }
+  }
+}
