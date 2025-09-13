@@ -10,7 +10,7 @@ interface EmptyProps {
 
 export default function Empty({ text }: EmptyProps) {
   return (
-    <CenterColumn width="100%" height="100%" gridGap="12px">
+    <CenterColumn width="100%" height="100%" gridGap="12px" py="20px">
       <Icon
         icon="mdi:alert-circle-outline"
         width="40"

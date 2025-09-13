@@ -10,8 +10,8 @@ import StampContainer from "@/component/home/content/StampContainer";
 import ReviewContainer from "@/component/home/content/ReviewContainer";
 
 type Props = {
-  searchParams: { tab?: string }
-}
+  searchParams: { tab?: string };
+};
 
 export default function HomeScreen({ searchParams }: Props) {
   const router = useRouter();
@@ -20,7 +20,7 @@ export default function HomeScreen({ searchParams }: Props) {
   useEffect(() => {
     const tab = searchParams.tab || "review";
     setSelectedTab(tab);
-    
+
     if (!searchParams.tab) {
       router.replace("/?tab=review");
     }

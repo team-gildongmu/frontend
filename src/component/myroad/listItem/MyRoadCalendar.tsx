@@ -8,13 +8,8 @@ import Modal from "@/component/common/Modal";
 import colors from "@/styles/Colors";
 import { Font } from "@/styles/Typography";
 import { Button } from "@/styles/BaseStyledTags";
-
-interface Schedule {
-  id: string;
-  title: string;
-  time: string;
-  color: string;
-}
+import { useRouter } from "next/navigation";
+import { colorPalette } from "@/component/common/ColorPalette";
 
 interface MyRoadCalendarProps {
   isOpen: boolean;
@@ -28,14 +23,9 @@ export default function MyRoadCalendar({
   isOpen,
   onClose,
 }: MyRoadCalendarProps) {
+  const router = useRouter();
+
   const [selectedDate, setSelectedDate] = useState<Value>(new Date());
-  const [schedules, setSchedules] = useState<Record<string, Schedule[]>>({});
-  const [isAddingSchedule, setIsAddingSchedule] = useState(false);
-  const [newSchedule, setNewSchedule] = useState({
-    title: "",
-    time: "",
-    color: "#4285f4",
-  });
 
   const formatSelectedDate = (date: Value): string => {
     if (!date) return "날짜를 선택해주세요";
@@ -49,78 +39,94 @@ export default function MyRoadCalendar({
     });
   };
 
-  const getDateKey = (date: Date): string => {
-    return date.toISOString().split("T")[0];
-  };
-
   const handleDateChange = (value: Value) => {
     setSelectedDate(value);
-    setIsAddingSchedule(false);
-  };
-
-  const handleAddSchedule = () => {
-    if (
-      !selectedDate ||
-      Array.isArray(selectedDate) ||
-      !newSchedule.title.trim()
-    )
-      return;
-
-    const dateKey = getDateKey(selectedDate);
-    const schedule: Schedule = {
-      id: Date.now().toString(),
-      title: newSchedule.title.trim(),
-      time: newSchedule.time,
-      color: newSchedule.color,
-    };
-
-    setSchedules((prev) => ({
-      ...prev,
-      [dateKey]: [...(prev[dateKey] || []), schedule],
-    }));
-
-    setNewSchedule({ title: "", time: "", color: "#4285f4" });
-    setIsAddingSchedule(false);
-  };
-
-  const handleDeleteSchedule = (scheduleId: string) => {
-    if (!selectedDate || Array.isArray(selectedDate)) return;
-
-    const dateKey = getDateKey(selectedDate);
-    setSchedules((prev) => ({
-      ...prev,
-      [dateKey]: (prev[dateKey] || []).filter((s) => s.id !== scheduleId),
-    }));
-  };
-
-  const getTileContent = ({ date }: { date: Date }) => {
-    const dateKey = getDateKey(date);
-    const daySchedules = schedules[dateKey] || [];
-
-    if (daySchedules.length === 0) return null;
-
-    return (
-      <ScheduleDots>
-        {daySchedules.slice(0, 3).map((schedule, index) => (
-          <ScheduleDot key={index} color={schedule.color} />
-        ))}
-        {daySchedules.length > 3 && (
-          <MoreDot>+{daySchedules.length - 3}</MoreDot>
-        )}
-      </ScheduleDots>
-    );
-  };
-
-  const getSelectedDateSchedules = (): Schedule[] => {
-    if (!selectedDate || Array.isArray(selectedDate)) return [];
-    const dateKey = getDateKey(selectedDate);
-    return schedules[dateKey] || [];
   };
 
   const handleConfirm = () => {
     console.log("선택된 날짜:", selectedDate);
-    console.log("전체 일정:", schedules);
     onClose();
+  };
+
+  // ID 기반으로 일관된 색상 생성
+  const getColorById = (id: number) => {
+    return colorPalette[id % colorPalette.length];
+  };
+
+  // 가데이터
+  const reviewData = [
+    {
+      id: 1,
+      startDate: "2025-09-10",
+      endDate: "2025-09-12",
+      title: "제주도 여행",
+      reviewId: "12",
+    },
+    {
+      id: 2,
+      startDate: "2025-09-13",
+      endDate: "2025-09-15",
+      title: "부산 해변 투어",
+      reviewId: "13",
+    },
+    {
+      id: 3,
+      startDate: "2025-09-16",
+      endDate: "2025-09-18",
+      title: "경주 역사 탐방",
+      reviewId: "14",
+    },
+    {
+      id: 4,
+      startDate: "2025-09-20",
+      endDate: "2025-09-22",
+      title: "강릉 바다 여행",
+      reviewId: "15",
+    },
+  ];
+
+  // 선택된 날짜에 해당하는 후기 찾기
+  const getSelectedReview = () => {
+    if (!selectedDate || Array.isArray(selectedDate)) return null;
+
+    const selectedDateStr = selectedDate.toISOString().split("T")[0];
+
+    return reviewData.find(
+      (review) =>
+        selectedDateStr >= review.startDate && selectedDateStr <= review.endDate
+    );
+  };
+
+  const selectedReview = getSelectedReview();
+
+  // 날짜 범위에 해당하는 후기들 찾기
+  const getReviewsInRange = (startDate: string, endDate: string) => {
+    return reviewData.filter(
+      (review) =>
+        (review.startDate >= startDate && review.startDate <= endDate) ||
+        (review.endDate >= startDate && review.endDate <= endDate) ||
+        (review.startDate <= startDate && review.endDate >= endDate)
+    );
+  };
+
+  // 캘린더 타일에 후기 표시
+  const getTileContent = ({ date }: { date: Date }) => {
+    const dateStr = date.toISOString().split("T")[0];
+    const reviews = getReviewsInRange(dateStr, dateStr);
+
+    if (reviews.length === 0) return null;
+
+    // 첫 번째 후기의 색상 사용
+    const primaryColor = getColorById(reviews[0].id);
+
+    return (
+      <ReviewIndicator>
+        <ReviewBar color={primaryColor} />
+        {reviews.length > 1 && (
+          <ReviewCount color={primaryColor}>+{reviews.length}</ReviewCount>
+        )}
+      </ReviewIndicator>
+    );
   };
 
   return (
@@ -170,80 +176,46 @@ export default function MyRoadCalendar({
             <Font typo="c01_m" color="blue_500">
               선택된 날짜
             </Font>
-            <AddScheduleButton
-              onClick={() => setIsAddingSchedule(!isAddingSchedule)}
-            >
-              + 일정 추가
-            </AddScheduleButton>
           </DateHeader>
           <Font typo="t02_m" color="black" style={{ marginTop: "8px" }}>
             {formatSelectedDate(selectedDate)}
           </Font>
 
-          {isAddingSchedule && (
-            <ScheduleForm>
-              <FormRow>
-                <ScheduleInput
-                  type="text"
-                  placeholder="일정 제목"
-                  value={newSchedule.title}
-                  onChange={(e) =>
-                    setNewSchedule((prev) => ({
-                      ...prev,
-                      title: e.target.value,
-                    }))
-                  }
-                />
-              </FormRow>
-              <FormRow>
-                <ScheduleInput
-                  type="time"
-                  value={newSchedule.time}
-                  onChange={(e) =>
-                    setNewSchedule((prev) => ({
-                      ...prev,
-                      time: e.target.value,
-                    }))
-                  }
-                />
-                <ColorPicker
-                  type="color"
-                  value={newSchedule.color}
-                  onChange={(e) =>
-                    setNewSchedule((prev) => ({
-                      ...prev,
-                      color: e.target.value,
-                    }))
-                  }
-                />
-              </FormRow>
-              <FormButtons>
-                <SmallButton onClick={() => setIsAddingSchedule(false)}>
-                  취소
-                </SmallButton>
-                <SmallButton primary onClick={handleAddSchedule}>
-                  추가
-                </SmallButton>
-              </FormButtons>
-            </ScheduleForm>
+          {selectedReview ? (
+            <ReviewCard color={getColorById(selectedReview.id)}>
+              <ReviewHeader>
+                <ReviewIcon>✈️</ReviewIcon>
+                <ReviewTitle color={getColorById(selectedReview.id)}>
+                  {selectedReview.title}
+                </ReviewTitle>
+              </ReviewHeader>
+              <ReviewDateRange>
+                <DateIcon>📅</DateIcon>
+                {selectedReview.startDate} ~ {selectedReview.endDate}
+              </ReviewDateRange>
+              <ReviewDescription>
+                이 여행의 상세한 후기를 확인해보세요
+              </ReviewDescription>
+              <ReviewDetailButton
+                color={getColorById(selectedReview.id)}
+                onClick={() => {
+                  console.log(
+                    `후기 상세 페이지로 이동: ${selectedReview.reviewId}`
+                  );
+                  router.push(`/mind/${selectedReview.reviewId}`);
+                }}
+              >
+                <ButtonIcon>👀</ButtonIcon>
+                상세 후기 보기
+              </ReviewDetailButton>
+            </ReviewCard>
+          ) : (
+            <EmptyState>
+              <EmptyIcon>🗓️</EmptyIcon>
+              <EmptyText>선택한 날짜에 여행이 없습니다</EmptyText>
+              <EmptySubText>다른 날짜를 선택해보세요</EmptySubText>
+            </EmptyState>
           )}
-
-          <ScheduleList>
-            {getSelectedDateSchedules().map((schedule) => (
-              <ScheduleItem key={schedule.id}>
-                <ScheduleColor color={schedule.color} />
-                <ScheduleContent>
-                  <ScheduleTitle>{schedule.title}</ScheduleTitle>
-                  {schedule.time && (
-                    <ScheduleTime>{schedule.time}</ScheduleTime>
-                  )}
-                </ScheduleContent>
-                <DeleteButton onClick={() => handleDeleteSchedule(schedule.id)}>
-                  ×
-                </DeleteButton>
-              </ScheduleItem>
-            ))}
-          </ScheduleList>
         </SelectedDateInfo>
 
         <ActionButtons>
@@ -339,15 +311,16 @@ const CalendarWrapper = styled.div`
     font-size: 14px;
     color: ${colors.black};
     cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+    border-radius: 12px;
+    transition: all 0.3s ease;
     margin: 2px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    min-height: 50px;
+    min-height: 60px;
     position: relative;
+    overflow: hidden;
   }
 
   .react-calendar__tile:hover {
@@ -411,163 +384,137 @@ const DateHeader = styled.div`
   align-items: center;
 `;
 
-const AddScheduleButton = styled.button`
-  background: ${colors.blue_500};
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: ${colors.blue_300};
-    color: ${colors.blue_500};
-  }
-`;
-
-const ScheduleForm = styled.div`
-  margin-top: 12px;
-  padding: 12px;
+const ReviewCard = styled.div<{ color: string }>`
+  margin-top: 20px;
+  padding: 20px;
   background: white;
-  border-radius: 8px;
-  text-align: left;
+  border-radius: 12px;
+  border: 2px solid ${(props) => props.color};
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
 `;
 
-const FormRow = styled.div`
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-`;
-
-const ScheduleInput = styled.input`
-  flex: 1;
-  padding: 8px;
-  border: 1px solid ${colors.gray_200};
-  border-radius: 6px;
-  font-size: 14px;
-`;
-
-const ColorPicker = styled.input`
-  width: 40px;
-  height: 36px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-`;
-
-const FormButtons = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-`;
-
-const SmallButton = styled.button<{ primary?: boolean }>`
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  ${(props) =>
-    props.primary
-      ? `
-    background: ${colors.blue_500};
-    color: white;
-    &:hover {
-      background: ${colors.blue_300};
-      color: ${colors.blue_500};
-    }
-  `
-      : `
-    background: ${colors.gray_200};
-    color: ${colors.gray_500};
-    &:hover {
-      background: ${colors.gray_300};
-    }
-  `}
-`;
-
-const ScheduleList = styled.div`
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: left;
-`;
-
-const ScheduleItem = styled.div`
+const ReviewHeader = styled.div`
   display: flex;
   align-items: center;
-  padding: 8px;
-  background: white;
-  border-radius: 6px;
+  gap: 12px;
+  margin-bottom: 16px;
+`;
+
+const ReviewIcon = styled.div`
+  font-size: 20px;
+`;
+
+const ReviewTitle = styled.div<{ color: string }>`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${(props) => props.color};
+`;
+
+const ReviewDateRange = styled.div`
+  display: flex;
+  align-items: center;
   gap: 8px;
+  font-size: 14px;
+  color: ${colors.gray_500};
+  margin-bottom: 12px;
+  font-weight: 500;
 `;
 
-const ScheduleColor = styled.div<{ color: string }>`
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: ${(props) => props.color};
-  flex-shrink: 0;
+const DateIcon = styled.div`
+  font-size: 14px;
 `;
 
-const ScheduleContent = styled.div`
-  flex: 1;
+const ReviewDescription = styled.div`
+  font-size: 14px;
+  color: ${colors.gray_500};
+  margin-bottom: 16px;
+  line-height: 1.5;
 `;
 
-const ScheduleTitle = styled.div`
+const ReviewDetailButton = styled.button<{ color: string }>`
+  width: 100%;
+  padding: 10px 16px;
+  background: ${(props) => props.color};
+  color: white;
+  border: none;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: ${colors.black};
-`;
-
-const ScheduleTime = styled.div`
-  font-size: 12px;
-  color: ${colors.gray_500};
-  margin-top: 2px;
-`;
-
-const DeleteButton = styled.button`
-  background: none;
-  border: none;
-  color: ${colors.gray_500};
-  font-size: 18px;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
   &:hover {
-    background: ${colors.red_300};
-    color: ${colors.red_300};
+    opacity: 0.9;
+    transform: translateY(-1px);
   }
 `;
 
-const ScheduleDots = styled.div`
+const ButtonIcon = styled.div`
+  font-size: 16px;
+`;
+
+const EmptyState = styled.div`
+  margin-top: 20px;
+  padding: 32px 20px;
+  text-align: center;
+  background: ${colors.gray_100};
+  border-radius: 12px;
+  border: 1px dashed ${colors.gray_300};
+`;
+
+const EmptyIcon = styled.div`
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+`;
+
+const EmptyText = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  color: ${colors.gray_500};
+  margin-bottom: 6px;
+`;
+
+const EmptySubText = styled.div`
+  font-size: 12px;
+  color: ${colors.gray_500};
+`;
+
+const ReviewIndicator = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
   display: flex;
-  gap: 2px;
-  margin-top: 4px;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
 `;
 
-const ScheduleDot = styled.div<{ color: string }>`
-  width: 4px;
-  height: 4px;
+const ReviewBar = styled.div<{ color: string }>`
+  width: 8px;
+  height: 8px;
+  background: ${(props) => props.color};
   border-radius: 50%;
-  background-color: ${(props) => props.color};
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
-const MoreDot = styled.div`
-  font-size: 8px;
-  color: ${colors.gray_500};
-  background: ${colors.gray_200};
-  border-radius: 6px;
-  padding: 1px 3px;
+const ReviewCount = styled.div<{ color: string }>`
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: ${(props) => props.color};
+  color: white;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: 8px;
+  min-width: 14px;
+  text-align: center;
 `;
 
 const ActionButtons = styled.div`

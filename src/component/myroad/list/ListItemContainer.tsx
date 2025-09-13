@@ -70,9 +70,9 @@ export default function ListItemContainer() {
 
   const { data: logList, isLoading } = useGetLogListQuery();
 
-  if (logList.length === 0 || isLoading) {
-    return <Empty text="아직 작성된 여행 로그가 없습니다." />;
-  }
+  //   if (logList.length === 0 || isLoading) {
+  //     return <Empty text="아직 작성된 여행 로그가 없습니다." />;
+  //   }
 
   return (
     <Column
@@ -84,7 +84,7 @@ export default function ListItemContainer() {
       justifyContent="flex-start"
       alignItems="center"
     >
-      {logList.map((item: any) => (
+      {listItemData.map((item: any) => (
         <ListItem key={item.id} listItemData={item} />
       ))}
     </Column>

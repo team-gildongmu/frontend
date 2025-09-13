@@ -2,6 +2,7 @@ import { Grid } from "@/styles/BaseComponents";
 import React from "react";
 import StampItem from "./stampItem/StampItem";
 import useGetMyStampsQuery from "@/queries/stamps/useGetMyStamps";
+import Empty from "@/component/common/Empty";
 
 export default function StampContainer() {
   // todo: 가데이터 제거
@@ -39,7 +40,11 @@ export default function StampContainer() {
   //     hasPassStamp: false,
   //   },
   // ];
-  const { data: myStamps } = useGetMyStampsQuery();
+  const { data: myStamps, isLoading } = useGetMyStampsQuery();
+
+  if (myStamps?.stamps.length === 0 || isLoading) {
+    return <Empty text="아직 스탬프가 없습니다." />;
+  }
 
   return (
     <Grid width="100%" height="100%" gridTemplateColumns="repeat(2, 1fr)">
