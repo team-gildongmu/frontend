@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Modal from "@/component/common/Modal";
 import { Div } from "@/styles/BaseStyledTags";
 import MapSelectedLoactionModal from "./MapSelectedLoactionModal";
+import { useTranslation } from "react-i18next";
 
 interface MyRoadMapProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ interface Location {
 }
 
 export default function MyRoadMap({ isOpen, onClose }: MyRoadMapProps) {
+  const { t } = useTranslation();
   const dummyLocation = useMemo<Location[]>(
     () => [
       {
@@ -156,7 +158,7 @@ export default function MyRoadMap({ isOpen, onClose }: MyRoadMapProps) {
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        title="지도"
+        title={t("myroad.map")}
         width="100%"
         height="100%"
         maxWidth="780px"

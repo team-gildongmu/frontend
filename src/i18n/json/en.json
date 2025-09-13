@@ -1,5 +1,40 @@
 {
-  "hello": "안녕하세요",
-  "welcome": "길동무에 오신 것을 환영합니다",
-  "language": "언어"
+  "tabs": {
+    "review": "Review",
+    "log": "Confirmed Log",
+    "stamp": "Stamp"
+  },
+  "myroad": {
+    "detailCourse": "Detail Course",
+    "viewRouteOnMap": "View Route on Map",
+    "map": "Map",
+    "calendar": {
+      "title": "Select Date",
+      "selectDate": "Please select a date",
+      "selectDateRange": "Select date range",
+      "selectedDate": "Selected Date",
+      "reviewDescription": "Check out the detailed review of this trip",
+      "viewDetailReview": "View Detail Review",
+      "noTravelOnDate": "No travel on selected date",
+      "selectOtherDate": "Please select another date",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      "months": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "yearSuffix": ""
+    }
+  }
 }

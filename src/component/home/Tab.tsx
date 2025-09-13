@@ -5,6 +5,7 @@ import React from "react";
 import { styled } from "styled-components";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Z_INDEX } from "@/styles/ZIndex";
+import { useTranslation } from "react-i18next";
 
 interface TabProps {
   setSelectedTab: (tab: string) => void;
@@ -13,13 +14,14 @@ interface TabProps {
 export default function Tab({ setSelectedTab }: TabProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   const currentTab = searchParams.get("tab") || "review";
 
   const tabs = [
-    { label: "후기", value: "review" },
-    { label: "확정로그", value: "log" },
-    { label: "스탬프", value: "stamp" },
+    { label: t("tabs.review"), value: "review" },
+    { label: t("tabs.log"), value: "log" },
+    { label: t("tabs.stamp"), value: "stamp" },
   ];
 
   const onClickTab = (value: string) => {

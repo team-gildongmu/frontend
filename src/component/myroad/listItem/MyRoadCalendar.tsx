@@ -10,6 +10,7 @@ import { Font } from "@/styles/Typography";
 import { Button } from "@/styles/BaseStyledTags";
 import { useRouter } from "next/navigation";
 import { colorPalette } from "@/component/common/ColorPalette";
+import { useTranslation } from "react-i18next";
 
 interface MyRoadCalendarProps {
   isOpen: boolean;
@@ -24,14 +25,28 @@ export default function MyRoadCalendar({
   onClose,
 }: MyRoadCalendarProps) {
   const router = useRouter();
+  const { t, i18n } = useTranslation();
 
   const [selectedDate, setSelectedDate] = useState<Value>(new Date());
 
-  const formatSelectedDate = (date: Value): string => {
-    if (!date) return "날짜를 선택해주세요";
-    if (Array.isArray(date)) return "날짜 범위 선택";
+  const getCurrentLocale = () => {
+    const currentLang = i18n.language;
+    switch (currentLang) {
+      case "en":
+        return "en-US";
+      case "ja":
+        return "ja-JP";
+      case "ko":
+      default:
+        return "ko-KR";
+    }
+  };
 
-    return date.toLocaleDateString("ko-KR", {
+  const formatSelectedDate = (date: Value): string => {
+    if (!date) return t("myroad.calendar.selectDate");
+    if (Array.isArray(date)) return t("myroad.calendar.selectDateRange");
+
+    return date.toLocaleDateString(getCurrentLocale(), {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -133,7 +148,7 @@ export default function MyRoadCalendar({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="날짜 선택"
+      title={t("myroad.calendar.title")}
       width="90%"
       height="90%"
       maxWidth="780px"
@@ -142,31 +157,25 @@ export default function MyRoadCalendar({
         <Calendar
           onChange={handleDateChange}
           value={selectedDate}
-          locale="ko-KR"
+          locale={getCurrentLocale()}
           formatDay={(locale, date) => date.getDate().toString()}
           formatShortWeekday={(locale, date) => {
-            const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+            const weekdays = t("myroad.calendar.weekdays", {
+              returnObjects: true,
+            }) as string[];
             return weekdays[date.getDay()];
           }}
           next2Label={null}
           prev2Label={null}
           showNeighboringMonth={true}
-          formatMonth={(locale, date) => {
-            const months = [
-              "1월",
-              "2월",
-              "3월",
-              "4월",
-              "5월",
-              "6월",
-              "7월",
-              "8월",
-              "9월",
-              "10월",
-              "11월",
-              "12월",
-            ];
-            return months[date.getMonth()];
+          formatMonthYear={(locale, date) => {
+            const months = t("myroad.calendar.months", {
+              returnObjects: true,
+            }) as string[];
+            const yearSuffix = t("myroad.calendar.yearSuffix");
+            return `${date.getFullYear()}${yearSuffix} ${
+              months[date.getMonth()]
+            }`;
           }}
           tileContent={getTileContent}
         />
@@ -174,7 +183,7 @@ export default function MyRoadCalendar({
         <SelectedDateInfo>
           <DateHeader>
             <Font typo="c01_m" color="blue_500">
-              선택된 날짜
+              {t("myroad.calendar.selectedDate")}
             </Font>
           </DateHeader>
           <Font typo="t02_m" color="black" style={{ marginTop: "8px" }}>
@@ -194,36 +203,35 @@ export default function MyRoadCalendar({
                 {selectedReview.startDate} ~ {selectedReview.endDate}
               </ReviewDateRange>
               <ReviewDescription>
-                이 여행의 상세한 후기를 확인해보세요
+                {t("myroad.calendar.reviewDescription")}
               </ReviewDescription>
               <ReviewDetailButton
                 color={getColorById(selectedReview.id)}
                 onClick={() => {
-                  console.log(
-                    `후기 상세 페이지로 이동: ${selectedReview.reviewId}`
-                  );
                   router.push(`/mind/${selectedReview.reviewId}`);
                 }}
               >
                 <ButtonIcon>👀</ButtonIcon>
-                상세 후기 보기
+                {t("myroad.calendar.viewDetailReview")}
               </ReviewDetailButton>
             </ReviewCard>
           ) : (
             <EmptyState>
               <EmptyIcon>🗓️</EmptyIcon>
-              <EmptyText>선택한 날짜에 여행이 없습니다</EmptyText>
-              <EmptySubText>다른 날짜를 선택해보세요</EmptySubText>
+              <EmptyText>{t("myroad.calendar.noTravelOnDate")}</EmptyText>
+              <EmptySubText>
+                {t("myroad.calendar.selectOtherDate")}
+              </EmptySubText>
             </EmptyState>
           )}
         </SelectedDateInfo>
 
         <ActionButtons>
           <ActionButton variant="secondary" onClick={onClose}>
-            취소
+            {t("myroad.calendar.cancel")}
           </ActionButton>
           <ActionButton variant="primary" onClick={handleConfirm}>
-            확인
+            {t("myroad.calendar.confirm")}
           </ActionButton>
         </ActionButtons>
       </CalendarWrapper>

@@ -9,10 +9,12 @@ import { Font } from "@/styles/Typography";
 import { Button } from "@/styles/BaseStyledTags";
 import Icon from "@/component/common/IconifyIcon";
 import ListContainer from "@/component/myroad/listItem/ListContainer";
+import { useTranslation } from "react-i18next";
 
 export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <CenterColumn>
@@ -48,7 +50,7 @@ export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
       >
         <Icon icon="mdi:map" width="20" height="20" />
         <Font typo="c02_m" color="black">
-          지도로 경로보기
+          {t("myroad.viewRouteOnMap")}
         </Font>
       </Button>
       <MyRoadCalendar
