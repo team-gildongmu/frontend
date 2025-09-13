@@ -86,6 +86,12 @@ const Config = {
       fontSize: "9px",
       lineHeight: "normal",
     },
+    c04_m: {
+      fontFamily: "Noto Sans KR, sans-serif",
+      fontWeight: "400",
+      fontSize: "12px",
+      lineHeight: "normal",
+    },
   },
 };
 
