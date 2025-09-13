@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   HeaderContainer,
   LanguageBtn,
@@ -16,12 +16,29 @@ import { Font } from "@/styles/Typography";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isChanging, setIsChanging] = useState(false);
   const { languages, currentLanguage } = useLanguages();
 
-  const languageChange = (lang: string) => {
-    setLanguage(lang);
-    setIsOpen(false);
-  };
+  const languageChange = useCallback(
+    async (lang: string) => {
+      if (isChanging) return; // 이미 변경 중이면 무시
+
+      setIsChanging(true);
+      setIsOpen(false);
+
+      try {
+        await setLanguage(lang);
+        // 언어 변경 후 잠시 대기 (UI 업데이트를 위해)
+        setTimeout(() => {
+          setIsChanging(false);
+        }, 100);
+      } catch (error) {
+        console.error("언어 변경 실패:", error);
+        setIsChanging(false);
+      }
+    },
+    [isChanging]
+  );
 
   const getLanguageIcon = (locale: string) => {
     switch (locale) {
@@ -43,7 +60,10 @@ export const Header = () => {
       </HeaderLogo>
 
       <div>
-        <LanguageBtn onClick={() => setIsOpen((prev) => !prev)}>
+        <LanguageBtn
+          onClick={() => !isChanging && setIsOpen((prev) => !prev)}
+          disabled={isChanging}
+        >
           <LanguageDisplay>
             <Icon
               icon={getLanguageIcon(
@@ -53,7 +73,7 @@ export const Header = () => {
               height={15}
             />
             <Font typo="l01_bold_m" color="black">
-              {currentLanguage}
+              {isChanging ? "변경중..." : currentLanguage}
             </Font>
             <ChevronIcon $isOpen={isOpen}>
               <Icon icon="mdi:chevron-down" width={16} height={16} />
@@ -62,7 +82,7 @@ export const Header = () => {
         </LanguageBtn>
       </div>
 
-      {isOpen && (
+      {isOpen && !isChanging && (
         <Depth>
           {languages.map((lang) => (
             <DepthBtn

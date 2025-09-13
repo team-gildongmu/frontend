@@ -59,7 +59,6 @@ export default function MyRoadCalendar({
   };
 
   const handleConfirm = () => {
-    console.log("선택된 날짜:", selectedDate);
     onClose();
   };
 

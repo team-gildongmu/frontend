@@ -8,6 +8,6 @@ export default function LanguageInitializer({
 }: {
   initialLang: string;
 }) {
-  useInitializeLanguage();
+  useInitializeLanguage(initialLang);
   return null;
 }

@@ -1,20 +1,38 @@
 // src/i18n/useInitializeLanguage.ts
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import i18n, { LocaleType } from "@/i18n";
-import { C } from "@/constant";
-import { getCookie } from "@/hooks/useCookies";
 
 const toHtmlLang = (l: string) => l;
 
-export const useInitializeLanguage = () => {
-  useEffect(() => {
-    const cookieLang = (getCookie(C.USER_LANG_KEY) ?? "ko") as LocaleType;
+export const useInitializeLanguage = (initialLang: string) => {
+  const initialized = useRef(false);
 
-    if (i18n.language !== cookieLang) {
-      i18n.changeLanguage(cookieLang).catch(() => {});
-    }
-    document.documentElement.lang = toHtmlLang(cookieLang);
-  }, []);
+  useEffect(() => {
+    const initLanguage = async () => {
+      if (initialized.current) return;
+      initialized.current = true;
+
+      try {
+        const lang = initialLang as LocaleType;
+
+        await i18n.changeLanguage(lang);
+
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        if (typeof document !== "undefined") {
+          document.documentElement.lang = toHtmlLang(lang);
+        }
+
+        window.dispatchEvent(new Event("languageChanged"));
+      } catch (error) {
+        console.error("언어 초기화 오류:", error);
+      }
+    };
+
+    const timer = setTimeout(initLanguage, 50);
+
+    return () => clearTimeout(timer);
+  }, [initialLang]);
 };

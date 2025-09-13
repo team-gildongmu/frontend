@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
 import { C } from "@/constant";
 import i18n, { LocaleType } from "@/i18n";
-import { setCookie } from "@/hooks/useCookies";
+import { getCookie, setCookie } from "@/hooks/useCookies";
 
 export interface Language {
   locale: LocaleType;
@@ -9,7 +10,31 @@ export interface Language {
 }
 
 export const useLanguages = () => {
-  const currentLocale = i18n.language as LocaleType;
+  const [currentLocale, setCurrentLocale] = useState<LocaleType>(
+    i18n.language as LocaleType
+  );
+
+  useEffect(() => {
+    const updateLanguage = () => {
+      const newLocale = i18n.language as LocaleType;
+
+      setCurrentLocale(newLocale);
+    };
+
+    // i18n 언어 변경 이벤트 리스너
+    i18n.on("languageChanged", updateLanguage);
+
+    // 커스텀 이벤트 리스너 (강제 업데이트용)
+    window.addEventListener("languageChanged", updateLanguage);
+
+    // 초기 언어 설정
+    updateLanguage();
+
+    return () => {
+      i18n.off("languageChanged", updateLanguage);
+      window.removeEventListener("languageChanged", updateLanguage);
+    };
+  }, [currentLocale]);
 
   const languages: Language[] = [
     { locale: "ko", label: "한국어", selected: currentLocale === "ko" },
@@ -27,18 +52,41 @@ export const useLanguages = () => {
   };
 };
 
-export const saveLangCookie = (lang: string) => {
-  if (!lang) {
-    return;
-  }
+export const saveLangCookie = (lang: string): Promise<void> => {
+  return new Promise((resolve) => {
+    if (!lang) {
+      resolve();
+      return;
+    }
 
-  const expires = new Date();
-  expires.setDate(expires.getDate() + 365);
+    try {
+      setCookie(C.USER_LANG_KEY, lang, 365);
 
-  setCookie(C.USER_LANG_KEY, lang, 365);
+      setTimeout(() => {
+        const savedLang = getCookie(C.USER_LANG_KEY);
+        if (savedLang === lang) {
+          resolve();
+        } else {
+          setCookie(C.USER_LANG_KEY, lang, 365);
+          resolve();
+        }
+      }, 10);
+    } catch (error) {
+      resolve();
+    }
+  });
 };
 
-export const setLanguage = async (lang: string) => {
-  await i18n.changeLanguage(lang);
-  saveLangCookie(lang);
+export const setLanguage = async (lang: string): Promise<void> => {
+  try {
+    await saveLangCookie(lang);
+
+    await i18n.changeLanguage(lang);
+
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = lang;
+    }
+  } catch (error) {
+    console.error("언어 변경 중 오류:", error);
+  }
 };
