@@ -8,11 +8,12 @@ import { useTranslation } from "react-i18next";
 
 interface TopInfoProps {
   title: string;
-  detailId: string;
+  detailId: number;
+  subtitle: string;
   isMain?: boolean;
 }
 
-export default function TopInfo({ title, detailId, isMain }: TopInfoProps) {
+export default function TopInfo({ title, detailId, subtitle, isMain }: TopInfoProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const onClickDetail = () => {
@@ -55,7 +56,7 @@ export default function TopInfo({ title, detailId, isMain }: TopInfoProps) {
               textOverflow: "ellipsis",
             }}
           >
-            고즈넉한 강릉의 해안가를 즐길수 있는 여행코스{" "}
+            {subtitle}
           </Font>
         )}
       </Column>
