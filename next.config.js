@@ -27,6 +27,9 @@ const nextConfig = {
       ];
     }
 
+    console.log(
+      "⚠️ Next.js Config - No API Base URL found, no proxy configured"
+    );
     return [];
   },
 };
