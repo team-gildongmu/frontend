@@ -1,4 +1,11 @@
 {
+  "navigation": {
+    "main": "Main",
+    "search": "Search",
+    "myroad": "My Road",
+    "mind": "Mind",
+    "profile": "Profile"
+  },
   "tabs": {
     "review": "Review",
     "log": "Confirmed Log",

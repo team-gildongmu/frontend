@@ -1,4 +1,11 @@
 {
+  "navigation": {
+    "main": "メイン",
+    "search": "検索",
+    "myroad": "マイロード",
+    "mind": "マインド",
+    "profile": "プロフィール"
+  },
   "tabs": {
     "review": "レビュー",
     "log": "確認ログ",
