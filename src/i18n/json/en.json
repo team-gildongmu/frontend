@@ -6,6 +6,9 @@
     "mind": "Mind",
     "profile": "Profile"
   },
+  "stamp": {
+    "noStamps": "No stamps yet."
+  },
   "tabs": {
     "review": "Review",
     "log": "Confirmed Log",

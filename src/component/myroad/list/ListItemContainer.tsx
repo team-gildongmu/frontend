@@ -78,7 +78,7 @@ export default function ListItemContainer() {
   //     return <Empty text="아직 작성된 여행 로그가 없습니다." />;
   //   }
 
-  console.log(logList);
+  console.log(logList, isLoading);
 
   return (
     <Column

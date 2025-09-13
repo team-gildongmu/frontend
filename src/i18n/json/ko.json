@@ -6,6 +6,9 @@
     "mind": "마음길",
     "profile": "내정보"
   },
+  "stamp": {
+    "noStamps": "아직 스탬프가 없습니다."
+  },
   "tabs": {
     "review": "후기",
     "log": "확정로그",

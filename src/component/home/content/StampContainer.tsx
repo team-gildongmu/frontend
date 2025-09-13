@@ -1,5 +1,6 @@
 import { Grid } from "@/styles/BaseComponents";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import StampItem from "./stampItem/StampItem";
 import useGetMyStampsQuery from "@/queries/stamps/useGetMyStamps";
 import Empty from "@/component/common/Empty";
@@ -40,10 +41,11 @@ export default function StampContainer() {
   //     hasPassStamp: false,
   //   },
   // ];
+  const { t } = useTranslation();
   const { data: myStamps, isLoading } = useGetMyStampsQuery();
 
   if (myStamps?.stamps.length === 0 || isLoading) {
-    return <Empty text="아직 스탬프가 없습니다." />;
+    return <Empty text={t("stamp.noStamps")} />;
   }
 
   return (
