@@ -9,7 +9,7 @@ const Config = {
       // Main Logo
       fontFamily: "Nunito-Extra, sans-serif",
       fontWeight: "700",
-      fontSize: "35px",
+      fontSize: "25px",
       lineHeight: "normal",
     },
     m01_m: {

@@ -1,0 +1,13 @@
+// src/app/language-initializer.tsx
+"use client";
+
+import { useInitializeLanguage } from "@/i18n/useInitialLang";
+
+export default function LanguageInitializer({
+  initialLang,
+}: {
+  initialLang: string;
+}) {
+  useInitializeLanguage();
+  return null;
+}
