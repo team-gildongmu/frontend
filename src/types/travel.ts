@@ -11,3 +11,13 @@ export type Stamp = {
 export type MyStampsResponse = {
   stamps: Stamp[];
 };
+
+// 여행 로그 리스트 응답
+export type TravelLogItem = {
+  images: string[];
+  keywords: string[];
+  subtitle: string;
+  summary: string;
+  title: string;
+  travel_log_id: number;
+};

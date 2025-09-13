@@ -9,26 +9,18 @@ import TopInfo from "@/component/myroad/list/TopInfo";
 import ImgSwiper from "@/component/myroad/list/ImgSwiper";
 import TagWrapper from "@/component/myroad/list/TagWrapper";
 import Description from "@/component/myroad/list/Description";
-
-interface ListItemData {
-  id: number;
-  img: string[];
-  title: string;
-  description?: string;
-  tags: string[];
-  detailId: string;
-}
+import { TravelLogItem } from "@/types/travel";
 
 export default function ListItem({
   listItemData,
   isMain = false,
 }: {
   isMain?: boolean;
-  listItemData: ListItemData;
+  listItemData: TravelLogItem;
 }) {
   return (
     <Column
-      key={listItemData.id}
+      key={listItemData.travel_log_id}
       width="100%"
       p="7px"
       border={isMain ? "none" : `1px solid ${colors.gray_200}`}
@@ -39,12 +31,13 @@ export default function ListItem({
     >
       <TopInfo
         title={listItemData.title}
-        detailId={listItemData.detailId}
+        detailId={listItemData.travel_log_id}
+        subtitle={listItemData.subtitle}
         isMain={isMain}
       />
       {isMain ? (
         <Image
-          src={listItemData.img[0]}
+          src={listItemData.images[0]}
           alt={listItemData.title}
           width={0}
           height={0}
@@ -52,10 +45,10 @@ export default function ListItem({
           style={{ width: "100%", height: "auto" }}
         />
       ) : (
-        <ImgSwiper img={listItemData.img} />
+        <ImgSwiper img={listItemData.images} />
       )}
-      {isMain && <Description description={listItemData?.description || ""} />}
-      <TagWrapper tags={listItemData.tags} isMain={isMain} />
+      {isMain && <Description description={listItemData?.summary || ""} />}
+      <TagWrapper tags={listItemData.keywords} isMain={isMain} />
     </Column>
   );
 }
