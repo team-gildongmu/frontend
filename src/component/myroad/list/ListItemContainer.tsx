@@ -6,7 +6,6 @@ import { Column } from "@/styles/BaseComponents";
 
 import ListItem from "@/component/myroad/list/ListItem";
 import useGetLogListQuery from "@/queries/travel/useGetLogList";
-import Empty from "@/component/common/Empty";
 
 export default function ListItemContainer() {
   // todo: listItem 데이터 추가
@@ -70,9 +69,16 @@ export default function ListItemContainer() {
 
   const { data: logList, isLoading } = useGetLogListQuery();
 
+  // TODO: 실제 데이터 사용 시 주석 해제
+  // if (logList?.data?.length === 0 || isLoading) {
+  //   return <Empty text="아직 작성된 여행 로그가 없습니다." />;
+  // }
+
   //   if (logList.length === 0 || isLoading) {
   //     return <Empty text="아직 작성된 여행 로그가 없습니다." />;
   //   }
+
+  console.log(logList);
 
   return (
     <Column
@@ -84,7 +90,7 @@ export default function ListItemContainer() {
       justifyContent="flex-start"
       alignItems="center"
     >
-      {listItemData.map((item: any) => (
+      {listItemData.map((item) => (
         <ListItem key={item.id} listItemData={item} />
       ))}
     </Column>

@@ -51,8 +51,8 @@ export default function ListContainer() {
         <Font typo="t01_m" color="black" textAlign="left" width="100%">
           추천 관람 루트(약 2~3시간 코스)
         </Font>
-        {listItemData.section.map((item) => (
-          <Column width="100%" gridGap="5px">
+        {listItemData.section.map((item, index) => (
+          <Column key={index} width="100%" gridGap="5px">
             <Font typo="l01_bold_m" color="black" textAlign="left" width="100%">
               {item.title}
             </Font>

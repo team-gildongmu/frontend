@@ -71,7 +71,7 @@ export const saveLangCookie = (lang: string): Promise<void> => {
           resolve();
         }
       }, 10);
-    } catch (error) {
+    } catch {
       resolve();
     }
   });

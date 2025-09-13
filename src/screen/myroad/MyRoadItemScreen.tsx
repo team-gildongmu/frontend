@@ -16,6 +16,7 @@ export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
   const [isMapOpen, setIsMapOpen] = useState(false);
   const { t } = useTranslation();
 
+  console.log(myroadid);
   return (
     <CenterColumn>
       <ListContainer />
