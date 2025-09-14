@@ -10,12 +10,12 @@ export default function LogContainer() {
   const { t } = useTranslation();
   const { data: logList, isLoading } = useGetLogListQuery();
 
-  if (logList?.length === 0) {
-    return <Empty text={t("log.noLogs")} />;
-  }
-
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (logList?.length === 0) {
+    return <Empty text={t("log.noLogs")} />;
   }
 
   return (

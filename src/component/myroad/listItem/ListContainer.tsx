@@ -14,12 +14,12 @@ export default function ListContainer({ myroadid }: { myroadid: number }) {
   const { t } = useTranslation();
   const { data: listItemData, isLoading } = useGetLogDetailQuery(myroadid);
 
-  if (!listItemData) {
-    return <Empty text={t("myroad.loadingData")} />;
-  }
-
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (!listItemData) {
+    return <Empty text={t("myroad.loadingData")} />;
   }
 
   return (
