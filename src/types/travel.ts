@@ -67,3 +67,11 @@ export type TravelReviewItem = {
   weather: string;
   image: string[];
 };
+
+// 여행 리뷰 캘린더 응답
+export type TravelCalendarReviewItem = {
+  travel_review_id: number;
+  title: string;
+  start_date: string;
+  end_date: string;
+};

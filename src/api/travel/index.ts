@@ -1,5 +1,6 @@
 import { baseApi } from "@/api/baseApi";
 import {
+  TravelCalendarReviewItem,
   TravelLogDetail,
   TravelLogItem,
   TravelLogMapInfo,
@@ -77,6 +78,28 @@ export const getReviewList = async (): Promise<TravelReviewItem[]> => {
   try {
     const response = await baseApi.get<TravelReviewItem[]>(
       `/travel/review/list`
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+/**
+ * @getCalendarReviewList 여행 리뷰 캘린더 조회 api
+ * @returns {Promise<TravelCalendarReviewItem[]>} - 여행 리뷰 캘린더 데이터 응답
+ */
+
+export const getCalendarReviewList = async (): Promise<
+  TravelCalendarReviewItem[]
+> => {
+  try {
+    const response = await baseApi.get<TravelCalendarReviewItem[]>(
+      `/travel/review/calendar`
     );
     return response.data;
   } catch (error) {
