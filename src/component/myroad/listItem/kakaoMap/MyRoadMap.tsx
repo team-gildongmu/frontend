@@ -15,13 +15,10 @@ import { colorPalette } from "@/component/common/ColorPalette";
 import { buildMarkerEl } from "@/component/myroad/listItem/kakaoMap/BuildMarkerEl";
 import { TravelLocation } from "@/types/travel";
 
-// Kakao Maps 타입 정의 (실제 window.kakao.maps 타입 사용)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type KakaoMap = any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type KakaoMarker = any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type KakaoPolyline = any;
+// Kakao Maps 타입을 kakao.d.ts에서 가져옴
+type KakaoMap = kakao.maps.Map;
+type KakaoPolyline = kakao.maps.Polyline;
+type KakaoCustomOverlay = kakao.maps.CustomOverlay;
 import { Z_INDEX } from "@/styles/ZIndex";
 import { CenterRow } from "@/styles/BaseComponents";
 
@@ -82,7 +79,7 @@ export default function MyRoadMap({
 
   const mapDivRef = useRef<HTMLDivElement>(null);
   const mapObjRef = useRef<KakaoMap | null>(null);
-  const overlaysRef = useRef<KakaoMarker[]>([]);
+  const overlaysRef = useRef<KakaoCustomOverlay[]>([]);
   const polylinesRef = useRef<KakaoPolyline[]>([]);
 
   const [viewMode, setViewMode] = useState<ViewMode>("SOLO");
@@ -131,8 +128,7 @@ export default function MyRoadMap({
 
       if (showDays.length === 0) return;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const bounds = new (window as any).kakao.maps.LatLngBounds();
+      const bounds = new window.kakao.maps.LatLngBounds();
 
       showDays.forEach((day, idx) => {
         const color = colorPalette[(day - 1) % colorPalette.length];
@@ -150,8 +146,7 @@ export default function MyRoadMap({
             position,
             yAnchor: 1,
             zIndex: 100 + loc.order + idx * 1000,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any);
+          });
           overlay.setMap(map);
           overlaysRef.current.push(overlay);
         });
