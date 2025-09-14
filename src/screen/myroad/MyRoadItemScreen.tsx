@@ -4,19 +4,16 @@ import React, { useState } from "react";
 
 import { CenterColumn } from "@/styles/BaseComponents";
 import MyRoadCalendar from "@/component/myroad/listItem/MyRoadCalendar";
-import MyRoadMap from "@/component/myroad/listItem/MyRoadMap";
+import MyRoadMap from "@/component/myroad/listItem/kakaoMap/MyRoadMap";
 import { Font } from "@/styles/Typography";
 import { Button } from "@/styles/BaseStyledTags";
 import Icon from "@/component/common/IconifyIcon";
 import ListContainer from "@/component/myroad/listItem/ListContainer";
-import { useTranslation } from "react-i18next";
-import colors from "@/styles/Colors";
-import MapBtn from "@/component/myroad/listItem/MapBtn";
+import MapBtn from "@/component/myroad/listItem/kakaoMap/MapBtn";
 
 export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
-  const { t } = useTranslation();
 
   return (
     <CenterColumn p="20px" gridGap="15px">
@@ -42,7 +39,11 @@ export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
         isOpen={isCalendarOpen}
         onClose={() => setIsCalendarOpen(false)}
       />
-      <MyRoadMap isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
+      <MyRoadMap
+        isOpen={isMapOpen}
+        onClose={() => setIsMapOpen(false)}
+        myroadid={Number(myroadid)}
+      />
     </CenterColumn>
   );
 }

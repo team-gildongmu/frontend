@@ -15,6 +15,7 @@ export const Z_INDEX = {
   FOOTER: 20,
 
   MODAL: 200,
+  MODAL_BAR: 500,
 } as const;
 
 export type ZIndexLevel = (typeof Z_INDEX)[keyof typeof Z_INDEX];

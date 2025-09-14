@@ -1,5 +1,9 @@
 import { baseApi } from "@/api/baseApi";
-import { TravelLogDetail, TravelLogItem } from "@/types/travel";
+import {
+  TravelLogDetail,
+  TravelLogItem,
+  TravelLogMapInfo,
+} from "@/types/travel";
 
 /**
  * @getLogList 확정 로그 조회 api
@@ -30,6 +34,28 @@ export const getLogDetail = async (
   try {
     const response = await baseApi.get<TravelLogDetail>(
       `/travel/log?travel_log_id=${travel_log_id}`
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+/**
+ * @getLogMapInfo 여행 로그 지도 정보 조회 api
+ * @returns {Promise<TravelLogMapInfo>} - 여행 로그 지도 정보 데이터 응답
+ */
+
+export const getLogMapInfo = async (
+  travel_log_id: number
+): Promise<TravelLogMapInfo> => {
+  try {
+    const response = await baseApi.get<TravelLogMapInfo>(
+      `/travel/log/map?travel_log_id=${travel_log_id}`
     );
     return response.data;
   } catch (error) {

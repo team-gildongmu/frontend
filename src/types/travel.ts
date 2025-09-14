@@ -48,3 +48,11 @@ export type TravelLogDetail = {
     [key: string]: TravelLocation[];
   };
 };
+
+// 여행 로그 지도 정보 응답
+export type TravelLogMapInfo = {
+  travel_log_id: number;
+  locations: {
+    [key: string]: TravelLocation[];
+  };
+};
