@@ -20,11 +20,16 @@
   "myroad": {
     "detailCourse": "Detail Course",
     "viewRouteOnMap": "View Route on Map",
-    "map": "Map",
     "loadingData": "Loading travel log data...",
     "recommendedRoute": "Recommended Route",
     "daySuffix": "Day",
     "summary": "Summary",
+    "map": {
+      "title": "Map",
+      "solo": "By Day",
+      "all": "All",
+      "day": "Day {{day}}"
+    },
     "timeline": {
       "title": "Travel Schedule Timeline",
       "locationList": "Location List",
