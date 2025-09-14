@@ -3,6 +3,7 @@ import {
   TravelLogDetail,
   TravelLogItem,
   TravelLogMapInfo,
+  TravelReviewItem,
 } from "@/types/travel";
 
 /**
@@ -56,6 +57,26 @@ export const getLogMapInfo = async (
   try {
     const response = await baseApi.get<TravelLogMapInfo>(
       `/travel/log/map?travel_log_id=${travel_log_id}`
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+/**
+ * @getReviewList 여행 리뷰 리스트 조회 api
+ * @returns {Promise<TravelReviewItem[]>} - 여행 리뷰 리스트 데이터 응답
+ */
+
+export const getReviewList = async (): Promise<TravelReviewItem[]> => {
+  try {
+    const response = await baseApi.get<TravelReviewItem[]>(
+      `/travel/review/list`
     );
     return response.data;
   } catch (error) {
