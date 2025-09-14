@@ -11,6 +11,7 @@ const colors = {
   gray_300: "#888888",
   gray_200: "#999999",
   gray_100: "#CCCCCC",
+  gray_50: "#f8f9fa",
 
   transparent: "#00000000",
 };

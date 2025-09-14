@@ -9,6 +9,9 @@
   "stamp": {
     "noStamps": "아직 스탬프가 없습니다."
   },
+  "log": {
+    "noLogs": "아직 작성된 여행 로그가 없습니다."
+  },
   "tabs": {
     "review": "후기",
     "log": "확정로그",
@@ -17,7 +20,21 @@
   "myroad": {
     "detailCourse": "상세코스",
     "viewRouteOnMap": "지도로 경로보기",
-    "map": "지도",
+    "loadingData": "여행 로그 데이터를 불러오는 중입니다.",
+    "recommendedRoute": "추천 관람 루트",
+    "daySuffix": "일차",
+    "summary": "마무리",
+    "map": {
+      "title": "지도",
+      "solo": "일자별",
+      "all": "전체",
+      "day": "{{day}}일차"
+    },
+    "timeline": {
+      "title": "여행 일정 타임라인",
+      "locationList": "방문지 목록",
+      "locationOrder": "번째 방문지"
+    },
     "calendar": {
       "title": "날짜 선택",
       "selectDate": "날짜를 선택해주세요",

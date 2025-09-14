@@ -3,29 +3,19 @@ import { Column } from "@/styles/BaseComponents";
 import React from "react";
 import Image from "next/image";
 
-import TagWrapper from "@/component/myroad/list/TagWrapper";
 import Description from "@/component/myroad/list/Description";
 import UserContainer from "@/component/home/content/reviewItem/UserContainer";
-
-interface ReviewItemData {
-  id: number;
-  img: string[];
-  title: string;
-  description: string;
-  userNickname: string;
-  userProfile: string;
-  tags: string[];
-  detailId: string;
-}
+import { TravelReviewItem } from "@/types/travel";
 
 export default function ReviewItem({
   reviewItemData,
 }: {
-  reviewItemData: ReviewItemData;
+  reviewItemData: TravelReviewItem;
 }) {
+  // todo 수정필요
   return (
     <Column
-      key={reviewItemData.id}
+      key={reviewItemData.travel_review_id}
       width="100%"
       p="7px"
       justifyContent="flex-start"
@@ -34,11 +24,11 @@ export default function ReviewItem({
     >
       <UserContainer
         title={reviewItemData.title}
-        userNickname={reviewItemData.userNickname}
-        userProfile={reviewItemData.userProfile}
+        userNickname={reviewItemData.title}
+        userProfile={reviewItemData.image[0]}
       />
       <Image
-        src={reviewItemData.img[0]}
+        src={reviewItemData.image[0]}
         alt={reviewItemData.title}
         width={0}
         height={0}
@@ -46,8 +36,8 @@ export default function ReviewItem({
         style={{ width: "100%", height: "auto" }}
       />
 
-      <Description description={reviewItemData.description} />
-      <TagWrapper tags={reviewItemData.tags} isMain={true} />
+      <Description description={reviewItemData.title} />
+      {/* <TagWrapper tags={reviewItemData.tags} isMain={true} /> */}
     </Column>
   );
 }

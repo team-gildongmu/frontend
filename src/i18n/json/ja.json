@@ -9,6 +9,9 @@
   "stamp": {
     "noStamps": "まだスタンプがありません。"
   },
+  "log": {
+    "noLogs": "まだ旅行ログが作成されていません。"
+  },
   "tabs": {
     "review": "レビュー",
     "log": "確認ログ",
@@ -17,7 +20,21 @@
   "myroad": {
     "detailCourse": "詳細コース",
     "viewRouteOnMap": "地図でルートを見る",
-    "map": "地図",
+    "loadingData": "旅行ログデータを読み込み中です。",
+    "recommendedRoute": "おすすめ観光ルート",
+    "daySuffix": "日目",
+    "summary": "まとめ",
+    "map": {
+      "title": "地図",
+      "solo": "日別",
+      "all": "全体",
+      "day": "{{day}}日目"
+    },
+    "timeline": {
+      "title": "旅行スケジュールタイムライン",
+      "locationList": "訪問地リスト",
+      "locationOrder": "番目の訪問地"
+    },
     "calendar": {
       "title": "日付選択",
       "selectDate": "日付を選択してください",
