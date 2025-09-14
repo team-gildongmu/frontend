@@ -13,6 +13,15 @@ import { useTranslation } from "react-i18next";
 import useGetLogMapInfoQuery from "@/queries/travel/useLogMapInfo";
 import { colorPalette } from "@/component/common/ColorPalette";
 import { buildMarkerEl } from "@/component/myroad/listItem/kakaoMap/BuildMarkerEl";
+import { TravelLocation } from "@/types/travel";
+
+// Kakao Maps 타입 정의 (실제 window.kakao.maps 타입 사용)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type KakaoMap = any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type KakaoMarker = any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type KakaoPolyline = any;
 import { Z_INDEX } from "@/styles/ZIndex";
 import { CenterRow } from "@/styles/BaseComponents";
 
@@ -53,15 +62,17 @@ export default function MyRoadMap({
       .sort((a, b) => a - b);
 
     _dayKeys.forEach((day) => {
-      const arr = (raw[String(day)] || []).map((loc: any, idx: number) => ({
-        id: loc.travel_location_id,
-        lat: loc.latitude,
-        lng: loc.longitude,
-        title: loc.title,
-        type: loc.location_type,
-        day,
-        order: idx + 1,
-      }));
+      const arr = (raw[String(day)] || []).map(
+        (loc: TravelLocation, idx: number) => ({
+          id: loc.travel_location_id,
+          lat: loc.latitude,
+          lng: loc.longitude,
+          title: loc.title,
+          type: loc.location_type,
+          day,
+          order: idx + 1,
+        })
+      );
       byDay[day] = arr;
       all = all.concat(arr);
     });
@@ -70,9 +81,9 @@ export default function MyRoadMap({
   }, [MapInfo]);
 
   const mapDivRef = useRef<HTMLDivElement>(null);
-  const mapObjRef = useRef<any>(null);
-  const overlaysRef = useRef<any[]>([]);
-  const polylinesRef = useRef<any[]>([]);
+  const mapObjRef = useRef<KakaoMap | null>(null);
+  const overlaysRef = useRef<KakaoMarker[]>([]);
+  const polylinesRef = useRef<KakaoPolyline[]>([]);
 
   const [viewMode, setViewMode] = useState<ViewMode>("SOLO");
   const [activeDay, setActiveDay] = useState<number | null>(null);
@@ -104,7 +115,7 @@ export default function MyRoadMap({
   };
 
   const drawMapContent = useCallback(
-    (map: any) => {
+    (map: KakaoMap) => {
       const showDays: number[] = (() => {
         if (viewMode === "ALL") {
           return dayKeys;
@@ -120,6 +131,7 @@ export default function MyRoadMap({
 
       if (showDays.length === 0) return;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const bounds = new (window as any).kakao.maps.LatLngBounds();
 
       showDays.forEach((day, idx) => {
@@ -138,6 +150,7 @@ export default function MyRoadMap({
             position,
             yAnchor: 1,
             zIndex: 100 + loc.order + idx * 1000,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } as any);
           overlay.setMap(map);
           overlaysRef.current.push(overlay);
@@ -197,7 +210,7 @@ export default function MyRoadMap({
     if (!map || !window.kakao) return;
 
     drawMapContent(map);
-  }, [viewMode, activeDay, byDay, dayKeys]);
+  }, [viewMode, activeDay, byDay, dayKeys, drawMapContent]);
 
   // 닫힐 때 초기화
   useEffect(() => {
@@ -208,7 +221,7 @@ export default function MyRoadMap({
       setViewMode("SOLO");
       setActiveDay(dayKeys[0] ?? null);
     }
-  }, [isOpen === false]);
+  }, [isOpen, dayKeys]);
 
   return (
     <>
@@ -269,7 +282,21 @@ export default function MyRoadMap({
             description: "",
             image: "",
           }}
-          setSelectedLocation={(v: any) => setSelectedLocation(v)}
+          setSelectedLocation={(location) => {
+            if (location) {
+              setSelectedLocation({
+                id: location.id,
+                lat: location.lat,
+                lng: location.lng,
+                title: location.title,
+                type: "attraction", // 기본값
+                day: 1, // 기본값
+                order: 1, // 기본값
+              });
+            } else {
+              setSelectedLocation(null);
+            }
+          }}
         />
       )}
     </>

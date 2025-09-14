@@ -1,6 +1,5 @@
 import { Column } from "@/styles/BaseComponents";
 import React from "react";
-import ImgSwiper from "@/component/myroad/list/ImgSwiper";
 import TagWrapper from "@/component/myroad/list/TagWrapper";
 import { Font } from "@/styles/Typography";
 import useGetLogDetailQuery from "@/queries/travel/useGetLogDetail";

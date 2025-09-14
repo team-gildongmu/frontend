@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import styled from "styled-components";
 import colors from "@/styles/Colors";
 import { Font } from "@/styles/Typography";
@@ -27,7 +27,6 @@ export default function DayRouteTimeline({ locations }: DayRouteTimelineProps) {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const anchorsRef = useRef<(HTMLSpanElement | null)[]>([]);
-  const [sizeKey, setSizeKey] = useState(0);
 
   const points = useMemo((): TimelinePoint[] => {
     const parent = containerRef.current;
@@ -41,30 +40,7 @@ export default function DayRouteTimeline({ locations }: DayRouteTimelineProps) {
         y: rect.top - parentRect.top + rect.height / 2,
       };
     });
-  }, [sizeKey, locations?.length]);
-
-  const handleResize = useCallback(() => {
-    setSizeKey((prev) => prev + 1);
   }, []);
-
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver(handleResize);
-    const container = containerRef.current;
-
-    if (container) {
-      resizeObserver.observe(container);
-    }
-
-    window.addEventListener("resize", handleResize);
-
-    const layoutTimeout = window.setTimeout(handleResize, 0);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", handleResize);
-      clearTimeout(layoutTimeout);
-    };
-  }, [handleResize]);
 
   const pathD = useMemo(() => {
     if (points.length === 0) return "";
@@ -138,7 +114,7 @@ export default function DayRouteTimeline({ locations }: DayRouteTimelineProps) {
         </Card>
       );
     },
-    []
+    [t]
   );
 
   return (
