@@ -10,16 +10,18 @@ import { Button } from "@/styles/BaseStyledTags";
 import Icon from "@/component/common/IconifyIcon";
 import ListContainer from "@/component/myroad/listItem/ListContainer";
 import { useTranslation } from "react-i18next";
+import colors from "@/styles/Colors";
+import MapBtn from "@/component/myroad/listItem/MapBtn";
 
 export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
   const { t } = useTranslation();
 
-  console.log(myroadid);
   return (
-    <CenterColumn>
-      <ListContainer />
+    <CenterColumn p="20px" gridGap="15px">
+      <ListContainer myroadid={Number(myroadid)} />
+      <MapBtn isOpen={isMapOpen} setIsOpen={setIsMapOpen} />
       <Button
         display="flex"
         flexDirection="row"
@@ -36,24 +38,6 @@ export default function MyRoadItemScreen({ myroadid }: { myroadid: string }) {
         </Font>
       </Button>
 
-      <Button
-        display="flex"
-        flexDirection="row"
-        alignItems="center"
-        gridGap="5px"
-        backgroundColor="white"
-        border="1px solid #000"
-        borderRadius="10px"
-        padding="10px"
-        onClick={() => {
-          setIsMapOpen(!isMapOpen);
-        }}
-      >
-        <Icon icon="mdi:map" width="20" height="20" />
-        <Font typo="c02_m" color="black">
-          {t("myroad.viewRouteOnMap")}
-        </Font>
-      </Button>
       <MyRoadCalendar
         isOpen={isCalendarOpen}
         onClose={() => setIsCalendarOpen(false)}

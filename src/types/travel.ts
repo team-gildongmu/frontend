@@ -21,3 +21,30 @@ export type TravelLogItem = {
   title: string;
   travel_log_id: number;
 };
+
+// 여행 로그 상세 응답
+
+// 여행 위치 상세 정보
+export type TravelLocation = {
+  travel_location_id: number;
+  title: string;
+  longitude: number;
+  latitude: number;
+  location_type: string;
+  description: string;
+  travel_day: number;
+  image_link: string;
+};
+
+// 여행 로그 상세 정보
+export type TravelLogDetail = {
+  travel_log_id: number;
+  title: string;
+  subtitle: string;
+  summary: string;
+  keywords: string[];
+  images: string[];
+  locations: {
+    [key: string]: TravelLocation[];
+  };
+};
