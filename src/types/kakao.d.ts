@@ -1,5 +1,3 @@
-import type { kakao } from "./kakao";
-
 declare global {
   interface Window {
     kakao: typeof kakao;
@@ -15,6 +13,12 @@ declare namespace kakao {
       getLng(): number;
     }
 
+    class LatLngBounds {
+      constructor();
+      extend(latlng: LatLng): void;
+      isEmpty(): boolean;
+    }
+
     interface MapOptions {
       center: LatLng;
       level?: number;
@@ -22,6 +26,17 @@ declare namespace kakao {
 
     class Map {
       constructor(container: HTMLElement, options: MapOptions);
+      setCenter(latlng: LatLng): void;
+      setLevel(level: number): void;
+      getCenter(): LatLng;
+      getLevel(): number;
+      setBounds(
+        bounds: LatLngBounds,
+        paddingTop?: number,
+        paddingRight?: number,
+        paddingBottom?: number,
+        paddingLeft?: number
+      ): void;
     }
 
     interface MarkerOptions {
@@ -38,11 +53,16 @@ declare namespace kakao {
       content: string | HTMLElement;
       position: LatLng;
       yAnchor?: number;
+      zIndex?: number;
     }
 
     class CustomOverlay {
       constructor(options: CustomOverlayOptions);
       setMap(map: Map | null): void;
+      setPosition(latlng: LatLng): void;
+      setContent(content: string | HTMLElement): void;
+      setYAnchor(yAnchor: number): void;
+      setZIndex(zIndex: number): void;
     }
 
     interface PolylineOptions {
@@ -56,6 +76,10 @@ declare namespace kakao {
     class Polyline {
       constructor(options: PolylineOptions);
       setMap(map: Map | null): void;
+      setPath(path: LatLng[]): void;
+      setStrokeColor(color: string): void;
+      setStrokeWeight(weight: number): void;
+      setStrokeOpacity(opacity: number): void;
     }
 
     namespace event {
