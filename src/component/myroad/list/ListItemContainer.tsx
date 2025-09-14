@@ -14,12 +14,12 @@ export default function ListItemContainer() {
   const { t } = useTranslation();
   const { data: logList, isLoading } = useGetLogListQuery();
 
-  if (logList?.length === 0) {
-    return <Empty text={t("log.noLogs")} />;
-  }
-
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (logList?.length === 0) {
+    return <Empty text={t("log.noLogs")} />;
   }
 
   return (

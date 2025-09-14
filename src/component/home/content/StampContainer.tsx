@@ -10,14 +10,13 @@ export default function StampContainer() {
   const { t } = useTranslation();
   const { data: myStamps, isLoading } = useGetMyStampsQuery();
 
-  if (myStamps?.stamps.length === 0) {
-    return <Empty text={t("stamp.noStamps")} />;
-  }
-
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
+  if (myStamps?.stamps.length === 0) {
+    return <Empty text={t("stamp.noStamps")} />;
+  }
   return (
     <Grid width="100%" height="100%" gridTemplateColumns="repeat(2, 1fr)">
       {myStamps?.stamps?.map((item) => (
