@@ -1,7 +1,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { CenterColumn } from "@/styles/BaseComponents";
-import { Font } from "@/styles/Typography";
 import Icon from "@/component/common/IconifyIcon";
 import colors from "@/styles/Colors";
 
@@ -22,7 +21,7 @@ const SpinningIcon = styled(Icon)`
   animation: ${spin} 1s linear infinite;
 `;
 
-export default function LoadingSpinner({ text }: LoadingSpinnerProps) {
+export default function LoadingSpinner({}: LoadingSpinnerProps) {
   return (
     <CenterColumn width="100%" height="100%" gridGap="12px" py="20px">
       <SpinningIcon

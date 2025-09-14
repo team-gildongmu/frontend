@@ -3,7 +3,6 @@ import { Column } from "@/styles/BaseComponents";
 import React from "react";
 import Image from "next/image";
 
-import TagWrapper from "@/component/myroad/list/TagWrapper";
 import Description from "@/component/myroad/list/Description";
 import UserContainer from "@/component/home/content/reviewItem/UserContainer";
 import { TravelReviewItem } from "@/types/travel";
