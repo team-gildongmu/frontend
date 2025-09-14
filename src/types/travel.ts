@@ -56,3 +56,14 @@ export type TravelLogMapInfo = {
     [key: string]: TravelLocation[];
   };
 };
+
+// 여행 리뷰 리스트 응답
+export type TravelReviewItem = {
+  travel_review_id: number;
+  title: string;
+  ai_rating: string;
+  start_date: string;
+  end_date: string;
+  weather: string;
+  image: string[];
+};
