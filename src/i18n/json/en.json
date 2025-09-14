@@ -9,6 +9,9 @@
   "stamp": {
     "noStamps": "No stamps yet."
   },
+  "log": {
+    "noLogs": "No travel logs have been written yet."
+  },
   "tabs": {
     "review": "Review",
     "log": "Confirmed Log",
@@ -18,6 +21,15 @@
     "detailCourse": "Detail Course",
     "viewRouteOnMap": "View Route on Map",
     "map": "Map",
+    "loadingData": "Loading travel log data...",
+    "recommendedRoute": "Recommended Route",
+    "daySuffix": "Day",
+    "summary": "Summary",
+    "timeline": {
+      "title": "Travel Schedule Timeline",
+      "locationList": "Location List",
+      "locationOrder": "th visit"
+    },
     "calendar": {
       "title": "Select Date",
       "selectDate": "Please select a date",

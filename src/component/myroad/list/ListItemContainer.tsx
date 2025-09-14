@@ -8,12 +8,14 @@ import ListItem from "@/component/myroad/list/ListItem";
 import useGetLogListQuery from "@/queries/travel/useGetLogList";
 import Empty from "@/component/common/Empty";
 import LoadingSpinner from "@/component/common/LoadingSpinner";
+import { useTranslation } from "react-i18next";
 
 export default function ListItemContainer() {
+  const { t } = useTranslation();
   const { data: logList, isLoading } = useGetLogListQuery();
 
   if (logList?.length === 0) {
-    return <Empty text="아직 작성된 여행 로그가 없습니다." />;
+    return <Empty text={t("log.noLogs")} />;
   }
 
   if (isLoading) {
