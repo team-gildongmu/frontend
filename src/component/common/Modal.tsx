@@ -48,7 +48,7 @@ export default function Modal({
       >
         <Header>
           {title && (
-            <Font typo="t01_m" color="black">
+            <Font typo="t01_l_bold" color="black">
               {title}
             </Font>
           )}

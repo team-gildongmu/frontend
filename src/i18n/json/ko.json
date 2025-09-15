@@ -18,7 +18,9 @@
       "stampedButton": "스탬프 완료",
       "noLocations": "근처에 스탬프를 찍을 수 있는 장소가 없습니다.",
       "noLocationsDescription": "다른 위치에서 다시 시도해보세요.",
-      "distance": "km"
+      "distance": "km",
+      "latitude": "위도",
+      "longitude": "경도"
     }
   },
   "log": {

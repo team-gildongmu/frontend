@@ -47,10 +47,23 @@ const Config = {
       fontSize: "14px",
       lineHeight: "normal",
     },
+    t01_l_bold: {
+      fontFamily: "Noto Sans KR, sans-serif",
+      fontWeight: "700",
+      fontSize: "17px",
+      lineHeight: "normal",
+    },
     t01_m: {
       // 제목, 질문 강조 텍스트
       fontFamily: "Noto Sans KR, sans-serif",
       fontWeight: "700",
+      fontSize: "15px",
+      lineHeight: "normal",
+    },
+    t01_ligh_m: {
+      // 제목, 질문 강조 텍스트
+      fontFamily: "Noto Sans KR, sans-serif",
+      fontWeight: "400",
       fontSize: "15px",
       lineHeight: "normal",
     },
@@ -90,6 +103,12 @@ const Config = {
       fontFamily: "Noto Sans KR, sans-serif",
       fontWeight: "400",
       fontSize: "12px",
+      lineHeight: "normal",
+    },
+    c05_m: {
+      fontFamily: "Noto Sans KR, sans-serif",
+      fontWeight: "400",
+      fontSize: "13px",
       lineHeight: "normal",
     },
   },

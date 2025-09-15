@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import Icon from "@/component/common/IconifyIcon";
 import { Font } from "@/styles/Typography";
-import { CenterRow } from "@/styles/BaseComponents";
+import { Column, Row } from "@/styles/BaseComponents";
 import { StampDetectLocation } from "@/types/stamp";
+import colors from "@/styles/Colors";
+import { Button } from "@/styles/BaseStyledTags";
 
 interface StampLocationItemProps {
   location: StampDetectLocation;
@@ -20,82 +22,46 @@ export default function StampLocationItem({
   };
 
   return (
-    <StampLocationItemContainer key={location.id}>
-      <LocationHeader>
-        <LocationName typo="c04_bold_m" color="#333">
+    <Column
+      key={location.id}
+      width="100%"
+      height="auto"
+      border={`1px solid ${colors.gray_300}`}
+      borderRadius="12px"
+      padding="16px"
+      backgroundColor={colors.gray_50}
+      gridGap="8px"
+    >
+      <Row width="100%" justifyContent="space-between" textAlign="left">
+        <Font typo="t01_l_bold" color="black">
           {location.title}
-        </LocationName>
-        <Distance typo="c05_m" color="#666">
+        </Font>
+        <Font typo="c05_m" color="gray_300">
           {location.distance_km}
           {t("stamp.detect.distance")}
-        </Distance>
-      </LocationHeader>
-      <LocationAddress typo="c05_m" color="#666">
-        위도: {location.latitude.toFixed(6)}, 경도:{" "}
-        {location.longitude.toFixed(6)}
-      </LocationAddress>
+        </Font>
+      </Row>
+      <Font typo="t01_ligh_m" color="gray_500" width="100%" textAlign="left">
+        {t("stamp.detect.latitude")}: {location.latitude.toFixed(6)},{" "}
+        {t("stamp.detect.longitude")}: {location.longitude.toFixed(6)}
+      </Font>
       <StampButton
         $isStamped={false}
         onClick={() => handleStamp(location.id.toString())}
       >
         <Icon icon="mdi:stamp" width={16} height={16} />
-        {t("stamp.detect.stampButton")}
+        <Font typo="c05_m" color="white">
+          {t("stamp.detect.stampButton")}
+        </Font>
       </StampButton>
-    </StampLocationItemContainer>
+    </Column>
   );
 }
 
-const StampLocationItemContainer = styled.div`
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 16px;
-  background: #fafafa;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-color: #0047ab;
-    background: #f0f7ff;
-  }
-`;
-
-const LocationHeader = styled(CenterRow)`
-  justify-content: space-between;
-  margin-bottom: 8px;
-`;
-
-const LocationName = styled(Font)`
-  font-weight: 600;
-  color: #333;
-`;
-
-const Distance = styled(Font)`
-  color: #666;
-  font-size: 14px;
-`;
-
-const LocationAddress = styled(Font)`
-  color: #666;
-  font-size: 14px;
-  margin-bottom: 12px;
-`;
-
-const StampButton = styled.button<{ $isStamped: boolean }>`
-  background: ${({ $isStamped }) => ($isStamped ? "#4caf50" : "#0047ab")};
-  color: white;
-  border: none;
+const StampButton = styled(Button)<{ $isStamped: boolean }>`
+  background: ${({ $isStamped }) =>
+    $isStamped ? colors.gray_300 : colors.blue_400};
   border-radius: 8px;
   padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: ${({ $isStamped }) => ($isStamped ? "#45a049" : "#003d9a")};
-  }
-
-  &:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-  }
+  width: fit-content;
 `;
