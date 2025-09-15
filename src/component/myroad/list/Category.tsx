@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { CenterColumn, Row } from "@/styles/BaseComponents";
 import { Font } from "@/styles/Typography";
@@ -14,7 +15,7 @@ export default function Category({
   selectedCategory: { name: string };
   setSelectedCategory: (category: { name: string }) => void;
 }) {
-
+  const { t } = useTranslation();
   const categories = getCategories();
 
   return (
@@ -52,13 +53,13 @@ export default function Category({
             mb="4px"
           />
 
-          <Font
-            typo="c01_m"
-            color="gray_300"
-            $active={selectedCategory.name === category.name}
-          >
-            #{category.name}
-          </Font>
+            <Font
+              typo="c01_m"
+              color="gray_300"
+              $active={selectedCategory.name === category.name}
+            >
+              #{t(`myroad.categories.${category.displayName}`)}
+            </Font>
         </CenterColumn>
       ))}
     </Row>

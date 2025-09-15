@@ -38,6 +38,18 @@
     "recommendedRoute": "추천 관람 루트",
     "daySuffix": "일차",
     "summary": "마무리",
+    "categories": {
+      "nature": "자연",
+      "urban": "도심",
+      "nightView": "야경",
+      "history": "역사",
+      "food": "맛집",
+      "healing": "힐링",
+      "exciting": "신나게",
+      "shopping": "쇼핑",
+      "culture": "문화/예술",
+      "relaxation": "휴양/휴식"
+    },
     "map": {
       "title": "지도",
       "solo": "일자별",

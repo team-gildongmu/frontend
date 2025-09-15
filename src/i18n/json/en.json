@@ -38,6 +38,18 @@
     "recommendedRoute": "Recommended Route",
     "daySuffix": "Day",
     "summary": "Summary",
+    "categories": {
+      "nature": "Nature",
+      "urban": "Urban",
+      "nightView": "Night View",
+      "history": "History",
+      "food": "Food",
+      "healing": "Healing",
+      "exciting": "Exciting",
+      "shopping": "Shopping",
+      "culture": "Culture/Art",
+      "relaxation": "Relaxation"
+    },
     "map": {
       "title": "Map",
       "solo": "By Day",

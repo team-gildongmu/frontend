@@ -38,6 +38,18 @@
     "recommendedRoute": "おすすめ観光ルート",
     "daySuffix": "日目",
     "summary": "まとめ",
+    "categories": {
+      "nature": "自然",
+      "urban": "都市",
+      "nightView": "夜景",
+      "history": "歴史",
+      "food": "グルメ",
+      "healing": "ヒーリング",
+      "exciting": "楽しく",
+      "shopping": "ショッピング",
+      "culture": "文化/芸術",
+      "relaxation": "休養/休息"
+    },
     "map": {
       "title": "地図",
       "solo": "日別",
