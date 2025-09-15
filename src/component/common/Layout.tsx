@@ -23,6 +23,11 @@ const Main = styled.main`
   height: 100dvh;
   margin: 0 auto;
   position: relative;
+
+  @media (max-width: 380px) {
+    min-width: 380px;
+    overflow-x: auto;
+  }
 `;
 
 const ContentContainer = styled(Column)`
