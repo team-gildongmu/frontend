@@ -7,12 +7,13 @@ import {
   DepthBtn,
   LanguageDisplay,
   ChevronIcon,
-} from "./Header.styles";
+} from "@/component/common/Header.styles";
 import Link from "next/link";
 import { setLanguage } from "@/hooks/useLang";
 import { useLanguages } from "@/hooks/useLang";
 import Icon from "@/component/common/IconifyIcon";
 import { Font } from "@/styles/Typography";
+import LoadingSpinner from "@/component/common/LoadingSpinner";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,14 +22,13 @@ export const Header = () => {
 
   const languageChange = useCallback(
     async (lang: string) => {
-      if (isChanging) return; // 이미 변경 중이면 무시
+      if (isChanging) return;
 
       setIsChanging(true);
       setIsOpen(false);
 
       try {
         await setLanguage(lang);
-        // 언어 변경 후 잠시 대기 (UI 업데이트를 위해)
         setTimeout(() => {
           setIsChanging(false);
         }, 100);
@@ -73,7 +73,7 @@ export const Header = () => {
               height={15}
             />
             <Font typo="l01_bold_m" color="black">
-              {isChanging ? "변경중..." : currentLanguage}
+              {isChanging ? <LoadingSpinner /> : currentLanguage}
             </Font>
             <ChevronIcon $isOpen={isOpen}>
               <Icon icon="mdi:chevron-down" width={16} height={16} />
