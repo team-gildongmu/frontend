@@ -24,6 +24,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.62.0",
     "react-i18next": "^15.7.3",
+    "react-lottie-player": "^2.1.0",
     "styled-components": "^6.1.18",
     "styled-system": "^5.1.5",
     "swiper": "^11.2.10",
