@@ -23,6 +23,9 @@ export default function MindScreen () {
                 setSelectedCategory={setSelectedCategory}
             />
             <MindCardWrap/>
+            <PlusButtonWrap>
+                <PlusButton />
+            </PlusButtonWrap>
         </MindWrap>
     )   
 }
