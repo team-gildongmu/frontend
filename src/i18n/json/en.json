@@ -18,7 +18,9 @@
       "stampedButton": "Stamped",
       "noLocations": "No stamp locations found nearby.",
       "noLocationsDescription": "Please try again from a different location.",
-      "distance": "km"
+      "distance": "km",
+      "latitude": "Lat",
+      "longitude": "Lng"
     }
   },
   "log": {
