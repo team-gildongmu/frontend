@@ -1,7 +1,8 @@
 import React from "react";
-import styled from "styled-components";
 import Image from "next/image";
 import Modal from "@/component/common/Modal";
+import { Font } from "@/styles/Typography";
+import { Column } from "@/styles/BaseComponents";
 
 interface Location {
   id: number;
@@ -23,40 +24,30 @@ export default function MapSelectedLoactionModal({
     <Modal
       isOpen={!!selectedLocation}
       onClose={() => setSelectedLocation(null)}
-      title={selectedLocation.title}
+      title={selectedLocation?.title}
       width="90%"
       height="auto"
       maxWidth="500px"
     >
-      <DetailWrapper>
-        <Image
-          src={selectedLocation.image}
-          alt={selectedLocation.title}
-          width={500}
-          height={300}
-          style={{ width: "100%", height: "auto" }}
-        />
-        <h3>{selectedLocation.title}</h3>
-        <p>{selectedLocation.description}</p>
-      </DetailWrapper>
+      <Column gridGap="12px" width="100%">
+        {selectedLocation?.image && (
+          <Image
+            src={selectedLocation.image}
+            alt={selectedLocation?.title}
+            width={500}
+            height={300}
+            style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+          />
+        )}
+        <Column gridGap="5px" width="100%">
+          <Font typo="t01_bold_m" color="black">
+            {selectedLocation?.title}
+          </Font>
+          <Font typo="l01_m" color="grey_500">
+            {selectedLocation?.description}
+          </Font>
+        </Column>
+      </Column>
     </Modal>
   );
 }
-
-const DetailWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  img {
-    width: 100%;
-    border-radius: 8px;
-  }
-  h3 {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  p {
-    white-space: pre-line;
-    color: #555;
-  }
-`;
