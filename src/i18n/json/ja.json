@@ -7,7 +7,21 @@
     "profile": "プロフィール"
   },
   "stamp": {
-    "noStamps": "まだスタンプがありません。"
+    "noStamps": "まだスタンプがありません。",
+    "detect": {
+      "button": "スタンプ",
+      "modalTitle": "近くのスタンプを探す",
+      "description": "現在地の周辺でスタンプを押せる場所を探してみてください。",
+      "searchButton": "近くのスタンプ場所を探す",
+      "searching": "検索中...",
+      "stampButton": "スタンプ",
+      "stampedButton": "スタンプ完了",
+      "noLocations": "近くにスタンプを押せる場所がありません。",
+      "noLocationsDescription": "別の場所から再度お試しください。",
+      "distance": "km",
+      "latitude": "緯度",
+      "longitude": "経度"
+    }
   },
   "log": {
     "noLogs": "まだ旅行ログが作成されていません。"
@@ -24,6 +38,18 @@
     "recommendedRoute": "おすすめ観光ルート",
     "daySuffix": "日目",
     "summary": "まとめ",
+    "categories": {
+      "nature": "自然",
+      "urban": "都市",
+      "nightView": "夜景",
+      "history": "歴史",
+      "food": "グルメ",
+      "healing": "ヒーリング",
+      "exciting": "楽しく",
+      "shopping": "ショッピング",
+      "culture": "文化/芸術",
+      "relaxation": "休養/休息"
+    },
     "map": {
       "title": "地図",
       "solo": "日別",

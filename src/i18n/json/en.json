@@ -7,7 +7,21 @@
     "profile": "Profile"
   },
   "stamp": {
-    "noStamps": "No stamps yet."
+    "noStamps": "No stamps yet.",
+    "detect": {
+      "button": "Stamp",
+      "modalTitle": "Find Nearby Stamps",
+      "description": "Find places where you can stamp near your current location.",
+      "searchButton": "Find Nearby Stamp Locations",
+      "searching": "Searching...",
+      "stampButton": "Stamp",
+      "stampedButton": "Stamped",
+      "noLocations": "No stamp locations found nearby.",
+      "noLocationsDescription": "Please try again from a different location.",
+      "distance": "km",
+      "latitude": "Lat",
+      "longitude": "Lng"
+    }
   },
   "log": {
     "noLogs": "No travel logs have been written yet."
@@ -24,6 +38,18 @@
     "recommendedRoute": "Recommended Route",
     "daySuffix": "Day",
     "summary": "Summary",
+    "categories": {
+      "nature": "Nature",
+      "urban": "Urban",
+      "nightView": "Night View",
+      "history": "History",
+      "food": "Food",
+      "healing": "Healing",
+      "exciting": "Exciting",
+      "shopping": "Shopping",
+      "culture": "Culture/Art",
+      "relaxation": "Relaxation"
+    },
     "map": {
       "title": "Map",
       "solo": "By Day",

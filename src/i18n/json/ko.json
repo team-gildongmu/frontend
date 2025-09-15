@@ -7,7 +7,21 @@
     "profile": "내정보"
   },
   "stamp": {
-    "noStamps": "아직 스탬프가 없습니다."
+    "noStamps": "아직 스탬프가 없습니다.",
+    "detect": {
+      "button": "스탬프 찍기",
+      "modalTitle": "근처 스탬프 찾기",
+      "description": "현재 위치 주변에서 스탬프를 찍을 수 있는 장소를 찾아보세요.",
+      "searchButton": "근처 스탬프 장소 찾기",
+      "searching": "검색 중...",
+      "stampButton": "스탬프 찍기",
+      "stampedButton": "스탬프 완료",
+      "noLocations": "근처에 스탬프를 찍을 수 있는 장소가 없습니다.",
+      "noLocationsDescription": "다른 위치에서 다시 시도해보세요.",
+      "distance": "km",
+      "latitude": "위도",
+      "longitude": "경도"
+    }
   },
   "log": {
     "noLogs": "아직 작성된 여행 로그가 없습니다."
@@ -24,6 +38,18 @@
     "recommendedRoute": "추천 관람 루트",
     "daySuffix": "일차",
     "summary": "마무리",
+    "categories": {
+      "nature": "자연",
+      "urban": "도심",
+      "nightView": "야경",
+      "history": "역사",
+      "food": "맛집",
+      "healing": "힐링",
+      "exciting": "신나게",
+      "shopping": "쇼핑",
+      "culture": "문화/예술",
+      "relaxation": "휴양/휴식"
+    },
     "map": {
       "title": "지도",
       "solo": "일자별",

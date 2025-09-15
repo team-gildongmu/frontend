@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { createPortal } from "react-dom";
 import styled from "styled-components";
 import Icon from "@/component/common/IconifyIcon";
 import { Button, Div } from "@/styles/BaseStyledTags";
@@ -37,7 +38,7 @@ export default function Modal({
     }
   };
 
-  return (
+  const modalContent = (
     <FullScreenOverlay onClick={handleOverlayClick}>
       <ModalContainer
         width={width}
@@ -48,7 +49,7 @@ export default function Modal({
       >
         <Header>
           {title && (
-            <Font typo="t01_m" color="black">
+            <Font typo="t01_l_bold" color="black">
               {title}
             </Font>
           )}
@@ -62,6 +63,13 @@ export default function Modal({
       </ModalContainer>
     </FullScreenOverlay>
   );
+
+  // Portal을 사용해서 body에 직접 렌더링
+  if (typeof window !== "undefined") {
+    return createPortal(modalContent, document.body);
+  }
+
+  return null;
 }
 
 const FullScreenOverlay = styled(CenterColumn)`
@@ -94,7 +102,7 @@ const ModalContainer = styled(Column)<{
 const Header = styled(Row)`
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 const CloseButton = styled(Button)`

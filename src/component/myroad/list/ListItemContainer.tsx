@@ -10,9 +10,15 @@ import Empty from "@/component/common/Empty";
 import LoadingSpinner from "@/component/common/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 
-export default function ListItemContainer() {
+export default function ListItemContainer({
+  selectedCategory,
+}: {
+  selectedCategory: { name: string };
+}) {
   const { t } = useTranslation();
-  const { data: logList, isLoading } = useGetLogListQuery();
+  const { data: logList, isLoading } = useGetLogListQuery(
+    selectedCategory.name
+  );
 
   if (isLoading) {
     return <LoadingSpinner />;

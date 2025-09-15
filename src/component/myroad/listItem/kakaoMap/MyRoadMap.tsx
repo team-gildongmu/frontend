@@ -49,9 +49,10 @@ export default function MyRoadMap({
   const { data: MapInfo } = useGetLogMapInfoQuery(myroadid);
 
   // 일자별 정규화
-  const { byDay, allList, dayKeys } = useMemo(() => {
+  const { byDay, allList, dayKeys, locationMap } = useMemo(() => {
     const byDay: Record<number, NormalizedLocation[]> = {};
     let all: NormalizedLocation[] = [];
+    const locationMap: Record<number, TravelLocation> = {};
     const raw = MapInfo?.locations || {};
     const _dayKeys = Object.keys(raw)
       .map((d) => Number(d))
@@ -60,21 +61,25 @@ export default function MyRoadMap({
 
     _dayKeys.forEach((day) => {
       const arr = (raw[String(day)] || []).map(
-        (loc: TravelLocation, idx: number) => ({
-          id: loc.travel_location_id,
-          lat: loc.latitude,
-          lng: loc.longitude,
-          title: loc.title,
-          type: loc.location_type,
-          day,
-          order: idx + 1,
-        })
+        (loc: TravelLocation, idx: number) => {
+          // locationMap에 원본 데이터 저장
+          locationMap[loc.travel_location_id] = loc;
+          return {
+            id: loc.travel_location_id,
+            lat: loc.latitude,
+            lng: loc.longitude,
+            title: loc.title,
+            type: loc.location_type,
+            day,
+            order: idx + 1,
+          };
+        }
       );
       byDay[day] = arr;
       all = all.concat(arr);
     });
 
-    return { byDay, allList: all, dayKeys: _dayKeys };
+    return { byDay, allList: all, dayKeys: _dayKeys, locationMap };
   }, [MapInfo]);
 
   const mapDivRef = useRef<HTMLDivElement>(null);
@@ -274,8 +279,8 @@ export default function MyRoadMap({
             lat: selectedLocation.lat,
             lng: selectedLocation.lng,
             title: selectedLocation.title,
-            description: "",
-            image: "",
+            description: locationMap[selectedLocation.id]?.description || "",
+            image: locationMap[selectedLocation.id]?.image_link || "",
           }}
           setSelectedLocation={(location) => {
             if (location) {

@@ -1,4 +1,6 @@
 import { useState, useCallback } from "react";
+import Link from "next/link";
+
 import {
   HeaderContainer,
   LanguageBtn,
@@ -7,28 +9,33 @@ import {
   DepthBtn,
   LanguageDisplay,
   ChevronIcon,
-} from "./Header.styles";
-import Link from "next/link";
+} from "@/component/common/Header.styles";
+import Icon from "@/component/common/IconifyIcon";
+import LoadingSpinner from "@/component/common/LoadingSpinner";
+import StampDetectBtn from "@/component/stampdetect/StampDetectBtn";
+import StampDetectModal from "@/component/stampdetect/StampDetectModal";
+
 import { setLanguage } from "@/hooks/useLang";
 import { useLanguages } from "@/hooks/useLang";
-import Icon from "@/component/common/IconifyIcon";
+
 import { Font } from "@/styles/Typography";
+import { CenterRow } from "@/styles/BaseComponents";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
+  const [isStampModalOpen, setIsStampModalOpen] = useState(false);
   const { languages, currentLanguage } = useLanguages();
 
   const languageChange = useCallback(
     async (lang: string) => {
-      if (isChanging) return; // 이미 변경 중이면 무시
+      if (isChanging) return;
 
       setIsChanging(true);
       setIsOpen(false);
 
       try {
         await setLanguage(lang);
-        // 언어 변경 후 잠시 대기 (UI 업데이트를 위해)
         setTimeout(() => {
           setIsChanging(false);
         }, 100);
@@ -59,7 +66,8 @@ export const Header = () => {
         <Link href="/">My Road</Link>
       </HeaderLogo>
 
-      <div>
+      <CenterRow gridGap="10px" width="auto" flexWrap="nowrap">
+        <StampDetectBtn onClick={() => setIsStampModalOpen(true)} />
         <LanguageBtn
           onClick={() => !isChanging && setIsOpen((prev) => !prev)}
           disabled={isChanging}
@@ -73,14 +81,14 @@ export const Header = () => {
               height={15}
             />
             <Font typo="l01_bold_m" color="black">
-              {isChanging ? "변경중..." : currentLanguage}
+              {isChanging ? <LoadingSpinner /> : currentLanguage}
             </Font>
             <ChevronIcon $isOpen={isOpen}>
               <Icon icon="mdi:chevron-down" width={16} height={16} />
             </ChevronIcon>
           </LanguageDisplay>
         </LanguageBtn>
-      </div>
+      </CenterRow>
 
       {isOpen && !isChanging && (
         <Depth>
@@ -102,6 +110,12 @@ export const Header = () => {
           ))}
         </Depth>
       )}
+
+      {/* 근처 스탬프 찾기 모달 */}
+      <StampDetectModal
+        isOpen={isStampModalOpen}
+        onClose={() => setIsStampModalOpen(false)}
+      />
     </HeaderContainer>
   );
 };

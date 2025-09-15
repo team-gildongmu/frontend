@@ -9,12 +9,14 @@ import {
 
 /**
  * @getLogList 확정 로그 조회 api
+ * @param theme - 테마 카테고리
  * @returns {Promise<TravelLogItem[]>} - 확정 로그 데이터 응답
  */
 
-export const getLogList = async (): Promise<TravelLogItem[]> => {
+export const getLogList = async (theme?: string): Promise<TravelLogItem[]> => {
   try {
-    const response = await baseApi.get<TravelLogItem[]>("/travel/log/list");
+    const url = theme ? `/travel/log/list?theme=${theme}` : `/travel/log/list`;
+    const response = await baseApi.get<TravelLogItem[]>(url);
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
