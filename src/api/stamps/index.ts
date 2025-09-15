@@ -43,3 +43,26 @@ export const getStampDetect = async (
     }
   }
 };
+
+/**
+ * @getStampDetect 스탬프 찍기 api
+ * @param stamp_id - 스탬프 id
+ * @returns {Promise<StampDetectResponse>} - 스탬프 찍기 데이터 응답
+ */
+
+export const patchStamp = async (
+  stamp_id: number
+): Promise<StampDetectResponse> => {
+  try {
+    const response = await baseApi.patch<StampDetectResponse>(
+      `/stamps/${stamp_id}/mark-completed`
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
