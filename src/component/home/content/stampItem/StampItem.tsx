@@ -1,4 +1,4 @@
-import { CenterColumn, Column } from "@/styles/BaseComponents";
+import { Column } from "@/styles/BaseComponents";
 import { Font } from "@/styles/Typography";
 import Image from "next/image";
 import React from "react";
