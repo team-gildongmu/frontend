@@ -1,13 +1,19 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
+import Lottie from "react-lottie-player";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
+
 import Icon from "@/component/common/IconifyIcon";
+
+import usePatchStampMutation from "@/queries/stamps/usePatchStampMutation";
+import { StampDetectLocation } from "@/types/stamp";
+
 import { Font } from "@/styles/Typography";
 import { Column, Row } from "@/styles/BaseComponents";
-import { StampDetectLocation } from "@/types/stamp";
 import colors from "@/styles/Colors";
 import { Button } from "@/styles/BaseStyledTags";
 
+import StampLottie from "@/json/StampLottie.json";
 interface StampLocationItemProps {
   location: StampDetectLocation;
 }
@@ -17,8 +23,25 @@ export default function StampLocationItem({
 }: StampLocationItemProps) {
   const { t } = useTranslation();
 
+  const { mutate: patchStamp } = usePatchStampMutation();
+
+  const [isStamped, setIsStamped] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(false);
+
   const handleStamp = (locationId: string) => {
-    console.log("스탬프 찍기:", locationId);
+    patchStamp(
+      { stamp_id: Number(locationId) },
+      {
+        onSuccess: () => {
+          setIsStamped(true);
+        },
+      }
+    );
+    setShowAnimation(true);
+
+    setTimeout(() => {
+      setShowAnimation(false);
+    }, 3000);
   };
 
   return (
@@ -32,6 +55,16 @@ export default function StampLocationItem({
       backgroundColor={colors.gray_50}
       gridGap="8px"
     >
+      {showAnimation && (
+        <LottieWrapper>
+          <Lottie
+            animationData={StampLottie}
+            style={{ width: "100%", height: "100%" }}
+            play
+            loop={false}
+          />
+        </LottieWrapper>
+      )}
       <Row width="100%" justifyContent="space-between" textAlign="left">
         <Font typo="t01_l_bold" color="black">
           {location.title}
@@ -46,13 +79,23 @@ export default function StampLocationItem({
         {t("stamp.detect.longitude")}: {location.longitude.toFixed(6)}
       </Font>
       <StampButton
-        $isStamped={false}
+        $isStamped={isStamped}
         onClick={() => handleStamp(location.id.toString())}
+        disabled={isStamped}
       >
-        <Icon icon="mdi:stamp" width={16} height={16} />
-        <Font typo="c05_m" color="white">
-          {t("stamp.detect.stampButton")}
-        </Font>
+        <Row gridGap="5px">
+          <Icon
+            icon={isStamped ? "mdi:check" : "mdi:map-marker-plus"}
+            color={colors.white}
+            width={20}
+            height={20}
+          />
+          <Font typo="c05_m" color="white">
+            {isStamped
+              ? t("stamp.detect.stampedButton")
+              : t("stamp.detect.stampButton")}
+          </Font>
+        </Row>
       </StampButton>
     </Column>
   );
@@ -64,4 +107,13 @@ const StampButton = styled(Button)<{ $isStamped: boolean }>`
   border-radius: 8px;
   padding: 8px 16px;
   width: fit-content;
+`;
+
+const LottieWrapper = styled.div`
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 `;
