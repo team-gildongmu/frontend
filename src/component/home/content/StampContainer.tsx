@@ -18,7 +18,13 @@ export default function StampContainer() {
     return <Empty text={t("stamp.noStamps")} />;
   }
   return (
-    <Grid width="100%" height="100%" gridTemplateColumns="repeat(2, 1fr)">
+    <Grid
+      width="100%"
+      height="100%"
+      gridTemplateColumns="repeat(auto-fill, minmax(100px, 1fr))"
+      gridGap="15px"
+      p="10px"
+    >
       {myStamps?.stamps?.map((item) => (
         <StampItem key={item.id} item={item} />
       ))}
