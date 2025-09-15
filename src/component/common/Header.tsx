@@ -1,4 +1,6 @@
 import { useState, useCallback } from "react";
+import Link from "next/link";
+
 import {
   HeaderContainer,
   LanguageBtn,
@@ -8,16 +10,21 @@ import {
   LanguageDisplay,
   ChevronIcon,
 } from "@/component/common/Header.styles";
-import Link from "next/link";
+import Icon from "@/component/common/IconifyIcon";
+import LoadingSpinner from "@/component/common/LoadingSpinner";
+import StampDetectBtn from "@/component/stampdetect/StampDetectBtn";
+import StampDetectModal from "@/component/stampdetect/StampDetectModal";
+
 import { setLanguage } from "@/hooks/useLang";
 import { useLanguages } from "@/hooks/useLang";
-import Icon from "@/component/common/IconifyIcon";
+
 import { Font } from "@/styles/Typography";
-import LoadingSpinner from "@/component/common/LoadingSpinner";
+import { CenterRow } from "@/styles/BaseComponents";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
+  const [isStampModalOpen, setIsStampModalOpen] = useState(false);
   const { languages, currentLanguage } = useLanguages();
 
   const languageChange = useCallback(
@@ -59,7 +66,8 @@ export const Header = () => {
         <Link href="/">My Road</Link>
       </HeaderLogo>
 
-      <div>
+      <CenterRow gridGap="10px" width="auto" flexWrap="nowrap">
+        <StampDetectBtn onClick={() => setIsStampModalOpen(true)} />
         <LanguageBtn
           onClick={() => !isChanging && setIsOpen((prev) => !prev)}
           disabled={isChanging}
@@ -80,7 +88,7 @@ export const Header = () => {
             </ChevronIcon>
           </LanguageDisplay>
         </LanguageBtn>
-      </div>
+      </CenterRow>
 
       {isOpen && !isChanging && (
         <Depth>
@@ -102,6 +110,12 @@ export const Header = () => {
           ))}
         </Depth>
       )}
+
+      {/* 근처 스탬프 찾기 모달 */}
+      <StampDetectModal
+        isOpen={isStampModalOpen}
+        onClose={() => setIsStampModalOpen(false)}
+      />
     </HeaderContainer>
   );
 };

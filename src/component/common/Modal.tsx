@@ -94,7 +94,7 @@ const ModalContainer = styled(Column)<{
 const Header = styled(Row)`
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 const CloseButton = styled(Button)`
