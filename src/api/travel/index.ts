@@ -15,9 +15,8 @@ import {
 
 export const getLogList = async (theme?: string): Promise<TravelLogItem[]> => {
   try {
-    const response = await baseApi.get<TravelLogItem[]>(
-      `/travel/log/list?theme=${theme}`
-    );
+    const url = theme ? `/travel/log/list?theme=${theme}` : `/travel/log/list`;
+    const response = await baseApi.get<TravelLogItem[]>(url);
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
