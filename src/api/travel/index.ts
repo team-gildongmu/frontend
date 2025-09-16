@@ -4,7 +4,9 @@ import {
   TravelLogDetail,
   TravelLogItem,
   TravelLogMapInfo,
+  TravelReviewDetail,
   TravelReviewItem,
+  TravelReviewPost,
 } from "@/types/travel";
 
 /**
@@ -102,6 +104,67 @@ export const getCalendarReviewList = async (): Promise<
   try {
     const response = await baseApi.get<TravelCalendarReviewItem[]>(
       `/travel/review/calendar`
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+
+/**
+ * @getReviewDetail 여행 리뷰 상세 조회 api
+ * @returns {Promise<TravelReviewDetail>} - 여행 리뷰 상세 데이터 응답
+ */
+
+export const getReviewDetail = async (
+  travel_review_id: number
+): Promise<TravelReviewDetail> => {
+  try {
+    const response = await baseApi.get<TravelReviewDetail>(
+      `/travel/review?travel_review_id=${travel_review_id}`
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+
+/**
+ * @postReview 여행 리뷰 업로드 api
+ * @param {number} travel_review_id - 리뷰가 속한 여행 ID
+ * @param {object} reviewData - 리뷰 내용 (ex: { content, rating })
+ * @returns {Promise<TravelReviewDetail>} - 여행 리뷰 상세 데이터 응답
+ */
+export const postReview = async (
+  travel_log_id: number,
+  reviewData: { 
+    travel_log_id: number;
+    title: string;
+    ai_rating: number;
+    started_at: string;
+    finished_at: string;
+    weather: string;
+    mood: number;
+    tag: [];
+    note: string;
+    song: string;
+    picture: [];
+   }
+): Promise<TravelReviewPost> => {
+  try {
+    const response = await baseApi.post<TravelReviewPost>(
+      `/travel/review/${travel_log_id}`,
+      reviewData
     );
     return response.data;
   } catch (error) {

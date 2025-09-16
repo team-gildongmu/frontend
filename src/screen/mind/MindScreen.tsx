@@ -1,8 +1,9 @@
 "use client"
 
-import CarouselTabs from "@/component/mind/list/CarouselTabs";
 import MindCardWrap from "@/component/mind/list/MindCardWrap";
 import PlusButton from "@/component/mind/list/PlusButton";
+import Category from "@/component/myroad/list/Category";
+import { useState } from "react";
 import styled from "styled-components";
 
 const MindWrap = styled.div`
@@ -17,9 +18,14 @@ const PlusButtonWrap = styled.div`
 `
 
 export default function MindScreen () {
+    const [selectedCategory, setSelectedCategory] = useState({ name: "자연" });
+    
     return(
         <MindWrap>
-            <CarouselTabs />
+            <Category
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+            />
             <MindCardWrap/>
             <PlusButtonWrap>
                 <PlusButton />
