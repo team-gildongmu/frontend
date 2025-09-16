@@ -1,3 +1,4 @@
+import colors from "@/styles/Colors";
 import { Z_INDEX } from "@/styles/ZIndex";
 import styled from "styled-components";
 
@@ -38,17 +39,21 @@ export const NavItem = styled.div`
   color: #666;
 `;
 
-export const Icon = styled.div<{ $index: number; $active: boolean }>`
+export const IconWrapper = styled.div<{ $active: boolean }>`
   width: 24px;
   height: 24px;
-  background-image: url("./footer-image/tab-image.svg");
-  background-size: 123px 48px;
-  background-position: ${({ $index, $active }) =>
-    `-${$index * 24}px ${$active ? "0" : "24px"}`};
   margin-bottom: 2px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ $active }) => ($active ? "#0047AB" : "#888888")};
+  transition: color 0.2s ease;
 `;
 
 export const Label = styled.span<{ $active: boolean }>`
   display: inline-block;
-  font-color: ${($active) => `${$active ? "#0047AB" : "#888888"}`};
+  color: ${({ $active }) => ($active ? colors.blue_500 : colors.gray_300)};
+  font-size: 10px;
+  font-weight: 500;
 `;
