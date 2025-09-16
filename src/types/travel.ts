@@ -52,6 +52,10 @@ export type TravelReviewItem = {
   end_date: string;
   weather: string;
   image: string[];
+  note: string;
+  tags: string[];
+  user_nickname: string;
+  user_photo: string;
 };
 
 // 여행 리뷰 캘린더 응답

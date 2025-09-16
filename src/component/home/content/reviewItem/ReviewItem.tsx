@@ -6,13 +6,19 @@ import Image from "next/image";
 import Description from "@/component/myroad/list/Description";
 import UserContainer from "@/component/home/content/reviewItem/UserContainer";
 import { TravelReviewItem } from "@/types/travel";
+import TagWrapper from "@/component/myroad/list/TagWrapper";
+import { useRouter } from "next/navigation";
 
 export default function ReviewItem({
   reviewItemData,
 }: {
   reviewItemData: TravelReviewItem;
 }) {
-  // todo 수정필요
+  const router = useRouter();
+  const onClickReviewItem = () => {
+    router.push(`/mind/${reviewItemData.travel_review_id}`);
+  };
+
   return (
     <Column
       key={reviewItemData.travel_review_id}
@@ -21,11 +27,13 @@ export default function ReviewItem({
       justifyContent="flex-start"
       alignItems="flex-start"
       gridGap="2px"
+      onClick={onClickReviewItem}
+      style={{ cursor: "pointer" }}
     >
       <UserContainer
         title={reviewItemData.title}
-        userNickname={reviewItemData.title}
-        userProfile={reviewItemData.image[0]}
+        userNickname={reviewItemData.user_nickname}
+        userProfile={reviewItemData.user_photo}
       />
       <Image
         src={reviewItemData.image[0]}
@@ -36,8 +44,8 @@ export default function ReviewItem({
         style={{ width: "100%", height: "auto" }}
       />
 
-      <Description description={reviewItemData.title} />
-      {/* <TagWrapper tags={reviewItemData.tags} isMain={true} /> */}
+      <Description description={reviewItemData.note} />
+      <TagWrapper tags={reviewItemData.tags} isMain={true} />
     </Column>
   );
 }

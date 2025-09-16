@@ -48,7 +48,8 @@ export default function Footer() {
     <FooterContainer>
       <ul>
         {navItems.map(({ labelKey, path, icon }) => {
-          const isActive = pathname === path;
+          const isActive =
+            path === "/" ? pathname === path : pathname.startsWith(path);
           const label = t(labelKey);
           return (
             <li key={labelKey}>
