@@ -39,7 +39,7 @@ export type TravelLogDetail = {
 export type TravelLogMapInfo = {
   travel_log_id: number;
   locations: {
-    [key: string]: TravelLocation[];
+    [key: string]: MapTravelLocation[];
   };
 };
 
@@ -60,6 +60,17 @@ export type TravelCalendarReviewItem = {
   title: string;
   start_date: string;
   end_date: string;
+};
+
+// 지도용 여행 위치 정보
+export type MapTravelLocation = {
+  travel_location_id: number;
+  title: string;
+  longitude: number;
+  latitude: number;
+  location_type: string;
+  description: string;
+  image: string;
 };
 
 
