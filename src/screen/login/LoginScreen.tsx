@@ -1,7 +1,7 @@
 "use client";
 
 import { CenterColumn, CenterRow } from "@/styles/BaseComponents";
-import { Button, Div, Img } from "@/styles/BaseStyledTags";
+import { Button, Div } from "@/styles/BaseStyledTags";
 import { Font } from "@/styles/Typography";
 import React from "react";
 import styled from "styled-components";

@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import useGetLogMapInfoQuery from "@/queries/travel/useLogMapInfo";
 import { colorPalette } from "@/component/common/ColorPalette";
 import { buildMarkerEl } from "@/component/myroad/listItem/kakaoMap/BuildMarkerEl";
-import { MapTravelLocation, TravelLocation } from "@/types/travel";
+import { MapTravelLocation } from "@/types/travel";
 
 // Kakao Maps 타입을 kakao.d.ts에서 가져옴
 type KakaoMap = kakao.maps.Map;
