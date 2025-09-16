@@ -6,16 +6,16 @@ export async function middleware(req: NextRequest) {
   const userAuthToken = req.cookies.get(C.AUTH_TOKEN_KEY)?.value;
   const currentPath = req.nextUrl.pathname;
 
-  // OAuth 콜백 경로는 제외 (로그인 처리 중)
-  const oauthCallbackRoutes = ["/oauth/kakao"];
+  // OAuth 콜백 경로와 로그인 페이지는 제외 (로그인 처리 중)
+  const excludedRoutes = ["/oauth/kakao", "/login"];
 
   try {
-    // OAuth 콜백이 아닌 모든 페이지에서 로그인 체크
-    const isOAuthCallback = oauthCallbackRoutes.some((path) =>
+    // 제외된 경로가 아닌 모든 페이지에서 로그인 체크
+    const isExcludedRoute = excludedRoutes.some((path) =>
       currentPath.startsWith(path)
     );
 
-    if (!isOAuthCallback && !userAuthToken) {
+    if (!isExcludedRoute && !userAuthToken) {
       const loginUrl = new URL("/login", req.nextUrl.origin);
       return NextResponse.redirect(loginUrl);
     }
