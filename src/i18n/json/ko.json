@@ -1,4 +1,10 @@
 {
+  "login": {
+    "title": "My Road",
+    "subtitle": "나만의 여행 기록을 시작해보세요",
+    "kakaoLogin": "카카오로 시작하기",
+    "terms": "로그인하면 서비스 이용약관 및 개인정보처리방침에\n동의하는 것으로 간주됩니다."
+  },
   "navigation": {
     "main": "메인",
     "search": "검색",
