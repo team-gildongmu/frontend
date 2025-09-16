@@ -22,7 +22,7 @@ export default function TagWrapper({
           flexShrink="0"
         >
           <Font typo={isMain ? "c03_m" : "c02_m"} color="blue_500">
-            {tag}
+            #{tag}
           </Font>
         </Div>
       ))}

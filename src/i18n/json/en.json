@@ -1,4 +1,10 @@
 {
+  "login": {
+    "title": "My Road",
+    "subtitle": "Start recording your own travel memories",
+    "kakaoLogin": "Start with Kakao",
+    "terms": "By logging in, you agree to the Terms of Service\nand Privacy Policy."
+  },
   "navigation": {
     "main": "Main",
     "search": "Search",

@@ -6,32 +6,21 @@ export async function middleware(req: NextRequest) {
   const userAuthToken = req.cookies.get(C.AUTH_TOKEN_KEY)?.value;
   const currentPath = req.nextUrl.pathname;
 
-  const notAuthGuardedRoutes = ["/oauth/kakao", "/login"];
-
-  // 보호된 라우트 체크 (notAuthGuardedRoutes에 해당하지 않는 라우트)
-  const isProtectedRoute = !notAuthGuardedRoutes.some((path) =>
-    currentPath.startsWith(path)
-  );
+  // OAuth 콜백 경로와 로그인 페이지는 제외 (로그인 처리 중)
+  const excludedRoutes = ["/oauth/kakao", "/login"];
 
   try {
-    // 1. 로그인하지 않은 유저가 보호된 라우트 접근 시 → 로그인 페이지로
-    if (!userAuthToken && isProtectedRoute) {
+    // 제외된 경로가 아닌 모든 페이지에서 로그인 체크
+    const isExcludedRoute = excludedRoutes.some((path) =>
+      currentPath.startsWith(path)
+    );
+
+    if (!isExcludedRoute && !userAuthToken) {
       const loginUrl = new URL("/login", req.nextUrl.origin);
-      loginUrl.searchParams.set("redirect", currentPath);
       return NextResponse.redirect(loginUrl);
     }
 
-    // 2. 로그인한 유저가 로그인/회원가입 페이지 접근 시 → 홈으로
-    if (
-      userAuthToken &&
-      notAuthGuardedRoutes.some((path) => currentPath.startsWith(path))
-    ) {
-      const homeUrl = new URL("/", req.nextUrl.origin);
-      return NextResponse.redirect(homeUrl);
-    }
-
     const response = NextResponse.next();
-
     return response;
   } catch (error) {
     console.error("❗ Middleware Error:", error);

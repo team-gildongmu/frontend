@@ -39,14 +39,10 @@ export default function MapSelectedLoactionModal({
             style={{ width: "100%", height: "auto", borderRadius: "8px" }}
           />
         )}
-        <Column gridGap="5px" width="100%">
-          <Font typo="t01_bold_m" color="black">
-            {selectedLocation?.title}
-          </Font>
-          <Font typo="l01_m" color="grey_500">
-            {selectedLocation?.description}
-          </Font>
-        </Column>
+
+        <Font typo="l01_m" color="grey_500">
+          {selectedLocation?.description}
+        </Font>
       </Column>
     </Modal>
   );
