@@ -6,6 +6,7 @@ import { Font } from "@/styles/Typography";
 import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { Icon } from "@iconify/react";
 
 export default function LoginScreen() {
   const { t } = useTranslation();
@@ -108,9 +109,15 @@ const KakaoLoginButton = styled(Button)`
   cursor: pointer;
 `;
 
-const KakaoIcon = styled(Img)`
+const KakaoIcon = styled.div`
   width: 20px;
   height: 20px;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233C1E1E"><path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.52 1.44 4.8 3.72 6.24L5.28 19.2l2.88-1.68c.96.24 1.92.36 2.88.36 5.52 0 10-3.48 10-7.8S17.52 3 12 3z"/></svg>')
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.52 1.44 4.8 3.72 6.24L5.28 19.2l2.88-1.68c.96.24 1.92.36 2.88.36 5.52 0 10-3.48 10-7.8S17.52 3 12 3z" fill="%233C1E1E"/></svg>')
     center/contain no-repeat;
+  border: none;
+  outline: none;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block;
 `;
