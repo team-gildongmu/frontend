@@ -18,7 +18,9 @@ export default function KakaoLogin() {
     if (code) {
       postUserMutation(code, {
         onSuccess: () => {
-          router.push("/");
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 100);
         },
         onError: () => {
           setError("로그인에 실패했습니다. 다시 시도해주세요.");
