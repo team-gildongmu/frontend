@@ -8,12 +8,12 @@ import React, {
 import styled from "styled-components";
 import Modal from "@/component/common/Modal";
 import { Button, Div } from "@/styles/BaseStyledTags";
-import MapSelectedLoactionModal from "../MapSelectedLoactionModal";
+import MapSelectedLoactionModal from "@/component/myroad/listItem/MapSelectedLoactionModal";
 import { useTranslation } from "react-i18next";
 import useGetLogMapInfoQuery from "@/queries/travel/useLogMapInfo";
 import { colorPalette } from "@/component/common/ColorPalette";
 import { buildMarkerEl } from "@/component/myroad/listItem/kakaoMap/BuildMarkerEl";
-import { TravelLocation } from "@/types/travel";
+import { MapTravelLocation } from "@/types/travel";
 
 // Kakao Maps 타입을 kakao.d.ts에서 가져옴
 type KakaoMap = kakao.maps.Map;
@@ -52,7 +52,7 @@ export default function MyRoadMap({
   const { byDay, allList, dayKeys, locationMap } = useMemo(() => {
     const byDay: Record<number, NormalizedLocation[]> = {};
     let all: NormalizedLocation[] = [];
-    const locationMap: Record<number, TravelLocation> = {};
+    const locationMap: Record<number, MapTravelLocation> = {};
     const raw = MapInfo?.locations || {};
     const _dayKeys = Object.keys(raw)
       .map((d) => Number(d))
@@ -61,7 +61,7 @@ export default function MyRoadMap({
 
     _dayKeys.forEach((day) => {
       const arr = (raw[String(day)] || []).map(
-        (loc: TravelLocation, idx: number) => {
+        (loc: MapTravelLocation, idx: number) => {
           // locationMap에 원본 데이터 저장
           locationMap[loc.travel_location_id] = loc;
           return {
@@ -280,7 +280,7 @@ export default function MyRoadMap({
             lng: selectedLocation.lng,
             title: selectedLocation.title,
             description: locationMap[selectedLocation.id]?.description || "",
-            image: locationMap[selectedLocation.id]?.image_link || "",
+            image: locationMap[selectedLocation.id]?.image || "",
           }}
           setSelectedLocation={(location) => {
             if (location) {

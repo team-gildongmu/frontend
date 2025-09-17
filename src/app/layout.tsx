@@ -15,6 +15,20 @@ import LanguageInitializer from "@/app/language-initializer";
 export const metadata: Metadata = {
   title: "길동무",
   description: "길동무 프론트엔드 페이지입니다",
+  icons: {
+    icon: "/seoImage.png",
+  },
+  openGraph: {
+    title: "길동무",
+    description: "길동무 프론트엔드 페이지입니다",
+    images: ["/seoImage.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "길동무",
+    description: "길동무 프론트엔드 페이지입니다",
+    images: ["/seoImage.png"],
+  },
 };
 
 const toHtmlLang = (l: string) => l;

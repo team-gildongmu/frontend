@@ -1,11 +1,12 @@
 "use client";
 
-import { CenterColumn } from "@/styles/BaseComponents";
-import { Button, Div, Img } from "@/styles/BaseStyledTags";
+import { CenterColumn, CenterRow } from "@/styles/BaseComponents";
+import { Button, Div } from "@/styles/BaseStyledTags";
 import { Font } from "@/styles/Typography";
 import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { Z_INDEX } from "@/styles/ZIndex";
 
 export default function LoginScreen() {
   const { t } = useTranslation();
@@ -90,7 +91,7 @@ const LoginCard = styled(Div)`
   max-width: 400px;
   width: 90%;
   position: relative;
-  z-index: 1;
+  z-index: ${Z_INDEX.CONTENT};
 `;
 
 const KakaoLoginButton = styled(Button)`
@@ -101,16 +102,14 @@ const KakaoLoginButton = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 3px;
   box-shadow: 0 4px 12px rgba(254, 229, 0, 0.3);
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
 `;
 
-const KakaoIcon = styled(Img)`
-  width: 20px;
-  height: 20px;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233C1E1E"><path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.52 1.44 4.8 3.72 6.24L5.28 19.2l2.88-1.68c.96.24 1.92.36 2.88.36 5.52 0 10-3.48 10-7.8S17.52 3 12 3z"/></svg>')
+const KakaoIcon = styled(CenterRow)`
+  width: 25px;
+  height: 25px;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.52 1.44 4.8 3.72 6.24L5.28 19.2l2.88-1.68c.96.24 1.92.36 2.88.36 5.52 0 10-3.48 10-7.8S17.52 3 12 3z" fill="%233C1E1E"/></svg>')
     center/contain no-repeat;
+  margin-top: 2px;
 `;
