@@ -6,8 +6,7 @@ export async function middleware(req: NextRequest) {
   const userAuthToken = req.cookies.get(C.AUTH_TOKEN_KEY)?.value;
   const currentPath = req.nextUrl.pathname;
 
-  // OAuth 콜백 경로와 로그인 페이지는 제외 (로그인 처리 중)
-  const excludedRoutes = ["/oauth/kakao", "/login"];
+  const excludedRoutes = ["/oauth/kakao", "/oauth", "/login"];
 
   try {
     // 제외된 경로가 아닌 모든 페이지에서 로그인 체크
