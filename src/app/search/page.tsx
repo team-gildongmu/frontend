@@ -21,7 +21,12 @@ export default function SearchPage() {
         d.segments.forEach((s) => {
           const { mapx, mapy } = s.coords || {};
           if (typeof mapx === "number" && typeof mapy === "number") {
-            out.push({ position: { lat: mapy, lng: mapx }, title: s.title });
+            out.push({ 
+              position: { lat: mapy, lng: mapx }, 
+              title: s.title,
+              type: s.type || "POI",
+              image: s.image || undefined 
+            });
           }
         })
       );
@@ -30,12 +35,21 @@ export default function SearchPage() {
       plan.stays.forEach((s) => {
         const { mapx, mapy } = s.coords || {};
         if (typeof mapx === "number" && typeof mapy === "number") {
-          out.push({ position: { lat: mapy, lng: mapx }, title: s.title });
+          out.push({ 
+            position: { lat: mapy, lng: mapx }, 
+            title: s.title,
+            type: "STAY",
+            image: s.image || undefined 
+          });
         }
       });
     }
     if (!out.length && location) {
-      out.push({ position: { lat: location.lat, lng: location.lng }, title: "내 위치" });
+      out.push({ 
+        position: { lat: location.lat, lng: location.lng }, 
+        title: "내 위치",
+        type: "MY" 
+      });
     }
     console.log("[Page] current markers =", out);
     return out;

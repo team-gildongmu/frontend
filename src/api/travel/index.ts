@@ -7,6 +7,30 @@ import {
   TravelReviewItem,
 } from "@/types/travel";
 
+// 여행 로그 생성 요청 페이로드
+export type TravelLogCreatePayload = any;
+// 응답 타입 
+export type TravelLogCreateResponse = { id: number };
+
+/**
+ * @createTravelLog 확정 로그 생성 api
+ * @returns {Promise<TravelLogCreateResponse>} - 생성된 로그 id
+ */
+export const createTravelLog = async (
+  payload: TravelLogCreatePayload
+): Promise<TravelLogCreateResponse> => {
+  try{
+    const response = await baseApi.post<TravelLogCreateResponse>("/travel/log", payload);
+    return response.data;
+  }catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }else{
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
 /**
  * @getLogList 확정 로그 조회 api
  * @param theme - 테마 카테고리

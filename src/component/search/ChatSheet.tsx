@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import colors from "@/styles/Colors";
 import useAuth from "@/hooks/useAuth";
 import {
@@ -8,7 +8,14 @@ import {
   openStatusStream,
   sendMessage,
   type Plan as ApiPlan,
+  getState
 } from "@/api/search/ai";
+import { useRouter } from "next/navigation";
+import { useCreateLog } from "@/queries/travel/useCreateLog";
+import ModalPortal from "@/component/search/ModalPortal";
+
+const HEADER_H = 47;   // 예: 헤더 64px
+const FOOTER_H = 47;    // 예: 푸터 없으면 0
 
 export type ChatMsg = { 
     role: "user" | "assistant"; 
@@ -28,7 +35,7 @@ export type Plan = {
       title: string;
       desc?: string;
       reason?: string;
-      images?: string[];
+      image?: string;
       coords: { mapx: number; mapy: number };
       provider?: "tourapi" | "google";
       source?: string;
@@ -37,7 +44,7 @@ export type Plan = {
   stays?: {
     title: string;
     desc?: string;
-    images?: string[];
+    image?: string;
     coords: { mapx: number; mapy: number };
     provider?: "tourapi" | "google";
     source?: string;
@@ -54,6 +61,32 @@ type Props = {
 export default function ChatSheet({ center, onPlan }: Props) {
   const { getUserToken } = useAuth();
   const token = getUserToken();
+  const SID_KEY = "ai.sess";
+  const router = useRouter();
+  const { mutateAsync: createLog, isPending: saving } = useCreateLog();
+
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmPhase, setConfirmPhase] = useState<"saving" | "done" | "error" | null>(null);
+
+  const latestPlanRef = useRef<Plan | null>(null);
+
+  const handleNewChat = () => {
+    // SSE 끊기
+    if (sseRef.current) {
+      sseRef.current.close();
+      sseRef.current = null;
+    }
+    // 세션ID 초기화 + 로컬 저장소 제거
+    setSessionId(null);
+    try { localStorage.removeItem(SID_KEY); } catch {}
+
+    // 채팅/상태 초기화
+    setMsgs([{ role: "assistant", text: pickGreeting(), ts: Date.now() }]);
+    setHasPlan(false);
+    setRunning(null);
+    // 부모 지도 마커도 비우고 싶으면 (선택):
+    // onPlan?.({} as any);  // 타입상 애매하면 생략
+  };
 
   // 시트 높이(드래그)
   const MIN_H = 220;
@@ -93,6 +126,24 @@ const pickGreeting = () =>
   // 세션
   const [sessionId, setSessionId] = useState<string | null>(null);
   const sseRef = useRef<EventSource | null>(null);
+
+  // 최신 플랜 메모
+  const latestPlan = useMemo(() => {
+    for (let i = msgs.length -1 ; i >=0; i--){
+      if(msgs[i].role === "assistant" && msgs[i].plan) return msgs[i].plan;
+    }
+    return null;
+  }, [msgs]);
+
+  const handleFix = async () => {
+    if (!latestPlan) return;
+    try {
+      await createLog(latestPlan);             // ← POST /travel/log
+      setConfirmOpen(true);                    // ← 성공 모달 오픈
+    } catch (e: any) {
+      alert(`저장 중 오류가 발생했어요.\n${String(e?.message || e)}`);
+    }
+  };
 
   // 메시지 영역 스크롤
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -172,6 +223,43 @@ const pickGreeting = () =>
     };
   }, []);
 
+  useEffect(() => {
+    // 토큰이 없으면 스킵
+    if (!token) return
+    // 이미 세션이 있거나(메모리), 메시지가 복원된 상태면 스킵
+    if (sessionId || msgs.length > 1) return
+    try {
+      const saved = localStorage.getItem(SID_KEY);
+      if (!saved) return
+      // 서버 state에서 history 불러오기
+      (async () => {
+        try {
+          const st = await getState(saved, token);
+          const hist = (st.state?.history || []) as Array<any>;
+          if (!hist.length) return
+          // 화면 메시지로 변환
+          const restored = hist.map((h) =>
+            h.role === "user"
+              ? ({ role: "user", text: h.text, ts: h.ts } as ChatMsg)
+              : ({ role: "assistant", plan: normalizePlan(h.plan), ts: h.ts } as ChatMsg)
+          )
+          setMsgs(restored);
+          setSessionId(saved);
+          ensureSSE(saved)
+          // 마지막 플랜을 지도에 반영
+          const lastPlan = [...hist].reverse().find((h) => h.role === "assistant" && h.plan)?.plan;
+          if (lastPlan) {
+            onPlan?.(normalizePlan(lastPlan));
+            setHasPlan(true);
+          }
+        } catch (e) {
+          console.warn("[Chat] history restore failed:", e);
+        }
+      })();
+    } catch {}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]); // token 준비되면 1회 시도
+
   // API Plan → 우리 Plan
   const normalizePlan = (p: ApiPlan): Plan => ({
     title: p.title,
@@ -184,15 +272,19 @@ const pickGreeting = () =>
         title: s.title,
         desc: s.desc,
         reason: s.reason,
-        images: s.images,
+        image: s.image,
         coords: s.coords,
+        provider: (s.provider as "tourapi" | "google") || undefined,
+        source: s.source,
       })),
     })),
     stays: (p.stays || []).map((s: any) => ({
       title: s.title,
       desc: s.desc,
-      images: s.images,
+      image: s.image,
       coords: s.coords,
+      provider: (s.provider as "tourapi" | "google") || undefined,
+      source: s.source,
     })),
     summary: p.summary,
   });
@@ -219,6 +311,7 @@ const pickGreeting = () =>
         const { session_id } = await startSession({ origin }, token ?? "");
         sid = session_id;
         setSessionId(session_id);
+        localStorage.setItem(SID_KEY, session_id);
         console.log("[Search] session started:", session_id, " center=", origin);
         ensureSSE(session_id);
       }
@@ -229,10 +322,13 @@ const pickGreeting = () =>
       // 질문 보내기
       const origin = center ? { mapX: center.lng, mapY: center.lat } : undefined;
       const res = await sendMessage(sid!, { message: q, origin }, token ?? "");
+      console.log("[AI] raw response:", res);
+      console.log("[AI] raw plan:", res.plan);
 
       // 결과 수신
       setRunning(null);
       const plan = normalizePlan(res.plan);
+      latestPlanRef.current = plan;
       onPlan?.(plan);
       setHasPlan(true); // ✅ 결과가 생겼을 때만 버튼 노출
       // 어시스턴트 안내 한 줄
@@ -255,6 +351,29 @@ const pickGreeting = () =>
 
   const disabled = !!running; // 로딩 중엔 입력 비활성화
 
+  const handleConfirmRoute = async () => {
+    if (!latestPlanRef.current) return;
+    setConfirmOpen(true);       // 모달 먼저 띄우기
+    setConfirmPhase("saving");  // 저장중 문구로 전환
+
+    try {
+      await createLog(latestPlanRef.current as any);
+      setConfirmPhase("done");
+    } catch (e) {
+      setConfirmPhase("error");
+    }
+  };
+
+  const closeAndGoHome = () => {
+    setConfirmOpen(false);
+    // 로컬 세션 정리
+    try { localStorage.removeItem(SID_KEY); } catch {}
+    if (sseRef.current) { sseRef.current.close(); sseRef.current = null; }
+    setSessionId(null);
+    setMsgs([{ role: "assistant", text: pickGreeting(), ts: Date.now() }]);
+    router.push("/");
+  };
+  
   return (
     <div
       style={{
@@ -263,7 +382,7 @@ const pickGreeting = () =>
         right: 0,
         bottom: 0,
         height,
-        zIndex: 20,
+        zIndex: 100,
         display: "flex",
         flexDirection: "column",
         backdropFilter: "blur(4px)",
@@ -305,6 +424,43 @@ const pickGreeting = () =>
               background: "rgba(0,0,0,0.2)",
             }}
           />
+        </div>
+
+        {/* ★ 상단 툴바: 새 대화 버튼 & (선택) 세션 뱃지 */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            padding: "6px 12px 0 12px",
+            marginBottom: 8,
+          }}
+        >
+          <button
+            onClick={handleNewChat}
+            className="new_chat_button"
+          >
+            새 채팅하기
+          </button>
+
+          {/* {sessionId && (
+            <span
+              title={`세션: ${sessionId}`}
+              style={{
+                fontSize: 12,
+                padding: "0 8px",
+                height: 24,
+                display: "inline-flex",
+                alignItems: "center",
+                borderRadius: 999,
+                background: "#eef2ff",
+                color: "#3730a3",
+                fontWeight: 700,
+              }}
+            >
+              세션 {sessionId.slice(-4)}
+            </span>
+          )} */}
         </div>
 
         {/* 메시지 영역 */}
@@ -352,28 +508,26 @@ const pickGreeting = () =>
           {/* 플랜 생기면 액션 버튼(왼쪽 정렬) */}
           {hasPlan && !running && (
             <div style={{ display: "flex", justifyContent: "flex-start" }}>
-              <PlanActions
-                onFix={() => alert("루트 확정! (추후 POST 연동)")}
-                onRevise={() => setInput("숙소는 좀 더 저렴한 곳으로 바꿔줘")}
-              />
+              <PlanActions onFix={handleConfirmRoute} />
             </div>
           )}
         </div>
 
         {/* 입력 바 */}
-        <div style={{ padding: 12, borderTop: "1px solid #e9e9e9", background: "#fff" }}>
-          <form onSubmit={onSubmit} style={{ display: "flex", gap: 8 }}>
+        <div style={{ padding: 12, borderTop: "1px solid white", background: colors.blue_300 }}>
+          <form onSubmit={onSubmit} style={{ display: "flex"}}>
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="무엇을 도와드릴까요? (예) 홍대에서 2일코스 + 맛집 추천해줘"
+              placeholder="오늘은 어디로 떠나고 싶으세요? (예) 홍대에서 2일코스 + 맛집 추천해줘"
               style={{
                 flex: 1,
                 height: 44,
                 padding: "0 12px",
-                borderRadius: 12,
-                border: "1px solid #d7d7d7",
+                borderRadius: "7px 0 0 7px",
+                border: "4px solid white",
                 outline: "none",
+                background: "rgba(255,255,255,0.4)"
               }}
               disabled={disabled}
             />
@@ -383,18 +537,145 @@ const pickGreeting = () =>
               style={{
                 height: 44,
                 padding: "0 14px",
-                borderRadius: 12,
+                borderRadius: "0 7px 7px 0",
                 border: "none",
-                background: disabled ? "#c7c7c7" : "#1e90ff",
-                color: "#fff",
+                background: "white",
+                color: disabled ? colors.gray_300 : colors.blue_500,
                 fontWeight: 600,
                 cursor: disabled ? "not-allowed" : "pointer",
+                fontSize: 18,
               }}
             >
-              보내기
+              <i className="bi bi-send-fill"></i>
             </button>
           </form>
         </div>
+
+  {confirmOpen && (
+    <ModalPortal>
+      <div
+        style={{
+          position: "fixed",
+          left: 0,
+          right: 0,
+          top: HEADER_H,   // 헤더 만큼 비워서 "컨텐츠 영역 전체"만 덮음
+          bottom: FOOTER_H, // 푸터가 있으면 그만큼 비움
+          zIndex: 2000,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          pointerEvents: "auto",
+        }}
+      >
+        {/* 반투명 배경 */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(0,0,0,0.45)",
+          }}
+        />
+        {/* 본문 카드 */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 2001,
+            width: 320,
+            borderRadius: 14,
+            background: "#fff",
+            padding: "18px 16px",
+            textAlign: "center",
+            boxShadow: "0 12px 36px rgba(0,0,0,.25)",
+          }}
+        >
+          {confirmPhase === "saving" && (
+            <>
+              <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>
+                여행 루트를 저장하고 있습니다
+              </div>
+              <div style={{ marginTop: 8 }}>
+                <LoaderDots />
+              </div>
+            </>
+          )}
+
+          {confirmPhase === "done" && (
+            <>
+              <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 6 }}>
+                루트 스탬프가 생성되었습니다!
+              </div>
+              <button
+                onClick={closeAndGoHome}
+                style={{
+                  marginTop: 12,
+                  height: 40,
+                  borderRadius: 10,
+                  background: "#0b62e6",
+                  color: "#fff",
+                  border: "none",
+                  padding: "0 14px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                확인
+              </button>
+            </>
+          )}
+
+          {confirmPhase === "error" && (
+            <>
+              <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 8 }}>
+                저장에 실패했어요
+              </div>
+              <div style={{ fontSize: 13, color: "#666" }}>
+                잠시 후 다시 시도해주세요.
+              </div>
+              <div
+                style={{
+                  marginTop: 12,
+                  display: "flex",
+                  gap: 8,
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  onClick={() => setConfirmOpen(false)}
+                  style={{
+                    height: 38,
+                    borderRadius: 10,
+                    background: "#f3f4f6",
+                    color: "#111",
+                    border: "none",
+                    padding: "0 12px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  닫기
+                </button>
+                <button
+                  onClick={handleConfirmRoute}
+                  style={{
+                    height: 38,
+                    borderRadius: 10,
+                    background: "#0b62e6",
+                    color: "#fff",
+                    border: "none",
+                    padding: "0 12px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  다시 시도
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </ModalPortal>
+  )}
       </div>
 
       {/* 스크롤바 숨기기 */}
@@ -405,6 +686,30 @@ const pickGreeting = () =>
         .noScrollbars::-webkit-scrollbar {
           display: none; /* Chrome/Safari */
         }
+        .new_chat_button {
+          height: 30px;
+          padding: 0 12px;
+          border-radius: 8px;
+          border: 1.5px solid #E0E0E0;
+          background: #FFFFFF;
+          color: #212121;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease-in-out;
+        }
+        .new_chat_button:hover {
+          border-color: #BDBDBD;
+          background: #F5F5F5;
+        }
+          .tour-btn {
+            background-color: #90CAF9; /* 연한 파랑 */
+            color: #0D47A1;           /* 차분한 남색 */
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            padding: 2px 8px;
+            font-weight: 500;
+          }
       `}</style>
     </div>
   );
@@ -476,7 +781,7 @@ function Bubble({
   );
 }
 
-function PlanActions({ onFix, onRevise }: { onFix: () => void; onRevise: () => void }) {
+function PlanActions({ onFix, saving = false }: { onFix: () => void; saving?: boolean }) {
   return (
     <div style={{ marginTop: 10, display: "flex", gap: 8 }}>
       <button
@@ -485,29 +790,14 @@ function PlanActions({ onFix, onRevise }: { onFix: () => void; onRevise: () => v
           height: 40,
           padding: "0 14px",
           borderRadius: 12,
-          border: "1px solid #0b62e6",
-          background: "#0b62e6",
+          border: "none",
+          background: colors.blue_500,
           color: "#fff",
           fontWeight: 600,
           cursor: "pointer",
         }}
       >
         루트 확정하기
-      </button>
-      <button
-        onClick={onRevise}
-        style={{
-          height: 40,
-          padding: "0 14px",
-          borderRadius: 12,
-          border: "1px solid #d0d0d0",
-          background: "#fff",
-          color: "#333",
-          fontWeight: 600,
-          cursor: "pointer",
-        }}
-      >
-        루트 수정하기
       </button>
     </div>
   );
@@ -585,14 +875,18 @@ function AssistantPlanBubble({ plan, ts }: { plan: Plan; ts?: number }) {
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
                 숙박 추천
               </div>
-              <ol style={{ paddingLeft: 18, margin: 0, display: "grid", gap: 6 }}>
+
+              <div style={{ display: "grid", gap: 8 }}>
                 {plan.stays.map((s, i) => (
-                  <li key={i} style={{ lineHeight: 1.35 }}>
-                    <span style={{ marginRight: 6 }}>{s.title}</span>
-                    <ProviderChip provider={s.provider} />
-                  </li>
+                  <RowLine
+                    key={i}
+                    label="숙박"                   // ← 칩 텍스트
+                    color="#22c55e"               // ← 초록색 점(#22c55e)
+                    title={s.title}
+                    provider={s.provider}
+                  />
                 ))}
-              </ol>
+              </div>
             </div>
           )}
 
@@ -719,8 +1013,7 @@ function ProviderChip({ provider }: { provider?: "tourapi" | "google" }) {
         fontSize: 11,
         padding: "2px 6px",
         borderRadius: 6,
-        background: "#f1f5f9",
-        color: "#334155",
+        color: "#0c397eff",
         fontWeight: 700,
         whiteSpace: "nowrap",
       }}
