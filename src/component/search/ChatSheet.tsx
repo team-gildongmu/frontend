@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useCreateLog } from "@/queries/travel/useCreateLog";
 import ModalPortal from "@/component/search/ModalPortal";
+import { error } from "console";
 
 const HEADER_H = 47;   // 예: 헤더 64px
 const FOOTER_H = 47;    // 예: 푸터 없으면 0
@@ -84,8 +85,6 @@ export default function ChatSheet({ center, onPlan }: Props) {
     setMsgs([{ role: "assistant", text: pickGreeting(), ts: Date.now() }]);
     setHasPlan(false);
     setRunning(null);
-    // 부모 지도 마커도 비우고 싶으면 (선택):
-    // onPlan?.({} as any);  // 타입상 애매하면 생략
   };
 
   // 시트 높이(드래그)
@@ -126,24 +125,6 @@ const pickGreeting = () =>
   // 세션
   const [sessionId, setSessionId] = useState<string | null>(null);
   const sseRef = useRef<EventSource | null>(null);
-
-  // 최신 플랜 메모
-  const latestPlan = useMemo(() => {
-    for (let i = msgs.length -1 ; i >=0; i--){
-      if(msgs[i].role === "assistant" && msgs[i].plan) return msgs[i].plan;
-    }
-    return null;
-  }, [msgs]);
-
-  const handleFix = async () => {
-    if (!latestPlan) return;
-    try {
-      await createLog(latestPlan);             // ← POST /travel/log
-      setConfirmOpen(true);                    // ← 성공 모달 오픈
-    } catch (e: any) {
-      alert(`저장 중 오류가 발생했어요.\n${String(e?.message || e)}`);
-    }
-  };
 
   // 메시지 영역 스크롤
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -260,6 +241,11 @@ const pickGreeting = () =>
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]); // token 준비되면 1회 시도
 
+  const ensureSource = (title?: string, src?: string) =>
+    src && src.trim().length > 0
+      ? src
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title || "")}`;
+
   // API Plan → 우리 Plan
   const normalizePlan = (p: ApiPlan): Plan => ({
     title: p.title,
@@ -274,8 +260,8 @@ const pickGreeting = () =>
         reason: s.reason,
         image: s.image,
         coords: s.coords,
-        provider: (s.provider as "tourapi" | "google") || undefined,
-        source: s.source,
+        provider: (s.provider as "tourapi" | "google") || "google",
+        source: ensureSource(s.title, s.source),
       })),
     })),
     stays: (p.stays || []).map((s: any) => ({
@@ -283,8 +269,8 @@ const pickGreeting = () =>
       desc: s.desc,
       image: s.image,
       coords: s.coords,
-      provider: (s.provider as "tourapi" | "google") || undefined,
-      source: s.source,
+      provider: (s.provider as "tourapi" | "google") || "google",
+      source: ensureSource(s.title, s.source),
     })),
     summary: p.summary,
   });
@@ -357,10 +343,11 @@ const pickGreeting = () =>
     setConfirmPhase("saving");  // 저장중 문구로 전환
 
     try {
+      console.log("저장", latestPlanRef.current);
       await createLog(latestPlanRef.current as any);
       setConfirmPhase("done");
-    } catch (e) {
-      setConfirmPhase("error");
+    } catch (error) {
+      setConfirmPhase(error as any ? "error" : "done");
     }
   };
 

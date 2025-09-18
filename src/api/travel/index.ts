@@ -16,18 +16,15 @@ export type TravelLogCreateResponse = { id: number };
  * @createTravelLog 확정 로그 생성 api
  * @returns {Promise<TravelLogCreateResponse>} - 생성된 로그 id
  */
-export const createTravelLog = async (
-  payload: TravelLogCreatePayload
-): Promise<TravelLogCreateResponse> => {
-  try{
-    const response = await baseApi.post<TravelLogCreateResponse>("/travel/log", payload);
-    return response.data;
-  }catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }else{
-      throw new Error("An unknown error occurred");
-    }
+export const createTravelLog = async (payload: any) => {
+  try {
+    const res = await baseApi.post<TravelLogCreateResponse>("/travel/log", payload);
+    return res.data;
+  } catch (err: any) {
+    // 422면 pydantic 에러가 detail에 들어옴
+    const detail = err?.response?.data ?? err?.message;
+    console.log(detail);
+    throw new Error(typeof detail === "string" ? detail : JSON.stringify(detail));
   }
 };
 
