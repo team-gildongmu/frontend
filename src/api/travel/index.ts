@@ -176,3 +176,18 @@ export const postReview = async (reviewData: TravelReviewPost) => {
     }
   }
 };
+
+/**
+ * @deleteReview 여행 리뷰 삭제 api
+ */
+export const deleteReview = async (travel_review_id: number) => {
+  try {
+    await baseApi.delete(`/travel/review?review_id=${travel_review_id}`);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
