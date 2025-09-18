@@ -29,6 +29,7 @@ export const getLogList = async (theme?: string): Promise<TravelLogItem[]> => {
   }
 };
 
+
 /**
  * @getLogDetail 여행 로그 상세 조회 api
  * @returns {Promise<TravelLogDetail>} - 여행 로그 상세 데이터 응답
@@ -115,7 +116,6 @@ export const getCalendarReviewList = async (): Promise<
   }
 };
 
-
 /**
  * @getReviewDetail 여행 리뷰 상세 조회 api
  * @returns {Promise<TravelReviewDetail>} - 여행 리뷰 상세 데이터 응답
@@ -166,6 +166,7 @@ export const postReview = async (reviewData: TravelReviewPost) => {
 
     const response = await baseApi.post(`/travel/review`, formData);
     console.log("리뷰 폼데이터 전송 확인 콘솔: " + response.data);
+    
     return response.data;
     
   } catch (error) {

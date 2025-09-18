@@ -17,7 +17,6 @@ export default function ProfileScreen({ id }: Props) {
       <ProfileHeader userInfo={userInfo} />
       <Stats />
       <Description />
-
       <ReviewCalendar />
     </div>
   );
