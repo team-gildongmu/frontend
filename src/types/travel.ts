@@ -82,13 +82,14 @@ export type TravelReviewDetail = {
   travel_review_id: number;
   title: string;
   score: number;
+  // 사용자 기분 - mood
   mood: number;
   date: string;
   contents: string;
   weather: string;
-  travel_day: number;
-  image_link: string;
+  image: string;
 };
+
 
 // 여행 리뷰 업로드 데이터
 export type TravelReviewPost = {
