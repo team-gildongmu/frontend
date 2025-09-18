@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import useGetReviewDetailQuery from "@/queries/travel/useGetReviewDetail";
 import LoadingSpinner from "@/component/common/LoadingSpinner";
 import Empty from "@/component/common/Empty";
+import Modal from "./Modal";
 
 type Props = {
   key : number, 
@@ -16,6 +17,7 @@ type Props = {
 export function MindCard({key, id}: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // TODO: key 수정필요
   console.log("key", key)
@@ -54,8 +56,8 @@ export function MindCard({key, id}: Props) {
           </C.Setting_btn>
 
           <C.Setting_conform $open={open}>
-            <C.Update onClick={() => alert("수정 클릭됨!")}>수정</C.Update>
-            <C.Delete onClick={() => alert("삭제 클릭됨!")}>삭제</C.Delete>
+            <C.Update onClick={() => router.push(`/mind/update/${id}`)}>수정</C.Update>
+            <C.Delete onClick={() => setModalOpen(true)}>삭제</C.Delete>
           </C.Setting_conform>
         </C.Title__r>
       </C.TitleWrap>
@@ -66,6 +68,10 @@ export function MindCard({key, id}: Props) {
         alt="일기 사진"
         onClick={() => router.push(`/mind/${id}`)}
       />
+      {modalOpen && (
+        <Modal onClose={() => setModalOpen(false)} targetId={id} />
+      )}
     </C.Wrap>
+       
   );
 }
