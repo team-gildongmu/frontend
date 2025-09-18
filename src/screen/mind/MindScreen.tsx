@@ -1,7 +1,6 @@
 "use client"
 
 import MindCardWrap from "@/component/mind/list/MindCardWrap";
-import PlusButton from "@/component/mind/list/PlusButton";
 import Category from "@/component/myroad/list/Category";
 import { useState } from "react";
 import styled from "styled-components";
@@ -10,11 +9,8 @@ const MindWrap = styled.div`
     margin-bottom: 41px;
     position: relative;
     width: 100%;
+    height: 86%;
     max-width: 780px;
-`
-
-const PlusButtonWrap = styled.div`
-    position: absolute;
 `
 
 export default function MindScreen () {
@@ -27,9 +23,6 @@ export default function MindScreen () {
                 setSelectedCategory={setSelectedCategory}
             />
             <MindCardWrap/>
-            <PlusButtonWrap>
-                <PlusButton />
-            </PlusButtonWrap>
         </MindWrap>
     )   
 }

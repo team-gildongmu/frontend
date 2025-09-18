@@ -145,27 +145,52 @@ export const getReviewDetail = async (
  * @param {object} reviewData - 리뷰 내용 (ex: { content, rating })
  * @returns {Promise<TravelReviewDetail>} - 여행 리뷰 상세 데이터 응답
  */
-export const postReview = async (
-  travel_log_id: number,
-  reviewData: { 
-    travel_log_id: number;
-    title: string;
-    ai_rating: number;
-    started_at: string;
-    finished_at: string;
-    weather: string;
-    mood: number;
-    tag: [];
-    note: string;
-    song: string;
-    picture: [];
-   }
-): Promise<TravelReviewPost> => {
+// export const postReview = async (reviewData: TravelReviewPost) => {
+//   try {
+//     const response = await baseApi.post<TravelReviewPost>(
+//       `/travel/review`,
+//       reviewData,
+//       {headers: { "Content-Type": "multipart/form-data" }}
+//     );
+//     return response.data;
+//   } catch (error) {
+//     if (error instanceof Error) {
+//       throw new Error(error.message);
+//     } else {
+//       throw new Error("An unknown error occurred");
+//     }
+//   }
+// };
+
+
+export const postReview = async (reviewData: TravelReviewPost & { travel_log_id: number; selectedFiles?: File[] }) => {
   try {
-    const response = await baseApi.post<TravelReviewPost>(
-      `/travel/review/${travel_log_id}`,
-      reviewData
-    );
+    const formData = new FormData();
+
+    formData.append("travel_log_id", reviewData.travel_log_id.toString());
+    formData.append("title", reviewData.title);
+    formData.append("ai_rating", reviewData.ai_rating.toString());
+    formData.append("started_at", reviewData.started_at);
+    formData.append("finished_at", reviewData.finished_at);
+    formData.append("weather", reviewData.weather);
+    formData.append("mood", reviewData.mood.toString());
+    formData.append("note", reviewData.note);
+    formData.append("song", reviewData.song);
+
+    // 다중 태그
+    if (reviewData.tag && reviewData.tag.length > 0) {
+      reviewData.tag.forEach((t) => formData.append("tag", t));
+    }
+
+    // 파일
+    if (reviewData.selectedFiles && reviewData.selectedFiles.length > 0) {
+      reviewData.selectedFiles.forEach((file) => formData.append("picture", file));
+    }
+
+    const response = await baseApi.post(`/travel/review`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
     return response.data;
   } catch (error) {
     if (error instanceof Error) {

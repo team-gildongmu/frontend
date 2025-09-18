@@ -5,8 +5,6 @@ interface Props {
 }
 
 export default function MindDetailScreen({id}: Props) {
-  
-
   return(
     <>
         <MindDetail id={id}/>

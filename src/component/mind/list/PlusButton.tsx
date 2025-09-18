@@ -16,8 +16,6 @@ export default function PlusButton() {
 
 const FloatingButton = styled.button`
   position: fixed;
-  bottom: 24px;
-  right: 24px; 
   width: 45px;
   height: 45px;
   border-radius: 50%;

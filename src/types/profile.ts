@@ -9,7 +9,7 @@ export type MyProfileResponse = {
 
 // 유저 프로필 수정
 export type MyProfileRequest = {
-  nickname?: string,
-  intro?: string,
-  profile_photo?: string,
+  nickname: string | null,
+  intro: string | null,
+  profile_photo_url: string | null,
 };

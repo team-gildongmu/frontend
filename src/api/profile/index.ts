@@ -9,6 +9,7 @@ import { baseApi } from "@/api/baseApi";
 export const getMyProfile = async (): Promise<MyProfileResponse> => {
   try {
     const response = await baseApi.get<MyProfileResponse>("/profile/me");
+    console.log("response.data 확인용", response.data);
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
@@ -24,10 +25,10 @@ export const getMyProfile = async (): Promise<MyProfileResponse> => {
  * @returns {Promise<MyProfileRequest>} - 프로필 수정 데이터 응답
  */
 
-export const patchProfile = async (): Promise<MyProfileRequest> => {
+export const patchProfile = async (data: Partial<MyProfileRequest>): Promise<MyProfileRequest> => {
   try {
     const response = await baseApi.patch<MyProfileRequest>(
-      `/profile/edit`
+      `/profile/edit`, data
     );
     return response.data;
   } catch (error) {
@@ -38,7 +39,6 @@ export const patchProfile = async (): Promise<MyProfileRequest> => {
     }
   }
 };
-
 
 /**
  * @deleteProfile 프로필 삭제 api
