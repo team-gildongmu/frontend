@@ -5,10 +5,6 @@ import ProfileHeader from "@/component/profile/user-profile/ProfileHeader";
 import Stats from "@/component/profile/user-profile/Stats";
 import useGetMyProfile from "@/queries/profile/useGetMyProfile";
 
-interface Props {
-  id: number;
-}
-
 export default function ProfileScreen() {
   const { data } = useGetMyProfile();
   if(data == undefined) return;
