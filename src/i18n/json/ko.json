@@ -95,5 +95,9 @@
       ],
       "yearSuffix": "년"
     }
+  },
+  "mind": {
+    "loadingData": "여행 후기 데이터를 불러오는 중입니다."
+    
   }
 }

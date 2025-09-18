@@ -3,11 +3,11 @@ import * as P from "./UserInfoForm.styles"
 
 type Props = {
   nickname: string;
-  userId: string;
-  onChange: (field: "nickname" | "userId", value: string) => void;
+  email: string;
+  onChange: (field: "nickname", value: string) => void;
 }
 
-export default function UserInfoForm({ nickname, userId, onChange }: Props) {
+export default function UserInfoForm({ nickname, email, onChange }: Props) {
   return (
     <P.Form onSubmit={(e) => e.preventDefault()}>
       <div>
@@ -24,9 +24,8 @@ export default function UserInfoForm({ nickname, userId, onChange }: Props) {
         <P.Label>아이디</P.Label>
         <P.Input
           type="text"
-          value={userId}
+          value={email}
           readOnly
-          onChange={(e) => onChange("userId", e.target.value)}
         />
       </div>
     </P.Form>

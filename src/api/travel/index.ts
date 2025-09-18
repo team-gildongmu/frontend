@@ -4,7 +4,9 @@ import {
   TravelLogDetail,
   TravelLogItem,
   TravelLogMapInfo,
+  TravelReviewDetail,
   TravelReviewItem,
+  TravelReviewPost,
 } from "@/types/travel";
 
 /**
@@ -26,6 +28,7 @@ export const getLogList = async (theme?: string): Promise<TravelLogItem[]> => {
     }
   }
 };
+
 
 /**
  * @getLogDetail 여행 로그 상세 조회 api
@@ -104,6 +107,83 @@ export const getCalendarReviewList = async (): Promise<
       `/travel/review/calendar`
     );
     return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+/**
+ * @getReviewDetail 여행 리뷰 상세 조회 api
+ * @returns {Promise<TravelReviewDetail>} - 여행 리뷰 상세 데이터 응답
+ */
+
+export const getReviewDetail = async (
+  travel_review_id: number
+): Promise<TravelReviewDetail> => {
+  try {
+    const response = await baseApi.get<TravelReviewDetail>(
+      `/travel/review?travel_review_id=${travel_review_id}`
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+
+/**
+ * @postReview 여행 리뷰 업로드 api
+ * @param {number} travel_review_id - 리뷰가 속한 여행 ID
+ * @param {object} reviewData - 리뷰 내용 (ex: { content, rating })
+ */
+export const postReview = async (reviewData: TravelReviewPost) => {
+  try {
+    const formData = new FormData();
+
+    formData.append("travel_log_id", reviewData.travel_log_id.toString());
+    formData.append("title", reviewData.title);
+    formData.append("ai_rating", reviewData.ai_rating.toString());
+    formData.append("started_at", reviewData.started_at);
+    formData.append("finished_at", reviewData.finished_at);
+    formData.append("weather", reviewData.weather);
+    formData.append("mood", reviewData.mood.toString());
+    formData.append("note", reviewData.note);
+    formData.append("song", reviewData.song);
+
+    // 태그
+    reviewData.tag.forEach((t) => formData.append("tag", t));
+
+    // 파일
+    reviewData.picture?.forEach((file) => formData.append("picture", file));
+
+    const response = await baseApi.post(`/travel/review`, formData);
+    console.log("리뷰 폼데이터 전송 확인 콘솔: " + response.data);
+    
+    return response.data;
+    
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+/**
+ * @deleteReview 여행 리뷰 삭제 api
+ */
+export const deleteReview = async (travel_review_id: number) => {
+  try {
+    await baseApi.delete(`/travel/review?review_id=${travel_review_id}`);
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);

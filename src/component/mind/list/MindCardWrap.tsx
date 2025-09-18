@@ -1,78 +1,48 @@
+"use client"
+import useGetReviewListQuery from "@/queries/travel/useGetReviewList";
 import { MindCard } from "./MindCard";
 import styled from "styled-components";
+import LoadingSpinner from "@/component/common/LoadingSpinner";
+import Empty from "@/component/common/Empty";
+import { useTranslation } from "react-i18next";
+import PlusButton from "./PlusButton";
 
 const MindScreenWrap = styled.div`
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    height: 100%;
+
+`
+const PlusButtonWrap = styled.div`
+    position: absolute;
+    bottom: 24px;
+    right: 45px;
 `
 
 export default function MindCardWrap () {
-    const data = [
-        {
-            "id": 1,
-            "title": "📖 강릉에서의 멈춤",
-            "score": 4,
-            "date": "2025-06-05",
-            "weather": "맑음 ☀️",
-            "image": "/mind-test-image/mind-test-image.png"
-        },
-        {
-            "id": 2,
-            "title": "📖 제주 바닷가 산책",
-            "score": 3,
-            "date": "2025-06-06",
-            "weather": "흐림 ☁️",
-            "image": "/mind-test-image/mind-test-image.png"
-        },
-        {
-            "id": 3,
-            "title": "📖 서울 카페 탐방",
-            "score": 2,
-            "date": "2025-06-07",
-            "weather": "비 🌧️",
-            "image": "/mind-test-image/mind-test-image.png"
-        },
-        {
-            "id": 4,
-            "title": "📖 산책 중의 깨달음",
-            "score": 5,
-            "date": "2025-06-08",
-            "weather": "맑음 ☀️",
-            "image": "/mind-test-image/mind-test-image.png"
-        },
-        {
-            "id": 5,
-            "title": "📖 도서관에서의 집중",
-            "score": 3,
-            "date": "2025-06-09",
-            "weather": "흐림 ☁️",
-            "image": "/mind-test-image/mind-test-image.png"
-        },
-        {
-            "id": 6,
-            "title": "📖 친구와의 만남",
-            "score": 5,
-            "date": "2025-06-10",
-            "weather": "맑음 ☀️",
-            "image": "/mind-test-image/mind-test-image.png"
-        }
-    ]
+    const { t } = useTranslation();
+    const { data: listItemData, isLoading } = useGetReviewListQuery();
+    console.log("listItemData 확인", listItemData);
+    
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
 
+    if (!listItemData) {
+      return <Empty text={t("mind.loadingData")} />;
+    }
+    
     return (
         <MindScreenWrap>
-            {data.map(({ id, title, score, date, weather, image }) => (
-                <MindCard
-                    key={id}
-                    id={id}
-                    title={title}
-                    score={score}
-                    date={date}
-                    weather={weather}
-                    image={image}
-                />
+            {listItemData.map((item) => (
+                <MindCard key={item.travel_review_id} id={item.travel_review_id}/>
             ))}
+            <PlusButtonWrap >
+                <PlusButton />
+            </PlusButtonWrap>
         </MindScreenWrap>
     )
 }
