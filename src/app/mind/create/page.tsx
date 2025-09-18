@@ -1,10 +1,13 @@
 import MindCreateScreen from "@/screen/mind/MindCreateScreen";
+import { useRouter } from "next/router";
 
-type PageProps  = Promise<{id: string}>
+interface MindCreatePageProps {
+  searchParams: { logId: number };
+}
 
-export default async function MindCreate({ params }: {params:  PageProps}){
-    const {id} = await params;
+export default function MindCreate({ searchParams }: MindCreatePageProps) {
+    const logId = searchParams.logId
     return (
-        <MindCreateScreen params={Number(id)}/>
+        <MindCreateScreen params={logId}/>
     )
 }

@@ -105,6 +105,7 @@ export const getReviewList = async (): Promise<TravelReviewItem[]> => {
     const response = await baseApi.get<TravelReviewItem[]>(
       `/travel/review/list`
     );
+    console.log("get List 확인용", response.data)
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
@@ -178,17 +179,11 @@ export const postReview = async (reviewData: TravelReviewPost) => {
     formData.append("mood", reviewData.mood.toString());
     formData.append("note", reviewData.note);
     formData.append("song", reviewData.song);
-
     // 태그
     reviewData.tag.forEach((t) => formData.append("tag", t));
-
     // 파일
     reviewData.picture?.forEach((file) => formData.append("picture", file));
-
-    const response = await baseApi.post(`/travel/review`, formData);
-    console.log("리뷰 폼데이터 전송 확인 콘솔: " + response.data);
-    
-    return response.data;
+    await baseApi.post(`/travel/review`, formData);
     
   } catch (error) {
     if (error instanceof Error) {

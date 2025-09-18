@@ -13,8 +13,6 @@ type CreateModalProps = {
   travel_log_id: number;
 };
 
-// TODO: travel_log_id 부분 get 해오는 거 연결만 하면 될 것 같음
-
 export default function CreateModal({ travel_log_id }: CreateModalProps) {
   const [step, setStep] = useState(0);
   const [preview, setPreview] = useState<string[]>([]);
@@ -141,7 +139,7 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
                   />
                 )}
               />
-              <p> / 10</p>
+              <p> {watch("mood")} / 10</p>
             </>
           )}
 
@@ -182,7 +180,7 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
           {step === 5 && (
             <>
               <C.Title>여행을 사진으로 추억하세요!</C.Title>
-              <Controller // 리액트 훅 폼 컨트롤러로 마이그레이션
+              <Controller
                 name="picture"
                 control={control}
                 render={({field}) => (
@@ -195,8 +193,8 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
                         const files = e.target.files;
                         if (files) {
                           const arr = Array.from(files);
-                          field.onChange(arr);      // 훅 폼으로 파일 저장
-                          setPreview(arr.map((f) => URL.createObjectURL(f))); // 미리보기 처리
+                          field.onChange(arr);
+                          setPreview(arr.map((f) => URL.createObjectURL(f)));
                         }
                       }}
                     />
