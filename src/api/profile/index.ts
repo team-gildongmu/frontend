@@ -1,5 +1,6 @@
 import { MyProfileRequest, MyProfileResponse, PatchProfileRequest } from "@/types/profile";
 import { baseApi } from "@/api/baseApi";
+import useAuth from "@/hooks/useAuth";
 
 /**
  * @getMyProfile 프로필 조회 api
@@ -21,16 +22,12 @@ export const getMyProfile = async (): Promise<MyProfileResponse> => {
 
 /**
  * @patchProfile 프로필 수정 api
- * @returns {Promise<MyProfileRequest>} - 프로필 수정 데이터 응답
  */
-export const patchProfile = async ( data: Partial<PatchProfileRequest>): Promise<MyProfileRequest> => {
+export const patchProfile = async ( data: FormData) => {
   try {
-    const response = await baseApi.patch<MyProfileRequest>(
-      `/profile/edit`,
-      data
-    );
-    console.log("data ======> ", data);
-    return response.data;
+    const res = await baseApi.patch("/profile/edit", data)
+    return res.data
+    
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);
@@ -45,9 +42,8 @@ export const patchProfile = async ( data: Partial<PatchProfileRequest>): Promise
  */
 export const deleteProfile = async () => {
   try {
-    await baseApi.delete(
-      `/profile/delete`
-    );
+    await baseApi.delete(`/profile/delete`);
+    window.location.replace("/")
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);

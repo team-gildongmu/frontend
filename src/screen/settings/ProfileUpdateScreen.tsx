@@ -1,5 +1,6 @@
 "use client";
 
+import { patchProfile } from "@/api/profile";
 import SettingHeader from "@/component/profile/settings/list/SettingHeader";
 import { AccountActions } from "@/component/profile/settings/update/AccountActions";
 import ProfileUpdate from "@/component/profile/settings/update/ProfileUpdate";
@@ -7,8 +8,7 @@ import { SubmitButton } from "@/component/profile/settings/update/SubmitButton";
 import UserInfoForm from "@/component/profile/settings/update/UserInfoForm";
 import useDeleteProfileMutation from "@/queries/profile/useDeleteProfileMutation";
 import useGetMyProfile from "@/queries/profile/useGetMyProfile";
-import usePatchProfileMutation from "@/queries/profile/usePatchProfileMutation";
-import { PatchProfileRequest } from "@/types/profile";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 
@@ -20,8 +20,9 @@ const PageWrap = styled.main`
 
 export default function ProfileUpdateScreen() {
   const { data } = useGetMyProfile();
+  const router = useRouter();
 
-  const [photoUrl, setPhotoUrl] = useState<string | null>("");
+  const [photoUrl, setPhotoUrl] = useState<File | null>(null);
   const [intro, setIntro] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -33,8 +34,7 @@ export default function ProfileUpdateScreen() {
       setEmail(data.email ?? "");
     }
   }, [data]);
-
-  const { mutate: patchProfile } = usePatchProfileMutation();
+  
   const { mutate: deleteProfile } = useDeleteProfileMutation();
 
   if(data == undefined) return ;
@@ -46,21 +46,16 @@ export default function ProfileUpdateScreen() {
 
 
   const handleSubmit = () => {
-    const payload: Partial<PatchProfileRequest> = {
-      nickname,
-      intro,
-      profile_photo: photoUrl,
-    };
+    if (!data) return;
 
-    patchProfile(payload, {
-      onSuccess: () => {
-        alert("프로필이 성공적으로 수정되었습니다.");
-      },
-      onError: (error) => {
-        console.error(error);
-        alert("프로필 수정 중 오류가 발생했습니다.");
-      },
-    });
+    const formData = new FormData();
+    if (nickname) formData.append("nickname", nickname);
+    if (intro) formData.append("intro", intro);
+    if (photoUrl instanceof File) formData.append("profile_photo", photoUrl);
+
+    patchProfile(formData);
+    router.push("/profile")
+    
   };
 
   const handleWithdraw = () => {

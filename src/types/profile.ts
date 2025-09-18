@@ -12,7 +12,11 @@ export type MyProfileRequest = {
   email: string,
   nickname: string | null,
   intro: string | null,
-  profile_photo: string | null,
+  profile_photo: File | null,
 };
 
-export type PatchProfileRequest = Omit<MyProfileRequest, "email">;
+export type PatchProfileRequest = {
+  nickname?: string;
+  intro?: string;
+  profile_photo?: File;
+}
