@@ -143,27 +143,8 @@ export const getReviewDetail = async (
  * @postReview 여행 리뷰 업로드 api
  * @param {number} travel_review_id - 리뷰가 속한 여행 ID
  * @param {object} reviewData - 리뷰 내용 (ex: { content, rating })
- * @returns {Promise<TravelReviewDetail>} - 여행 리뷰 상세 데이터 응답
  */
-// export const postReview = async (reviewData: TravelReviewPost) => {
-//   try {
-//     const response = await baseApi.post<TravelReviewPost>(
-//       `/travel/review`,
-//       reviewData,
-//       {headers: { "Content-Type": "multipart/form-data" }}
-//     );
-//     return response.data;
-//   } catch (error) {
-//     if (error instanceof Error) {
-//       throw new Error(error.message);
-//     } else {
-//       throw new Error("An unknown error occurred");
-//     }
-//   }
-// };
-
-
-export const postReview = async (reviewData: TravelReviewPost & { travel_log_id: number; selectedFiles?: File[] }) => {
+export const postReview = async (reviewData: TravelReviewPost) => {
   try {
     const formData = new FormData();
 
@@ -177,21 +158,16 @@ export const postReview = async (reviewData: TravelReviewPost & { travel_log_id:
     formData.append("note", reviewData.note);
     formData.append("song", reviewData.song);
 
-    // 다중 태그
-    if (reviewData.tag && reviewData.tag.length > 0) {
-      reviewData.tag.forEach((t) => formData.append("tag", t));
-    }
+    // 태그
+    reviewData.tag.forEach((t) => formData.append("tag", t));
 
     // 파일
-    if (reviewData.selectedFiles && reviewData.selectedFiles.length > 0) {
-      reviewData.selectedFiles.forEach((file) => formData.append("picture", file));
-    }
+    reviewData.picture?.forEach((file) => formData.append("picture", file));
 
-    const response = await baseApi.post(`/travel/review`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
+    const response = await baseApi.post(`/travel/review`, formData);
+    console.log("리뷰 폼데이터 전송 확인 콘솔: " + response.data);
     return response.data;
+    
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);

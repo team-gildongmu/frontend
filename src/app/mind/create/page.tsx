@@ -1,7 +1,10 @@
 import MindCreateScreen from "@/screen/mind/MindCreateScreen";
 
-export default function MindCreate(){
+type PageProps  = Promise<{id: string}>
+
+export default async function MindCreate({ params }: {params:  PageProps}){
+    const {id} = await params;
     return (
-        <MindCreateScreen />
+        <MindCreateScreen params={Number(id)}/>
     )
 }

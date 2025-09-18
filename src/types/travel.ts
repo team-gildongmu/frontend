@@ -104,7 +104,7 @@ export type TravelReviewPost = {
     tag: string[]; 
     note: string;
     song: string;
-    picture: [];
+    picture?: File[];
 }
 
 export type WeatherType = "sunny" | "cloudy" | "rainy" | "snowy";

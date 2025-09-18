@@ -16,7 +16,6 @@ type CreateModalProps = {
 export default function CreateModal({ travel_log_id }: CreateModalProps) {
   const [step, setStep] = useState(0);
   const [preview, setPreview] = useState<string[]>([]);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const totalSteps = 8;
@@ -31,18 +30,21 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
   // 시작일자 선택 값
   const startDate = watch("started_at");
   const onSubmit = async (data: TravelReviewPost) => {
+    setLoading(true);
     try {
       await postReview({
         ...data,
-        travel_log_id,
-        selectedFiles, // Step 5에서 선택한 파일
+        travel_log_id: 1,
       });
       setSubmitted(true);
     } catch (error) {
       console.error("❌ 리뷰 등록 실패:", error);
+    } finally {
+      setLoading(false);
     }
   };
-    const prevStep = () => setStep((s) => Math.max(s - 1, 0));
+  
+  const prevStep = () => setStep((s) => Math.max(s - 1, 0));
 
   return (
     <C.Container>
@@ -178,27 +180,34 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
           {step === 5 && (
             <>
               <C.Title>여행을 사진으로 추억하세요!</C.Title>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={(e) => {
-                  const files = e.target.files;
-                  if (files) {
-                    const arr = Array.from(files);
-                    setSelectedFiles(arr);
-                    const previews = arr.map((f) => URL.createObjectURL(f));
-                    setPreview(previews);
-                  }
-                }}
+              <Controller // 리액트 훅 폼 컨트롤러로 마이그레이션
+                name="picture"
+                control={control}
+                render={({field}) => (
+                  <>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) => {
+                        const files = e.target.files;
+                        if (files) {
+                          const arr = Array.from(files);
+                          field.onChange(arr);      // 훅 폼으로 파일 저장
+                          setPreview(arr.map((f) => URL.createObjectURL(f))); // 미리보기 처리
+                        }
+                      }}
+                    />
+                    {preview.length > 0 && (
+                      <C.PreviewGrid>
+                        {preview.map((src, idx) => (
+                          <Image key={idx} src={src} alt={`preview-${idx}`} width={200} height={150} />
+                        ))}
+                      </C.PreviewGrid>
+                    )}
+                  </>
+                )}
               />
-              {preview.length > 0 && (
-                <C.PreviewGrid>
-                  {preview.map((src, idx) => (
-                    <Image key={idx} src={src} alt={`preview-${idx}`} width={200} height={150} />
-                  ))}
-                </C.PreviewGrid>
-              )}
             </>
           )}
 
