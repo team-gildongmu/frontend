@@ -9,6 +9,27 @@ import {
   TravelReviewPost,
 } from "@/types/travel";
 
+// 여행 로그 생성 요청 페이로드
+export type TravelLogCreatePayload = any;
+// 응답 타입 
+export type TravelLogCreateResponse = { id: number };
+
+/**
+ * @createTravelLog 확정 로그 생성 api
+ * @returns {Promise<TravelLogCreateResponse>} - 생성된 로그 id
+ */
+export const createTravelLog = async (payload: any) => {
+  try {
+    const res = await baseApi.post<TravelLogCreateResponse>("/travel/log", payload);
+    return res.data;
+  } catch (err: any) {
+    // 422면 pydantic 에러가 detail에 들어옴
+    const detail = err?.response?.data ?? err?.message;
+    console.log(detail);
+    throw new Error(typeof detail === "string" ? detail : JSON.stringify(detail));
+  }
+};
+
 /**
  * @getLogList 확정 로그 조회 api
  * @param theme - 테마 카테고리
