@@ -1,12 +1,13 @@
-import { Column, Row } from "@/styles/BaseComponents";
+import { CenterColumn, Column, Row } from "@/styles/BaseComponents";
 import { Font } from "@/styles/Typography";
 import Image from "next/image";
 import React from "react";
+import Icon from "@/component/common/IconifyIcon";
 
 interface UserContainerProps {
   title: string;
   userNickname: string;
-  userProfile: string;
+  userProfile: string | null;
 }
 
 export default function UserContainer({
@@ -16,14 +17,25 @@ export default function UserContainer({
 }: UserContainerProps) {
   return (
     <Row width="100%" gridGap="10px" alignItems="center">
-      <Image
-        src={userProfile}
-        alt={userNickname}
-        width={0}
-        height={0}
-        sizes="100vw"
-        style={{ width: "20px", height: "20px", borderRadius: "50%" }}
-      />
+      {userProfile ? (
+        <Image
+          src={userProfile}
+          alt={userNickname}
+          width={0}
+          height={0}
+          sizes="100vw"
+          style={{ width: "20px", height: "20px", borderRadius: "50%" }}
+        />
+      ) : (
+        <CenterColumn
+          width="20px"
+          height="20px"
+          borderRadius="50%"
+          backgroundColor="gray_100"
+        >
+          <Icon icon="mdi:account" width={14} height={14} color="white" />
+        </CenterColumn>
+      )}
       <Column>
         <Font
           typo="m01_sb_m"
