@@ -1,7 +1,6 @@
 import colors from "@/styles/Colors";
 import { Config } from "@/styles/FontVariants";
 import styled from "styled-components";
-import { color } from "styled-system";
 
 export const Container = styled.div`
   max-width: 987px;

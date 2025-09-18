@@ -14,6 +14,8 @@ type CreateModalProps = {
 };
 
 export default function CreateModal({ travel_log_id }: CreateModalProps) {
+  // TODO: 나중에 작업
+  console.log("travel_log_id === 나중에 작업", travel_log_id)
   const [step, setStep] = useState(0);
   const [preview, setPreview] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);

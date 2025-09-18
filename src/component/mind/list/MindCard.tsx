@@ -17,6 +17,8 @@ export function MindCard({key, id}: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
+  // TODO: key 수정필요
+  console.log("key", key)
   const { t } = useTranslation();
   const { data: listItemData, isLoading } = useGetReviewDetailQuery(id);
       

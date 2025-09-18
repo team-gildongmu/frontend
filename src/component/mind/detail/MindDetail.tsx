@@ -15,6 +15,7 @@ type Props = {
 };
 
 export default function MindDetail ({id}: Props) {
+    const router = useRouter();
     const { t } = useTranslation();
     const { data: listItemData, isLoading } = useGetReviewDetailQuery(id);
   
@@ -26,7 +27,6 @@ export default function MindDetail ({id}: Props) {
       return <Empty text={t("mind.loadingData")} />;
     }
 
-  const router = useRouter();
 
   return (
       <div>
