@@ -1,4 +1,4 @@
-export type Origin = { mapX: number; mapY: number };
+export type Origin = { mapx: number; mapy: number };
 
 export type StartSessionRequest = {
   origin?: Origin;

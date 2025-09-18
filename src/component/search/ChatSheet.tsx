@@ -15,8 +15,8 @@ import { useCreateLog } from "@/queries/travel/useCreateLog";
 import ModalPortal from "@/component/search/ModalPortal";
 import { error } from "console";
 
-const HEADER_H = 47;   // 예: 헤더 64px
-const FOOTER_H = 47;    // 예: 푸터 없으면 0
+const HEADER_H = 47;   
+const FOOTER_H = 47;    
 
 export type ChatMsg = { 
     role: "user" | "assistant"; 

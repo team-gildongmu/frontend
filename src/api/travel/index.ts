@@ -41,7 +41,7 @@ export const getLogList = async (theme?: string): Promise<TravelLogItem[]> => {
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(error.message);
+      throw error;
     } else {
       throw new Error("An unknown error occurred");
     }
