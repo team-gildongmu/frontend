@@ -13,9 +13,9 @@ type CreateModalProps = {
   travel_log_id: number;
 };
 
+// TODO: travel_log_id 부분 get 해오는 거 연결만 하면 될 것 같음
+
 export default function CreateModal({ travel_log_id }: CreateModalProps) {
-  // TODO: 나중에 작업
-  console.log("travel_log_id === 나중에 작업", travel_log_id)
   const [step, setStep] = useState(0);
   const [preview, setPreview] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
     try {
       await postReview({
         ...data,
-        travel_log_id: 1,
+        travel_log_id: travel_log_id,
       });
       setSubmitted(true);
     } catch (error) {
@@ -254,9 +254,9 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
               다음
             </C.Button>
           ) : (
-            <C.Button type="submit" disabled={loading}>
+            <C.SubmitButton type="submit" disabled={loading}>
               {loading ? "제출중..." : "제출하기"}
-            </C.Button>
+            </C.SubmitButton>
           )}
         </C.Nav>
       </form>

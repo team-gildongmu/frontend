@@ -8,7 +8,7 @@ import UserInfoForm from "@/component/profile/settings/update/UserInfoForm";
 import useDeleteProfileMutation from "@/queries/profile/useDeleteProfileMutation";
 import useGetMyProfile from "@/queries/profile/useGetMyProfile";
 import usePatchProfileMutation from "@/queries/profile/usePatchProfileMutation";
-import { MyProfileRequest } from "@/types/profile";
+import { PatchProfileRequest } from "@/types/profile";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 
@@ -21,7 +21,7 @@ const PageWrap = styled.main`
 export default function ProfileUpdateScreen() {
   const { data } = useGetMyProfile();
 
-  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [photoUrl, setPhotoUrl] = useState<string | null>("");
   const [intro, setIntro] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -34,21 +34,23 @@ export default function ProfileUpdateScreen() {
     }
   }, [data]);
 
-  console.log("user data", data);
-
   const { mutate: patchProfile } = usePatchProfileMutation();
   const { mutate: deleteProfile } = useDeleteProfileMutation();
 
+  if(data == undefined) return ;
+
   const hasChange =
     !!photoUrl ||
-    intro !== (data?.intro ?? "") ||
-    nickname !== (data?.nickname ?? "")
+    intro !== (data?.intro ?? null) ||
+    nickname !== (data?.nickname ?? null)
+
 
   const handleSubmit = () => {
-    const payload: Partial<MyProfileRequest> = {};
-     if (nickname !== (data?.nickname ?? "")) payload.nickname = nickname;
-    if (photoUrl !== (data?.profile_photo_url ?? "")) payload.profile_photo_url = photoUrl;
-    if (intro !== (data?.intro ?? "")) payload.intro = intro;
+    const payload: Partial<PatchProfileRequest> = {
+      nickname,
+      intro,
+      profile_photo: photoUrl,
+    };
 
     patchProfile(payload, {
       onSuccess: () => {

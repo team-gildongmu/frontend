@@ -224,6 +224,20 @@ export const Button = styled.button`
   }
 `;
 
+export const SubmitButton = styled.button`
+  background: ${colors.blue_500};
+  color: white;
+  padding: 0.5rem 0.5rem;
+  border: none;
+  border-radius: 8px;
+  font: ${Config.variants.t02_m};
+  cursor: pointer;
+  &:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+`;
+
 export const LButton = styled.button`
   background: ${colors.white};
   padding: 0.5rem 1.2rem;

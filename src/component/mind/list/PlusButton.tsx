@@ -6,9 +6,9 @@ import styled from "styled-components";
 
 export default function PlusButton() {
   const router = useRouter();
-
+// TODO: log_ id 받아 갈 수 있도록 getLogId를 어디에 붙여야 하는지 확인하기
   const handleClick = () => {
-    router.push("/mind/create"); // 이동할 페이지 경로
+    router.push(`/mind/create`); // 이동할 페이지 경로
   };
 
   return <FloatingButton onClick={handleClick}>+</FloatingButton>;

@@ -1,4 +1,4 @@
-import { MyProfileRequest, MyProfileResponse } from "@/types/profile";
+import { MyProfileRequest, MyProfileResponse, PatchProfileRequest } from "@/types/profile";
 import { baseApi } from "@/api/baseApi";
 
 /**
@@ -9,7 +9,6 @@ import { baseApi } from "@/api/baseApi";
 export const getMyProfile = async (): Promise<MyProfileResponse> => {
   try {
     const response = await baseApi.get<MyProfileResponse>("/profile/me");
-    console.log("response.data 확인용", response.data);
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
@@ -24,12 +23,13 @@ export const getMyProfile = async (): Promise<MyProfileResponse> => {
  * @patchProfile 프로필 수정 api
  * @returns {Promise<MyProfileRequest>} - 프로필 수정 데이터 응답
  */
-
-export const patchProfile = async (data: Partial<MyProfileRequest>): Promise<MyProfileRequest> => {
+export const patchProfile = async ( data: Partial<PatchProfileRequest>): Promise<MyProfileRequest> => {
   try {
     const response = await baseApi.patch<MyProfileRequest>(
-      `/profile/edit`, data
+      `/profile/edit`,
+      data
     );
+    console.log("data ======> ", data);
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
@@ -41,7 +41,7 @@ export const patchProfile = async (data: Partial<MyProfileRequest>): Promise<MyP
 };
 
 /**
- * @deleteProfile 프로필 삭제 api
+ * @deleteProfile 회원탈퇴 api
  */
 export const deleteProfile = async () => {
   try {

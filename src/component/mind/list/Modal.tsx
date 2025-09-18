@@ -1,3 +1,4 @@
+import { deleteReview } from "@/api/travel"
 import * as C from "./Modal.styles" 
 
 interface ModalProps {
@@ -10,12 +11,13 @@ export default function Modal({ onClose, targetId }: ModalProps) {
 
   const handleDelete = async () => {
     try {
-    //   await axios.delete(`/api/your-resource/${targetId}`)
+      await deleteReview(targetId);
       alert("삭제가 완료되었습니다.")
       onClose();
     } catch (error) {
       console.error(error)
-      alert("삭제에 실패했습니다.")
+      alert("삭제 실패했습니다.")
+      onClose();
     }
   }
 

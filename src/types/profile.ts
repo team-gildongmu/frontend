@@ -3,13 +3,16 @@ export type MyProfileResponse = {
   nickname: string,
   email: string,
   intro: string,
-  profile_photo_url: string,
+  profile_photo: string | null,
 };
 
 
 // 유저 프로필 수정
 export type MyProfileRequest = {
+  email: string,
   nickname: string | null,
   intro: string | null,
-  profile_photo_url: string | null,
+  profile_photo: string | null,
 };
+
+export type PatchProfileRequest = Omit<MyProfileRequest, "email">;
