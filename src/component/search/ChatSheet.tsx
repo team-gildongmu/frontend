@@ -12,11 +12,13 @@ import {
 } from "@/api/search/ai";
 import { useRouter } from "next/navigation";
 import { useCreateLog } from "@/queries/travel/useCreateLog";
+import { useLanguages } from "@/hooks/useLang";
 import ModalPortal from "@/component/search/ModalPortal";
+import { useTranslation } from "react-i18next";
 import { error } from "console";
 
-const HEADER_H = 47;   // 예: 헤더 64px
-const FOOTER_H = 47;    // 예: 푸터 없으면 0
+const HEADER_H = 47;   
+const FOOTER_H = 47;    
 
 export type ChatMsg = { 
     role: "user" | "assistant"; 
@@ -37,7 +39,7 @@ export type Plan = {
       desc?: string;
       reason?: string;
       image?: string;
-      coords: { mapx: number; mapy: number };
+      coords: { mapX: number; mapY: number };
       provider?: "tourapi" | "google";
       source?: string;
     }[];
@@ -46,7 +48,7 @@ export type Plan = {
     title: string;
     desc?: string;
     image?: string;
-    coords: { mapx: number; mapy: number };
+    coords: { mapX: number; mapY: number };
     provider?: "tourapi" | "google";
     source?: string;
   }[];
@@ -60,8 +62,11 @@ type Props = {
 };
 
 export default function ChatSheet({ center, onPlan }: Props) {
+  const { t } = useTranslation();
+  
   const { getUserToken } = useAuth();
   const token = getUserToken();
+  const { currentLocale } = useLanguages();
   const SID_KEY = "ai.sess";
   const router = useRouter();
   const { mutateAsync: createLog, isPending: saving } = useCreateLog();
@@ -95,26 +100,24 @@ export default function ChatSheet({ center, onPlan }: Props) {
   const dragRef = useRef(false);
 
 // 랜덤 안내 멘트 목록
-const GREETINGS = [
-"오늘은 어떤 기분이세요? 신나게 놀고 싶으세요, 아니면 푹 쉬면서 힐링하고 싶으세요?",
-"가고 싶은 장소가 있나요? 없다면 근처에서 알짜 코스도 추천해드릴 수 있어요 😊",
-"먹방, 힐링, 액티비티! 지금 땡기는 여행 테마가 뭐예요?",
-"오늘 하루, 어디서 어떻게 보내고 싶으세요? 제가 딱 맞는 코스를 짜드릴게요 ✨",
-"친구랑 놀고 싶으세요? 혼자 힐링하고 싶으세요? 분위기만 말해주셔도 추천해드려요!",
-] as const;
+const pickGreeting = () => {
+  const list = t("chat.greetings", { returnObjects: true }) as string[]; // ko/en/ja 배열
+  const arr = Array.isArray(list) && list.length ? list : [
+    // 안전장치(팩토리 기본값)
+    "오늘은 어떤 기분이세요? 신나게 놀고 싶으세요, 아니면 푹 쉬면서 힐링하고 싶으세요?"
+  ];
+  return arr[Math.floor(Math.random() * arr.length)];
+};
 
-const pickGreeting = () =>
-  GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
-
-  // 채팅
-  const [input, setInput] = useState("");
-  const [msgs, setMsgs] = useState<ChatMsg[]>([
-    {
-      role: "assistant",
-      text: pickGreeting(),
-      ts: Date.now(), // ✅ number 로 통일
-    },
-  ]);
+// 채팅
+const [input, setInput] = useState("");
+const [msgs, setMsgs] = useState<ChatMsg[]>([
+  {
+    role: "assistant",
+    text: pickGreeting(),
+    ts: Date.now(), // ✅ number 로 통일
+  },
+]);
 
   // 진행 상태 (DONE 표시 X, RESULT 오면 로더 숨김)
   const [running, setRunning] = useState<null | { step: string; message: string }>(null);
@@ -293,8 +296,13 @@ const pickGreeting = () =>
       // 세션 없으면 시작
       let sid = sessionId;
       if (!sid) {
+        
         const origin = center ? { mapX: center.lng, mapY: center.lat } : undefined;
-        const { session_id } = await startSession({ origin }, token ?? "");
+        const { session_id } = await startSession(
+          { origin, lang:currentLocale as any },
+            token ?? ""
+        );
+        console.log("[AI] request body:", { message: q, origin, lang: currentLocale });
         sid = session_id;
         setSessionId(session_id);
         localStorage.setItem(SID_KEY, session_id);
@@ -303,11 +311,15 @@ const pickGreeting = () =>
       }
 
       // 로딩 시작
-      setRunning({ step: "WAIT", message: "준비 중…" });
+      setRunning({ step: "WAIT", message: t("chat.status.waiting") });
 
       // 질문 보내기
       const origin = center ? { mapX: center.lng, mapY: center.lat } : undefined;
-      const res = await sendMessage(sid!, { message: q, origin }, token ?? "");
+      const res = await sendMessage(
+        sid!, 
+        { message: q, origin, lang: currentLocale as any }, 
+        token ?? ""
+      );
       console.log("[AI] raw response:", res);
       console.log("[AI] raw plan:", res.plan);
 
@@ -326,9 +338,7 @@ const pickGreeting = () =>
         ...m,
         {
           role: "assistant",
-          text: `문제가 발생했어요. 잠시 후 다시 시도해 주세요.\n(${String(
-            err?.message || "Unknown error"
-          )})`,
+          text: `${t("chat.errorGeneric")}\n(${String(err?.message || "Unknown error")})`,
           ts: Date.now(),
         },
       ]);
@@ -427,7 +437,7 @@ const pickGreeting = () =>
             onClick={handleNewChat}
             className="new_chat_button"
           >
-            새 채팅하기
+            {t("chat.newChat")}
           </button>
 
           {/* {sessionId && (
@@ -506,7 +516,7 @@ const pickGreeting = () =>
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="오늘은 어디로 떠나고 싶으세요? (예) 홍대에서 2일코스 + 맛집 추천해줘"
+              placeholder={t("chat.inputPlaceholder")}
               style={{
                 flex: 1,
                 height: 44,
@@ -578,7 +588,7 @@ const pickGreeting = () =>
           {confirmPhase === "saving" && (
             <>
               <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>
-                여행 루트를 저장하고 있습니다
+                {t("modal.savingTitle")}
               </div>
               <div style={{ marginTop: 8 }}>
                 <LoaderDots />
@@ -589,7 +599,7 @@ const pickGreeting = () =>
           {confirmPhase === "done" && (
             <>
               <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 6 }}>
-                루트 스탬프가 생성되었습니다!
+                {t("modal.confirm")}
               </div>
               <button
                 onClick={closeAndGoHome}
@@ -605,7 +615,7 @@ const pickGreeting = () =>
                   cursor: "pointer",
                 }}
               >
-                확인
+                {t("modal.close")}
               </button>
             </>
           )}
@@ -639,7 +649,7 @@ const pickGreeting = () =>
                     cursor: "pointer",
                   }}
                 >
-                  닫기
+                  {t("modal.retry")}
                 </button>
                 <button
                   onClick={handleConfirmRoute}
@@ -769,6 +779,7 @@ function Bubble({
 }
 
 function PlanActions({ onFix, saving = false }: { onFix: () => void; saving?: boolean }) {
+  const { t } = useTranslation();
   return (
     <div style={{ marginTop: 10, display: "flex", gap: 8 }}>
       <button
@@ -784,15 +795,15 @@ function PlanActions({ onFix, saving = false }: { onFix: () => void; saving?: bo
           cursor: "pointer",
         }}
       >
-        루트 확정하기
+        {t("chat.actions.confirmRoute")}
       </button>
     </div>
   );
 }
 
 function AssistantPlanBubble({ plan, ts }: { plan: Plan; ts?: number }) {
+  const { t } = useTranslation();
   const stamp = ts ? formatKTime(ts) : "";
-
   return (
     <div
       style={{
@@ -832,14 +843,14 @@ function AssistantPlanBubble({ plan, ts }: { plan: Plan; ts?: number }) {
               }}
             >
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
-                Day {idx + 1}
+                {t("plan.day", { n: idx + 1 })}
               </div>
 
               <div style={{ display: "grid", gap: 8 }}>
                 {d.segments?.map((s, i) => (
                   <RowLine
                     key={i}
-                    label={s.type === "MEAL" ? "맛집" : "장소"}
+                    label={ s.type === "MEAL" ? t("plan.labels.meal") : t("plan.labels.place") }
                     color={s.type === "MEAL" ? "#f59e0b" : "#60a5fa"}
                     title={s.title}
                     provider={s.provider}
@@ -860,7 +871,7 @@ function AssistantPlanBubble({ plan, ts }: { plan: Plan; ts?: number }) {
               }}
             >
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
-                숙박 추천
+                {t("plan.stayRecommendations")}
               </div>
 
               <div style={{ display: "grid", gap: 8 }}>
@@ -889,7 +900,7 @@ function AssistantPlanBubble({ plan, ts }: { plan: Plan; ts?: number }) {
               }}
             >
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
-                ✨ 요약
+                {t("plan.summary")}
               </div>
               {plan.summary}
             </div>
@@ -992,6 +1003,7 @@ function RowLine({
 }
 
 function ProviderChip({ provider }: { provider?: "tourapi" | "google" }) {
+  const { t } = useTranslation();
   if (!provider) return null;
   const isTour = provider === "tourapi";
   return (
@@ -1004,9 +1016,9 @@ function ProviderChip({ provider }: { provider?: "tourapi" | "google" }) {
         fontWeight: 700,
         whiteSpace: "nowrap",
       }}
-      title={isTour ? "KTO(TourAPI) 데이터" : "Google 데이터"}
+      title={isTour ? t("provider.tourapiTitle") : t("provider.googleTitle")}
     >
-      {isTour ? "TourAPI" : "Google"}
+      {isTour ? t("provider.tourapi") : t("provider.google")}
     </span>
   );
 }

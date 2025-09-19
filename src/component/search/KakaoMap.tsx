@@ -1,10 +1,10 @@
-// src/component/search/KakaoMap.tsx
 "use client";
 
 import { useEffect, useRef } from "react";
 import useKakao from "@/hooks/useKakao";
 import colors from "@/styles/Colors";
 import { it } from "node:test";
+import { useTranslation } from "react-i18next";
 
 export type LatLng = { lat: number; lng: number };
 export type MapMarker = {
@@ -58,6 +58,8 @@ export default function KakaoMap({
   myLocation = null,
   onLocateClick,
 }: Props) {
+  const { t } = useTranslation();
+  console.log(t("mymap.legend.my"));
   const ready = useKakao();
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapObjRef = useRef<any>(null);
@@ -164,7 +166,7 @@ export default function KakaoMap({
     }
 
     const text = document.createElement("div");
-    text.textContent = item.type === "MY" ? "내 위치" : (item.title || "");
+    text.textContent = item.type === "MY" ? t("mymap.myLocation") : (item.title || "");
     Object.assign(text.style, {
       padding: "8px 10px",
       fontSize: "13px",
@@ -272,7 +274,7 @@ export default function KakaoMap({
       // 호버 이벤트(내 위치) — 중복 바인딩 방지
       if (!myMarkerBoundRef.current) {
         kakao.maps.event.addListener(myMarkerRef.current, "mouseover", () =>
-          showOverlay({ position: myLocation, title: "내 위치", type: "MY" }, myMarkerRef.current)
+          showOverlay({ position: myLocation, title: t("mymap.myLocation"),  type: "MY" }, myMarkerRef.current)
         );
         kakao.maps.event.addListener(myMarkerRef.current, "mouseout", () => scheduleHideOverlay());
         myMarkerBoundRef.current = true;
@@ -295,6 +297,18 @@ export default function KakaoMap({
     }
   };
 
+  useEffect(() => {
+  // @ts-ignore
+  import("@/i18n").then(({ default: i }) => {
+    const lng = i.resolvedLanguage || i.language;
+    console.log("[i18n] lang =", lng);
+    console.log("[i18n] has translation bundle =", i.hasResourceBundle(lng, "translation"));
+    console.log("[i18n] has common bundle      =", i.hasResourceBundle(lng, "common"));
+    console.log("[i18n] mymap.legend.my =", i.t("mymap.legend.my"));
+    console.log("[i18n] mymap.myLocation      =", i.t("mymap.myLocation"));
+  });
+}, []);
+
   return (
     <div style={{ position: "relative", width: "100%", height }}>
       <div
@@ -311,7 +325,7 @@ export default function KakaoMap({
       {showMyLocation && myLocation && (
         <button
           onClick={handleLocate}
-          title="내 위치로 이동"
+          title={t("map.locateBtnTitle")}
           className="locationBtn"
           style={{
             position: "absolute",
@@ -364,10 +378,10 @@ export default function KakaoMap({
         }}
       >
         {[
-          { label: "장소", color: COLORS.POI },
-          { label: "맛집", color: COLORS.MEAL },
-          { label: "숙박", color: COLORS.STAY },
-          { label: "내 위치", color: COLORS.MY },
+          { label: t("map.legend.place"), color: COLORS.POI },
+          { label: t("map.legend.meal"),  color: COLORS.MEAL },
+          { label: t("map.legend.stay"),  color: COLORS.STAY },
+          { label: t("map.legend.my"),    color: COLORS.MY },
         ].map((it) => (
           <div
             key={it.label}
