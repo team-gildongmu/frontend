@@ -19,6 +19,7 @@ export default function MindDetail ({id}: Props) {
     const router = useRouter();
     const { t } = useTranslation();
     const { data: listItemData, isLoading } = useGetReviewDetailQuery(id);
+    console.log("listItemData 확인하기", listItemData);
   
     if (isLoading) {
       return <LoadingSpinner />;
