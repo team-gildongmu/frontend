@@ -1,10 +1,13 @@
-export type Origin = { mapx: number; mapy: number };
+export type Origin = { mapX: number; mapY: number };
+
+export type Lang = "ko" | "en" | "ja";
 
 export type StartSessionRequest = {
   origin?: Origin;
   days?: number;
   mode?: "walk" | "drive" | "transit";
   tags?: string[];
+  lang?: Lang;
 };
 
 export type StartSessionResponse = {
@@ -17,6 +20,7 @@ export type MessageRequest = {
   days?: number | null;
   mode?: "walk" | "drive" | "transit" | null;
   tags?: string[] | null;
+  lang?: Lang;
 };
 
 export type Coords = { mapx: number | null; mapy: number | null };
@@ -99,10 +103,12 @@ export async function startSession(
   body: StartSessionRequest,
   token: string
 ): Promise<StartSessionResponse> {
+  const lang = body.lang || "ko";
   return apiFetch<StartSessionResponse>("/ai/session/start", {
     method: "POST",
     body: JSON.stringify(body),
     token,
+    headers: lang ? { "Accept-Language": lang } : undefined,
   });
 }
 
@@ -111,10 +117,12 @@ export async function sendMessage(
   body: MessageRequest,
   token: string
 ): Promise<MessageResponse> {
+  const lang = body.lang || "ko";
   return apiFetch<MessageResponse>(`/ai/session/${sessionId}/message`, {
     method: "POST",
     body: JSON.stringify(body),
     token,
+    headers: lang ? { "Accept-Language": lang } : undefined,
   });
 }
 
