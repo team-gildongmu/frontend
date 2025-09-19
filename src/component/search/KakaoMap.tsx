@@ -301,11 +301,8 @@ export default function KakaoMap({
   // @ts-ignore
   import("@/i18n").then(({ default: i }) => {
     const lng = i.resolvedLanguage || i.language;
-    console.log("[i18n] lang =", lng);
-    console.log("[i18n] has translation bundle =", i.hasResourceBundle(lng, "translation"));
-    console.log("[i18n] has common bundle      =", i.hasResourceBundle(lng, "common"));
-    console.log("[i18n] mymap.legend.my =", i.t("mymap.legend.my"));
-    console.log("[i18n] mymap.myLocation      =", i.t("mymap.myLocation"));
+    console.log("[i18n] value(mymap) =", i.getResource(lng, "translation", "mymap"));
+    console.log("[i18n] value(mymap.legend.my) =", i.getResource(lng, "translation", "mymap.legend.my"));
   });
 }, []);
 
@@ -378,10 +375,10 @@ export default function KakaoMap({
         }}
       >
         {[
-          { label: t("map.legend.place"), color: COLORS.POI },
-          { label: t("map.legend.meal"),  color: COLORS.MEAL },
-          { label: t("map.legend.stay"),  color: COLORS.STAY },
-          { label: t("map.legend.my"),    color: COLORS.MY },
+          { label: t("mymap.legend.place"), color: COLORS.POI },
+          { label: t("mymap.legend.meal"),  color: COLORS.MEAL },
+          { label: t("mymap.legend.stay"),  color: COLORS.STAY },
+          { label: t("mymap.legend.my"),    color: COLORS.MY },
         ].map((it) => (
           <div
             key={it.label}

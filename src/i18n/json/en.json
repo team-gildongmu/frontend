@@ -94,8 +94,9 @@
         "Dec"
       ],
       "yearSuffix": ""
-    },
-    "chat": {
+    }
+  },
+  "chat": {
       "greetings": [
         "How are you feeling today? Want something exciting, or a relaxing healing day?",
         "Do you have a place in mind? If not, I can suggest a no-miss course nearby 😊",
@@ -135,5 +136,4 @@
       "locateBtnTitle": "Go to my location",
       "legend": { "place": "Place", "meal": "Food", "stay": "Stay", "my": "My location" }
     }
-  }
 }
