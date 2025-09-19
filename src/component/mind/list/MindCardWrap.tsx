@@ -15,11 +15,6 @@ const MindScreenWrap = styled.div`
     height: 100%;
 
 `
-const PlusButtonWrap = styled.div`
-    position: absolute;
-    bottom: 24px;
-    right: 45px;
-`
 
 export default function MindCardWrap () {
     const { t } = useTranslation();

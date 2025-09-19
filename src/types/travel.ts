@@ -107,6 +107,21 @@ export type TravelReviewPost = {
     picture?: File[];
 }
 
+// 여행 리뷰 수정 데이터
+export type TravelReviewPut = {
+    review_id: number;
+    title: string;
+    ai_rating: number;
+    started_at: string;
+    finished_at: string;
+    weather: keyof typeof WEATHER_LABELS;
+    mood: number;
+    tag: string[]; 
+    note: string;
+    song: string;
+    picture?: File[];
+}
+
 export type WeatherType = "sunny" | "cloudy" | "rainy" | "snowy";
 
 export type ReviewTagType =

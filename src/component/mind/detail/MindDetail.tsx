@@ -9,7 +9,6 @@ import useGetReviewDetailQuery from "@/queries/travel/useGetReviewDetail";
 import LoadingSpinner from "@/component/common/LoadingSpinner";
 import Empty from "@/component/common/Empty";
 import ImgSwiper from "@/component/myroad/list/ImgSwiper";
-import TagWrapper from "@/component/myroad/list/TagWrapper";
 import Weather from "./Weather";
 
 type Props = {

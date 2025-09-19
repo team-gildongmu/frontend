@@ -1,6 +1,6 @@
-import { MyProfileRequest, MyProfileResponse, PatchProfileRequest } from "@/types/profile";
+import {  MyProfileResponse } from "@/types/profile";
 import { baseApi } from "@/api/baseApi";
-import useAuth from "@/hooks/useAuth";
+
 
 /**
  * @getMyProfile 프로필 조회 api
