@@ -11,9 +11,9 @@ export default function PlusButton({ logId }: { logId: number }) {
 
   return (
     <PlusButtonWrap>
-      <Icon icon="mdi:map" width="20" height="20" color={colors.blue_500} />
+      <Icon icon="tdesign:edit-2" width="20" height="20" color={colors.blue_500} />
       <FloatingButton onClick={() => {
-          router.push(`/mind/create?travel_log_id=${logId}`)}}>루트 후기 생성하기</FloatingButton>
+          router.push(`/mind/create?travel_log_id=${logId}`)}}>루트 후기 작성하기</FloatingButton>
     </PlusButtonWrap>
   );
 }

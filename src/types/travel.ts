@@ -81,13 +81,14 @@ export type MapTravelLocation = {
 export type TravelReviewDetail = {
   travel_review_id: number;
   title: string;
-  score: number;
-  // 사용자 기분 - mood
-  mood: number;
-  date: string;
-  contents: string;
+  ai_rating: number;
+  start_date: string;
+  end_date: string;
   weather: string;
-  image: string;
+  mood: number;
+  tags: string[]; 
+  note: string;
+  images: string[];
 };
 
 

@@ -8,12 +8,14 @@ import Icon from "@/component/common/IconifyIcon";
 import colors from "@/styles/Colors";
 import { REVIEW_TAG_LABELS, TravelReviewPost, WEATHER_LABELS } from "@/types/travel";
 import { postReview } from "@/api/travel";
+import { useRouter } from "next/navigation";
 
 type CreateModalProps = {
   travel_log_id: number;
 };
 
 export default function CreateModal({ travel_log_id }: CreateModalProps) {
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [preview, setPreview] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -242,19 +244,26 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
 
         {/* Navigation */}
         <C.Nav>
-          {step > 0 && (
+          {step > 0 && !submitted && (
             <C.LButton type="button" onClick={prevStep}>
               <Icon icon="tdesign:chevron-left" width="16" height="16" color={colors.blue_500} />
             </C.LButton>
           )}
-          {step < 8 ? (
-            <C.Button type="button" onClick={() => setStep((s) => Math.min(s + 1, 8))}>
-              다음
-            </C.Button>
+
+          {!submitted ? (
+            step < 8 ? (
+              <C.Button type="button" onClick={() => setStep((s) => Math.min(s + 1, 8))}>
+                다음
+              </C.Button>
+            ) : (
+              <C.SubmitButton type="submit" disabled={loading}>
+                {loading ? "제출중..." : "제출하기"}
+              </C.SubmitButton>
+            )
           ) : (
-            <C.SubmitButton type="submit" disabled={loading}>
-              {loading ? "제출중..." : "제출하기"}
-            </C.SubmitButton>
+            <C.Button type="button" onClick={() => router.push("/")}>
+              메인으로
+            </C.Button>
           )}
         </C.Nav>
       </form>
