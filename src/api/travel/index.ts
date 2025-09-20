@@ -106,7 +106,6 @@ export const getReviewList = async (): Promise<TravelReviewItem[]> => {
     const response = await baseApi.get<TravelReviewItem[]>(
       `/travel/review/list`
     );
-    console.log("get List 확인용", response.data)
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
@@ -215,7 +214,6 @@ export const putReview = async (reviewData: TravelReviewPut) => {
     reviewData.tag.forEach((t) => formData.append("tag", t));
     reviewData.picture?.forEach((file) => formData.append("picture", file));
 
-    console.log("데이터 확인용 ----->", formData)
     await baseApi.put(`/travel/review`, formData);
     
   } catch (error) {

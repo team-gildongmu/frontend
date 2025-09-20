@@ -6,5 +6,5 @@ interface Props {
 }
 
 export default function MindUpdateScreen({id}: Props) {
-  return <MindUpdateDetail id={id}/>
+  return <MindUpdateDetail review_id={id}/>
 }

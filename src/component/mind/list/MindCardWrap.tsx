@@ -19,7 +19,6 @@ const MindScreenWrap = styled.div`
 export default function MindCardWrap () {
     const { t } = useTranslation();
     const { data: listItemData, isLoading } = useGetReviewListQuery();
-    console.log("review data", listItemData)
     
     if (isLoading) {
       return <LoadingSpinner />;
@@ -32,7 +31,7 @@ export default function MindCardWrap () {
     return (
         <MindScreenWrap>
             {listItemData.map((item) => (
-                <MindCard key={item.travel_review_id} id={item.travel_review_id}/>
+                <MindCard key={item.travel_review_id} review_id={item.travel_review_id}/>
             ))}
         </MindScreenWrap>
     )

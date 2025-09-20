@@ -36,6 +36,7 @@ export default function ProfileUpdateScreen() {
   }, [data]);
   
   const { mutate: deleteProfile } = useDeleteProfileMutation();
+  
 
   if(data == undefined) return ;
 
@@ -60,15 +61,9 @@ export default function ProfileUpdateScreen() {
 
   const handleWithdraw = () => {
     if (window.confirm("정말로 회원탈퇴 하시겠습니까?")) {
-      deleteProfile(undefined, {
-        onSuccess: () => {
-          alert("회원탈퇴가 완료되었습니다.");
-        },
-        onError: (error) => {
-          console.error(error);
-          alert("회원탈퇴 중 오류가 발생했습니다.");
-        },
-      });
+      deleteProfile();
+    } else {
+      router.push('/');
     }
   };
 

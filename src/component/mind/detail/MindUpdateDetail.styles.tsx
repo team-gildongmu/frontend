@@ -3,7 +3,6 @@
 import styled from "styled-components";
 import colors from "@/styles/Colors";
 import { Config } from "@/styles/FontVariants";
-import { cp } from "fs";
 
 export const Container = styled.div`
   max-width: 720px;

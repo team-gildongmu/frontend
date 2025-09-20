@@ -43,7 +43,6 @@ export const patchProfile = async ( data: FormData) => {
 export const deleteProfile = async () => {
   try {
     await baseApi.delete(`/profile/delete`);
-    window.location.replace("/")
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);

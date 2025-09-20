@@ -16,12 +16,12 @@ import { putReview } from "@/api/travel";
 import useGetReviewDetailQuery from "@/queries/travel/useGetReviewDetail";
 
 type UpdateModalProps = {
-  id: number;
+  review_id: number;
 };
 
-export default function MindUpdateModal({ id }: UpdateModalProps) {
+export default function MindUpdateModal({ review_id }: UpdateModalProps) {
   const router = useRouter();
-  const { data: detail, isLoading } = useGetReviewDetailQuery(id);
+  const { data: detail, isLoading } = useGetReviewDetailQuery(review_id);
 
   const [preview, setPreview] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,6 @@ export default function MindUpdateModal({ id }: UpdateModalProps) {
   useEffect(() => {
     if (detail) {
       reset({
-        review_id: id,
         title: detail.title,
         ai_rating: detail.ai_rating,
         started_at: detail.start_date,
@@ -58,7 +57,7 @@ export default function MindUpdateModal({ id }: UpdateModalProps) {
     try {
       await putReview({
         ...data,
-        review_id: id
+        review_id: review_id
       });
       alert("리뷰가 수정되었습니다!");
       router.push(`/mind`);
