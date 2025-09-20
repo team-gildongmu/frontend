@@ -6,12 +6,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  userInfo: number;
-};
+    nickname: string;
+}
 
-export default function ProfileHeader({userInfo}: Props){
-    console.log("userInfo", userInfo)
-    const nickname = "길동무 친구들"
+export default function ProfileHeader({nickname}: Props){
     const router = useRouter();
     return (
         <P.Wrap>

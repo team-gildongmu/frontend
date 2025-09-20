@@ -95,5 +95,14 @@
       ],
       "yearSuffix": "年"
     }
+  },
+  "mind": {
+    "setting": " setting",
+     "weather": {
+      "sunny": "맑음",
+      "cloudy" : "흐림",
+      "rainy": "비",
+      "snowy" : "눈"
+    }
   }
 }

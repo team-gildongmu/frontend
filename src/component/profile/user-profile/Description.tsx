@@ -1,12 +1,18 @@
 import * as D from "./Description.styles"
 
-export default function Description (){
+type Props = {
+    nickname: string;
+    intro: string | null;
+}
+
+export default function Description ({nickname, intro}: Props){
     return (
         <D.Container>
-            {/* <strong>{userInfo.nickname}</strong>
-            <p>{userInfo.desc}</p> */}
-            <D.Nickname>길동무 친구들</D.Nickname>
-            <D.Quote>천천히 걸어가야 비로소 보이는 것들이 있다.</D.Quote>
+            
+            <D.Nickname>{nickname}</D.Nickname>
+            <D.Quote>
+                {intro == null ? "한 줄 소개를 작성해주세요!" : intro}
+            </D.Quote>
         </D.Container>
     )
 }

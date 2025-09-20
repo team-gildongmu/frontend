@@ -95,5 +95,14 @@
       ],
       "yearSuffix": ""
     }
+  },
+ "mind": {
+    "setting": " setting",
+     "weather": {
+      "sunny": "sunny",
+      "cloudy" : "cloudy",
+      "rainy": "rainy",
+      "snowy" : "snowy"
+    }
   }
 }

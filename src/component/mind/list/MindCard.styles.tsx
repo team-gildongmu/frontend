@@ -2,31 +2,42 @@ import styled from "styled-components";
 import colors from "@/styles/Colors";
 import { Config } from "@/styles/FontVariants"
 
-export const Wrap = styled.a`
-    display: block;
-    text-decoration: none;
-    color: #000;
-    padding: 10px 10px;
-    border-bottom: 1px solid ${colors.blue_300}
-`
-export const TitleWrap = styled.h4`
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-`
+export const Wrap = styled.div`
+  width : 90%;
+  display: block;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+`;
+
+export const TitleWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+`;
 
 export const Title__l = styled.div`
   cursor: pointer;
-`
+`;
 
 export const Title = styled.h4`
-   font: ${Config.variants.l01_bold_m}
-`
+  font: ${Config.variants.t01_bold_m};
+  margin-bottom: 6px;
+`;
 
-export const ScoreWrap = styled.h4`
+export const ScoreWrap = styled.div`
   display: flex;
   gap: 4px;
-`
+`;
 
 export const Score = styled.span<{ filled: boolean }>`
   font-size: 20px;
@@ -35,51 +46,80 @@ export const Score = styled.span<{ filled: boolean }>`
   transition: color 0.2s ease-in-out;
 `;
 
-export const Date = styled.div`
-    font: ${Config.variants.l01_m}
-`
+export const DateWrap = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+  margin-top: 4px;
+`;
+
+export const Period = styled.span`
+  font-weight: 500;
+  color: #222;
+  margin-right: 8px;
+`;
 
 export const Title__r = styled.div`
-    height: 10px;
-    position: relative;
-`
+  position: relative;
+`;
+
+export const ImgWrapper = styled.div`
+  width: 100%;
+  margin-top: 12px;
+
+  img {
+    border-radius: 8px;
+    object-fit: cover;
+  }
+`;
+
 export const Setting_btn = styled.button`
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: none;
-  border-radius: 8px;
-  background: #f1f1f1;
+  border-radius: 6px;
+  background: #f5f5f5;
   cursor: pointer;
+  font-size: 14px;
+
+  &:hover {
+    background: ${colors.gray_300};
+  }
 `;
 
 export const Setting_conform = styled.ul<{ $open: boolean }>`
   position: absolute;
-  margin-top: 5px;
+  top: 28px;
+  right: 0;
+  z-index: 999;
   list-style: none;
-  padding: 0;
-  background: white;
-  border: 1px solid ${colors.gray_500};
+  margin: 0;
+  padding: 4px 0;
+  background: #fff;
+  border: 1px solid ${colors.gray_400};
   border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 
   display: ${({ $open }) => ($open ? "block" : "none")};
 `;
 
 export const Update = styled.li`
-  padding: 5px 12px;
+  padding: 6px 12px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 6px;
 
   &:hover {
-    background: #f5f5f5;
+    background: #f9f9f9;
   }
 `;
 
 export const Delete = styled.li`
-  padding: 5px 12px;
-  border-radius: 8px;
+  padding: 6px 12px;
   cursor: pointer;
+  border-radius: 6px;
   color: ${colors.red_500};
 
   &:hover {
-    background: #f5f5f5;
+    background: #f9f9f9;
   }
 `;
