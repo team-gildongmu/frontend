@@ -84,7 +84,7 @@ export type TravelReviewDetail = {
   ai_rating: number;
   start_date: string;
   end_date: string;
-  weather: string;
+  weather: keyof typeof WEATHER_LABELS;
   mood: number;
   tags: string[]; 
   note: string;

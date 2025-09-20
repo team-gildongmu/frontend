@@ -212,10 +212,10 @@ export const putReview = async (reviewData: TravelReviewPut) => {
     formData.append("mood", reviewData.mood.toString());
     formData.append("note", reviewData.note);
     formData.append("song", reviewData.song);
-    // 태그
     reviewData.tag.forEach((t) => formData.append("tag", t));
-    // 파일
     reviewData.picture?.forEach((file) => formData.append("picture", file));
+
+    console.log("데이터 확인용 ----->", formData)
     await baseApi.put(`/travel/review`, formData);
     
   } catch (error) {

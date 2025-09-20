@@ -97,18 +97,12 @@
     }
   },
  "mind": {
-    "detailCourse": "Detail Course",
-    "viewRouteOnMap": "View Route on Map",
-    "loadingData": "Loading travel log data...",
-    "recommendedRoute": "Recommended Route",
     "setting": " setting",
-    "daySuffix": "Day",
-    "summary": "Summary",
      "weather": {
-      "맑음": "sunny",
-      "흐림" : "cloudy",
-      "비": "rainy",
-      "눈" : "snowy"
+      "sunny": "sunny",
+      "cloudy" : "cloudy",
+      "rainy": "rainy",
+      "snowy" : "snowy"
     }
   }
 }
