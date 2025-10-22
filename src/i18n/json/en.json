@@ -95,5 +95,45 @@
       ],
       "yearSuffix": ""
     }
-  }
+  },
+  "chat": {
+      "greetings": [
+        "How are you feeling today? Want something exciting, or a relaxing healing day?",
+        "Do you have a place in mind? If not, I can suggest a no-miss course nearby 😊",
+        "Foodie, healing, or activities! What theme are you craving now?",
+        "How would you like to spend your day? I’ll craft the perfect course ✨",
+        "Hanging out with friends or solo healing? Just tell me the vibe and I’ll recommend!"
+      ],
+      "newChat": "New chat",
+      "inputPlaceholder": "Where would you like to go today? (e.g., 2-day Hongdae course + good restaurants)",
+      "status": { "waiting": "Preparing…" },
+      "errorGeneric": "Something went wrong. Please try again in a moment.",
+      "actions": { "confirmRoute": "Confirm route" }
+    },
+    "plan": {
+      "day": "Day {{n}}",
+      "stayRecommendations": "Stay Recommendations",
+      "summary": "✨ Summary",
+      "labels": { "place": "Place", "meal": "Food", "stay": "Stay" }
+    },
+    "modal": {
+      "savingTitle": "Saving your travel route",
+      "doneTitle": "Your route stamp has been created!",
+      "confirm": "OK",
+      "errorTitle": "Failed to save",
+      "errorDesc": "Please try again later.",
+      "close": "Close",
+      "retry": "Retry"
+    },
+    "provider": {
+      "tourapiTitle": "KTO (TourAPI) data",
+      "googleTitle": "Google data",
+      "tourapi": "TourAPI",
+      "google": "Google"
+    },
+    "mymap": {
+      "myLocation": "My location",
+      "locateBtnTitle": "Go to my location",
+      "legend": { "place": "Place", "meal": "Food", "stay": "Stay", "my": "My location" }
+    }
 }

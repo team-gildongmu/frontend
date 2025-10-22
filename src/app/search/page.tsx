@@ -53,7 +53,7 @@ export default function SearchPage() {
     }
     console.log("[Page] current markers =", out);
     return out;
-  }, [plan, location?.lat, location?.lng]);
+  }, [plan, location]);
 
   const center = location
     ? { lat: location.lat, lng: location.lng }

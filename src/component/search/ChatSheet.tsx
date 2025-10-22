@@ -12,11 +12,12 @@ import {
 } from "@/api/search/ai";
 import { useRouter } from "next/navigation";
 import { useCreateLog } from "@/queries/travel/useCreateLog";
+import { useLanguages } from "@/hooks/useLang";
 import ModalPortal from "@/component/search/ModalPortal";
-import { error } from "console";
+import { useTranslation } from "react-i18next";
 
-const HEADER_H = 47;   // 예: 헤더 64px
-const FOOTER_H = 47;    // 예: 푸터 없으면 0
+const HEADER_H = 47;   
+const FOOTER_H = 47;    
 
 export type ChatMsg = { 
     role: "user" | "assistant"; 
@@ -60,11 +61,14 @@ type Props = {
 };
 
 export default function ChatSheet({ center, onPlan }: Props) {
+  const { t } = useTranslation();
+  
   const { getUserToken } = useAuth();
   const token = getUserToken();
+  const { currentLocale } = useLanguages();
   const SID_KEY = "ai.sess";
   const router = useRouter();
-  const { mutateAsync: createLog, isPending: saving } = useCreateLog();
+  const { mutateAsync: createLog} = useCreateLog();
 
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmPhase, setConfirmPhase] = useState<"saving" | "done" | "error" | null>(null);
@@ -89,32 +93,32 @@ export default function ChatSheet({ center, onPlan }: Props) {
 
   // 시트 높이(드래그)
   const MIN_H = 220;
-  const MAX_H =
-    typeof window !== "undefined" ? Math.floor(window.innerHeight * 0.95) : 700;
+  const MAX_H = useMemo(
+    () => (typeof window !== "undefined" ? Math.floor(window.innerHeight * 0.95) : 700),
+    []
+  );
   const [height, setHeight] = useState<number>(MIN_H);
   const dragRef = useRef(false);
 
 // 랜덤 안내 멘트 목록
-const GREETINGS = [
-"오늘은 어떤 기분이세요? 신나게 놀고 싶으세요, 아니면 푹 쉬면서 힐링하고 싶으세요?",
-"가고 싶은 장소가 있나요? 없다면 근처에서 알짜 코스도 추천해드릴 수 있어요 😊",
-"먹방, 힐링, 액티비티! 지금 땡기는 여행 테마가 뭐예요?",
-"오늘 하루, 어디서 어떻게 보내고 싶으세요? 제가 딱 맞는 코스를 짜드릴게요 ✨",
-"친구랑 놀고 싶으세요? 혼자 힐링하고 싶으세요? 분위기만 말해주셔도 추천해드려요!",
-] as const;
+const pickGreeting = () => {
+  const list = t("chat.greetings", { returnObjects: true }) as string[]; // ko/en/ja 배열
+  const arr = Array.isArray(list) && list.length ? list : [
+    // 안전장치(팩토리 기본값)
+    "오늘은 어떤 기분이세요? 신나게 놀고 싶으세요, 아니면 푹 쉬면서 힐링하고 싶으세요?"
+  ];
+  return arr[Math.floor(Math.random() * arr.length)];
+};
 
-const pickGreeting = () =>
-  GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
-
-  // 채팅
-  const [input, setInput] = useState("");
-  const [msgs, setMsgs] = useState<ChatMsg[]>([
-    {
-      role: "assistant",
-      text: pickGreeting(),
-      ts: Date.now(), // ✅ number 로 통일
-    },
-  ]);
+// 채팅
+const [input, setInput] = useState("");
+const [msgs, setMsgs] = useState<ChatMsg[]>([
+  {
+    role: "assistant",
+    text: pickGreeting(),
+    ts: Date.now(), // ✅ number 로 통일
+  },
+]);
 
   // 진행 상태 (DONE 표시 X, RESULT 오면 로더 숨김)
   const [running, setRunning] = useState<null | { step: string; message: string }>(null);
@@ -159,7 +163,7 @@ const pickGreeting = () =>
       window.removeEventListener("touchmove", onMove);
       window.removeEventListener("touchend", stop);
     };
-  }, []);
+  }, [MAX_H]);
 
   // SSE 연결
   const ensureSSE = (sid: string) => {
@@ -169,7 +173,7 @@ const pickGreeting = () =>
 
     es.addEventListener("message", (ev: MessageEvent) => {
       try {
-        const data = JSON.parse(ev.data);
+        const data = JSON.parse(ev.data) as { step?: string; message?: string };
         const step: string = (data.step || "").toUpperCase();
         const message: string = data.message || "";
 
@@ -204,6 +208,8 @@ const pickGreeting = () =>
     };
   }, []);
 
+  type ServerHistoryItem = { role: "user"; text?: string; ts?: number } | { role: "assistant"; plan?: ApiPlan; ts?: number };
+
   useEffect(() => {
     // 토큰이 없으면 스킵
     if (!token) return
@@ -216,19 +222,19 @@ const pickGreeting = () =>
       (async () => {
         try {
           const st = await getState(saved, token);
-          const hist = (st.state?.history || []) as Array<any>;
+          const hist = (st.state?.history || []) as ServerHistoryItem[];
           if (!hist.length) return
           // 화면 메시지로 변환
-          const restored = hist.map((h) =>
+          const restored: ChatMsg[] = hist.map((h) =>
             h.role === "user"
               ? ({ role: "user", text: h.text, ts: h.ts } as ChatMsg)
-              : ({ role: "assistant", plan: normalizePlan(h.plan), ts: h.ts } as ChatMsg)
-          )
+              : { role: "assistant", plan: normalizePlan((h as Extract<ServerHistoryItem, {role:"assistant"}>).plan as ApiPlan), ts: h.ts }
+          );
           setMsgs(restored);
           setSessionId(saved);
           ensureSSE(saved)
           // 마지막 플랜을 지도에 반영
-          const lastPlan = [...hist].reverse().find((h) => h.role === "assistant" && h.plan)?.plan;
+          const lastPlan = [...hist].reverse().find((h): h is Extract<ServerHistoryItem, {role:"assistant"}> => h.role === "assistant" && "plan" in h)?.plan;
           if (lastPlan) {
             onPlan?.(normalizePlan(lastPlan));
             setHasPlan(true);
@@ -247,33 +253,93 @@ const pickGreeting = () =>
       : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title || "")}`;
 
   // API Plan → 우리 Plan
+  // const normalizePlan = (p: ApiPlan): Plan => ({
+  //   title: p.title,
+  //   subtitle: p.subtitle,
+  //   keywords: p.keywords,
+  //   theme: p.theme as any,
+  //   days: (p.days || []).map((d: any) => ({
+  //     segments: (d.segments || []).map((s: any) => ({
+  //       type: s.type,
+  //       title: s.title,
+  //       desc: s.desc,
+  //       reason: s.reason,
+  //       image: s.image,
+  //       coords: s.coords,
+  //       provider: (s.provider as "tourapi" | "google") || "google",
+  //       source: ensureSource(s.title, s.source),
+  //     })),
+  //   })),
+  //   stays: (p.stays || []).map((s: any) => ({
+  //     title: s.title,
+  //     desc: s.desc,
+  //     image: s.image,
+  //     coords: s.coords,
+  //     provider: (s.provider as "tourapi" | "google") || "google",
+  //     source: ensureSource(s.title, s.source),
+  //   })),
+  //   summary: p.summary,
+  // });
+  // 좌표 키 (mapX/mapY 또는 mapx/mapy) 모두 입력 허용 → 우리 타입 (소문자)로 정규화
+  // type ApiCoords = { mapX?: number; mapY?: number; mapx?: number; mapy?: number };
+  // const toCoords = (c?: ApiCoords) => {
+  //   const mapx = typeof c?.mapx === "number" ? c!.mapx : (typeof c?.mapX === "number" ? c!.mapX : undefined);
+  //   const mapy = typeof c?.mapy === "number" ? c!.mapy : (typeof c?.mapY === "number" ? c!.mapY : undefined);
+  //   return { mapx: mapx ?? 0, mapy: mapy ?? 0 };
+  // };
+
+  type ApiCoordsLoose = {
+    mapX?: number | null;
+    mapY?: number | null;
+    mapx?: number | null;
+    mapy?: number | null;
+  };
+
+  const toCoords = (c?: ApiCoordsLoose) => {
+    const x = typeof c?.mapx === "number" ? c!.mapx
+          : typeof c?.mapX === "number" ? c!.mapX
+          : null;
+    const y = typeof c?.mapy === "number" ? c!.mapy
+          : typeof c?.mapY === "number" ? c!.mapY
+          : null;
+      return { mapx: x ?? 0, mapy: y ?? 0 };
+  };
+
+  function getImage(seg: unknown): string | undefined {
+    if (!seg || typeof seg !== "object") return undefined;
+    const s = seg as { image?: unknown; images?: unknown };
+    if (typeof s.image === "string") return s.image;
+    if (Array.isArray(s.images) && typeof s.images[0] === "string") return s.images[0];
+    return undefined;
+  }
+
   const normalizePlan = (p: ApiPlan): Plan => ({
-    title: p.title,
-    subtitle: p.subtitle,
-    keywords: p.keywords,
-    theme: p.theme as any,
-    days: (p.days || []).map((d: any) => ({
-      segments: (d.segments || []).map((s: any) => ({
-        type: s.type,
-        title: s.title,
-        desc: s.desc,
-        reason: s.reason,
-        image: s.image,
-        coords: s.coords,
-        provider: (s.provider as "tourapi" | "google") || "google",
-        source: ensureSource(s.title, s.source),
-      })),
-    })),
-    stays: (p.stays || []).map((s: any) => ({
-      title: s.title,
-      desc: s.desc,
-      image: s.image,
-      coords: s.coords,
-      provider: (s.provider as "tourapi" | "google") || "google",
-      source: ensureSource(s.title, s.source),
-    })),
-    summary: p.summary,
-  });
+     title: p.title,
+     subtitle: p.subtitle,
+     keywords: p.keywords,
+     theme: p.theme,                                     
+     days: (p.days ?? []).map((d) => ({
+       segments: (d.segments ?? []).map((s) => ({
+         type: s.type,
+         title: s.title,
+         desc: s.desc,
+         reason: s.reason,
+         image: getImage(s),
+         coords: toCoords((s as unknown as { coords?: ApiCoordsLoose }).coords),                  
+         provider: (s.provider as "tourapi" | "google") ?? "google",
+         source: ensureSource(s.title, s.source),
+       })),
+     })),
+     stays: (p.stays ?? []).map((s) => ({
+       title: s.title,
+       desc: s.desc,
+       image: getImage(s),  
+       coords: toCoords((s as unknown as { coords?: ApiCoordsLoose }).coords),                      
+       provider: (s.provider as "tourapi" | "google") ?? "google",
+       source: ensureSource(s.title, s.source),
+     })),
+     summary: p.summary,
+   });
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -293,8 +359,13 @@ const pickGreeting = () =>
       // 세션 없으면 시작
       let sid = sessionId;
       if (!sid) {
+        
         const origin = center ? { mapX: center.lng, mapY: center.lat } : undefined;
-        const { session_id } = await startSession({ origin }, token ?? "");
+        const { session_id } = await startSession(
+          { origin, lang:currentLocale }, //origin err
+            token ?? ""
+        );
+        console.log("[AI] request body:", { message: q, origin, lang: currentLocale });
         sid = session_id;
         setSessionId(session_id);
         localStorage.setItem(SID_KEY, session_id);
@@ -303,11 +374,15 @@ const pickGreeting = () =>
       }
 
       // 로딩 시작
-      setRunning({ step: "WAIT", message: "준비 중…" });
+      setRunning({ step: "WAIT", message: t("chat.status.waiting") });
 
       // 질문 보내기
       const origin = center ? { mapX: center.lng, mapY: center.lat } : undefined;
-      const res = await sendMessage(sid!, { message: q, origin }, token ?? "");
+      const res = await sendMessage(
+        sid!, 
+        { message: q, origin, lang: currentLocale},  //origin err
+        token ?? ""
+      );
       console.log("[AI] raw response:", res);
       console.log("[AI] raw plan:", res.plan);
 
@@ -319,16 +394,14 @@ const pickGreeting = () =>
       setHasPlan(true); // ✅ 결과가 생겼을 때만 버튼 노출
       // 어시스턴트 안내 한 줄
       setMsgs((m) => [...m, { role: "assistant", plan, ts: Date.now() }]);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       setRunning(null);
       setMsgs((m) => [
         ...m,
         {
           role: "assistant",
-          text: `문제가 발생했어요. 잠시 후 다시 시도해 주세요.\n(${String(
-            err?.message || "Unknown error"
-          )})`,
+          text: `${t("chat.errorGeneric")}\n(${err instanceof Error ? err.message : "Unknown error"})`,
           ts: Date.now(),
         },
       ]);
@@ -344,10 +417,39 @@ const pickGreeting = () =>
 
     try {
       console.log("저장", latestPlanRef.current);
-      await createLog(latestPlanRef.current as any);
+      // await createLog(latestPlanRef.current as any);
+        const plan = latestPlanRef.current!;                             
+        const payload = {
+          title: plan.title,
+          subtitle: plan.subtitle,
+          theme: plan.theme,
+          summary: plan.summary,
+          keywords: plan.keywords,
+          days: plan.days.map((d) => ({
+            segments: d.segments.map((s) => ({
+              type: s.type,
+              title: s.title,
+              desc: s.desc,
+              reason: s.reason,
+              image: s.image,
+              coords: { mapx: s.coords.mapx, mapy: s.coords.mapy },      
+              provider: s.provider ?? "google",
+              source: ensureSource(s.title, s.source),
+            })),
+          })),
+          stays: (plan.stays ?? []).map((s) => ({
+            title: s.title,
+            desc: s.desc,
+            image: s.image,
+            coords: { mapx: s.coords.mapx, mapy: s.coords.mapy },         
+            provider: s.provider ?? "google",
+            source: ensureSource(s.title, s.source),
+          })),
+        };
+      await createLog(payload);
       setConfirmPhase("done");
-    } catch (error) {
-      setConfirmPhase(error as any ? "error" : "done");
+    } catch {
+      setConfirmPhase( "error");
     }
   };
 
@@ -427,7 +529,7 @@ const pickGreeting = () =>
             onClick={handleNewChat}
             className="new_chat_button"
           >
-            새 채팅하기
+            {t("chat.newChat")}
           </button>
 
           {/* {sessionId && (
@@ -506,7 +608,7 @@ const pickGreeting = () =>
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="오늘은 어디로 떠나고 싶으세요? (예) 홍대에서 2일코스 + 맛집 추천해줘"
+              placeholder={t("chat.inputPlaceholder")}
               style={{
                 flex: 1,
                 height: 44,
@@ -578,7 +680,7 @@ const pickGreeting = () =>
           {confirmPhase === "saving" && (
             <>
               <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>
-                여행 루트를 저장하고 있습니다
+                {t("modal.savingTitle")}
               </div>
               <div style={{ marginTop: 8 }}>
                 <LoaderDots />
@@ -589,7 +691,7 @@ const pickGreeting = () =>
           {confirmPhase === "done" && (
             <>
               <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 6 }}>
-                루트 스탬프가 생성되었습니다!
+                {t("modal.confirm")}
               </div>
               <button
                 onClick={closeAndGoHome}
@@ -605,7 +707,7 @@ const pickGreeting = () =>
                   cursor: "pointer",
                 }}
               >
-                확인
+                {t("modal.close")}
               </button>
             </>
           )}
@@ -639,7 +741,7 @@ const pickGreeting = () =>
                     cursor: "pointer",
                   }}
                 >
-                  닫기
+                  {t("modal.retry")}
                 </button>
                 <button
                   onClick={handleConfirmRoute}
@@ -768,7 +870,8 @@ function Bubble({
   );
 }
 
-function PlanActions({ onFix, saving = false }: { onFix: () => void; saving?: boolean }) {
+function PlanActions({ onFix }: { onFix: () => void }) {
+  const { t } = useTranslation();
   return (
     <div style={{ marginTop: 10, display: "flex", gap: 8 }}>
       <button
@@ -784,15 +887,15 @@ function PlanActions({ onFix, saving = false }: { onFix: () => void; saving?: bo
           cursor: "pointer",
         }}
       >
-        루트 확정하기
+        {t("chat.actions.confirmRoute")}
       </button>
     </div>
   );
 }
 
 function AssistantPlanBubble({ plan, ts }: { plan: Plan; ts?: number }) {
+  const { t } = useTranslation();
   const stamp = ts ? formatKTime(ts) : "";
-
   return (
     <div
       style={{
@@ -832,14 +935,14 @@ function AssistantPlanBubble({ plan, ts }: { plan: Plan; ts?: number }) {
               }}
             >
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
-                Day {idx + 1}
+                {t("plan.day", { n: idx + 1 })}
               </div>
 
               <div style={{ display: "grid", gap: 8 }}>
                 {d.segments?.map((s, i) => (
                   <RowLine
                     key={i}
-                    label={s.type === "MEAL" ? "맛집" : "장소"}
+                    label={ s.type === "MEAL" ? t("plan.labels.meal") : t("plan.labels.place") }
                     color={s.type === "MEAL" ? "#f59e0b" : "#60a5fa"}
                     title={s.title}
                     provider={s.provider}
@@ -860,7 +963,7 @@ function AssistantPlanBubble({ plan, ts }: { plan: Plan; ts?: number }) {
               }}
             >
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
-                숙박 추천
+                {t("plan.stayRecommendations")}
               </div>
 
               <div style={{ display: "grid", gap: 8 }}>
@@ -889,7 +992,7 @@ function AssistantPlanBubble({ plan, ts }: { plan: Plan; ts?: number }) {
               }}
             >
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
-                ✨ 요약
+                {t("plan.summary")}
               </div>
               {plan.summary}
             </div>
@@ -992,6 +1095,7 @@ function RowLine({
 }
 
 function ProviderChip({ provider }: { provider?: "tourapi" | "google" }) {
+  const { t } = useTranslation();
   if (!provider) return null;
   const isTour = provider === "tourapi";
   return (
@@ -1004,9 +1108,9 @@ function ProviderChip({ provider }: { provider?: "tourapi" | "google" }) {
         fontWeight: 700,
         whiteSpace: "nowrap",
       }}
-      title={isTour ? "KTO(TourAPI) 데이터" : "Google 데이터"}
+      title={isTour ? t("provider.tourapiTitle") : t("provider.googleTitle")}
     >
-      {isTour ? "TourAPI" : "Google"}
+      {isTour ? t("provider.tourapi") : t("provider.google")}
     </span>
   );
 }

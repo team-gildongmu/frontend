@@ -95,5 +95,45 @@
       ],
       "yearSuffix": "年"
     }
+  },
+  "chat": {
+    "greetings": [
+      "今日はどんな気分ですか？ワクワク遊びたいですか？それともゆっくり癒やされたいですか？",
+      "行きたい場所はありますか？なければ近くの“ハズレなし”コースもご提案できますよ 😊",
+      "食べ歩き、ヒーリング、アクティビティ！今の気分はどれですか？",
+      "今日はどこでどう過ごしたいですか？ぴったりのコースを作ります ✨",
+      "友だちと遊びたいですか？一人で癒やされたいですか？雰囲気だけでも教えてください！最適におすすめします。"
+    ],
+    "newChat": "新しいチャット",
+    "inputPlaceholder": "今日はどこへ行きますか？（例：弘大で2日コース＋グルメをおすすめして）",
+    "status": { "waiting": "準備中…" },
+    "errorGeneric": "問題が発生しました。少ししてからもう一度お試しください。",
+    "actions": { "confirmRoute": "ルートを確定" }
+  },
+  "plan": {
+    "day": "Day {{n}}",
+    "stayRecommendations": "宿泊のおすすめ",
+    "summary": "✨ まとめ",
+    "labels": { "place": "スポット", "meal": "グルメ", "stay": "宿泊" }
+  },
+  "modal": {
+    "savingTitle": "旅行ルートを保存しています",
+    "doneTitle": "ルートスタンプを作成しました！",
+    "confirm": "確認",
+    "errorTitle": "保存に失敗しました",
+    "errorDesc": "時間をおいてから再度お試しください。",
+    "close": "閉じる",
+    "retry": "再試行"
+  },
+  "provider": {
+    "tourapiTitle": "KTO（TourAPI）データ",
+    "googleTitle": "Google データ",
+    "tourapi": "TourAPI",
+    "google": "Google"
+  },
+  "mymap": {
+    "myLocation": "現在地",
+    "locateBtnTitle": "現在地へ移動",
+    "legend": { "place": "スポット", "meal": "グルメ", "stay": "宿泊", "my": "現在地" }
   }
 }
