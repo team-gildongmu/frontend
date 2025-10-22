@@ -1,6 +1,20 @@
 import { useState, useEffect } from "react";
 
-let kakaoPromise: Promise<any> | null = null;
+interface KakaoMapsGlobal {
+  maps: {
+    load: (cb: () => void) => void;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+declare global {
+  interface Window {
+    kakao?: KakaoMapsGlobal;
+  }
+}
+
+let kakaoPromise: Promise<KakaoMapsGlobal> | null = null;
 
 export default function useKakao(): boolean {
   const [isReady, setIsReady] = useState(false);

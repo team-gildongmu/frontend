@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import useKakao from "@/hooks/useKakao";
 import colors from "@/styles/Colors";
-import { it } from "node:test";
 import { useTranslation } from "react-i18next";
 
 export type LatLng = { lat: number; lng: number };
@@ -23,10 +22,51 @@ type Props = {
   onLocateClick?: () => void;
 };
 
+// declare global {
+//   interface Window {
+//     kakao: any;
+//   }
+// }
+
+interface KM_LatLng { __brand: "LatLng"; }  
+interface KM_Size   { __brand: "Size"; } 
+interface KM_Point  { __brand: "Point"; }
+interface KM_MarkerImage { __brand: "MarkerImage"; }
+interface KM_LatLngBounds { extend(latlng: KM_LatLng): void; }
+interface KM_Map {
+  setCenter(latlng: KM_LatLng): void;
+  setLevel(l: number): void;
+  setBounds(b: KM_LatLngBounds): void;
+}
+interface KM_Marker {
+  setMap(map: KM_Map | null): void;
+  getPosition(): KM_LatLng;
+  setPosition(latlng: KM_LatLng): void;
+  getMap(): KM_Map | null; 
+}
+interface KM_CustomOverlay {
+  setMap(map: KM_Map | null): void;
+  setContent(content: HTMLElement): void;
+  setPosition(pos: KM_LatLng): void;
+}
+// 생성자 시그니처(런타임 new kakao.maps.* 에 맞춤)
+interface KM_Constructors {
+  LatLng: new (lat: number, lng: number) => KM_LatLng;
+  Size: new (w: number, h: number) => KM_Size;
+  Point: new (x: number, y: number) => KM_Point;
+  MarkerImage: new (src: string, size: KM_Size, opts?: { offset?: KM_Point }) => KM_MarkerImage;
+  LatLngBounds: new () => KM_LatLngBounds;
+  Marker: new (opts: { position: KM_LatLng; title?: string; image?: KM_MarkerImage }) => KM_Marker;
+  CustomOverlay: new (opts: { position: KM_LatLng; content: HTMLElement; xAnchor?: number; yAnchor?: number; zIndex?: number }) => KM_CustomOverlay;
+  Map: new (container: HTMLElement, opts: { center: KM_LatLng; level: number }) => KM_Map;
+  event: { addListener(obj: KM_Marker, type: string, handler: () => void): void };
+  load: (cb: () => void) => void;
+}
+type KakaoMaps = KM_Constructors;
+
+type KakaoWindow = { kakao: { maps: KakaoMaps } };
 declare global {
-  interface Window {
-    kakao: any;
-  }
+  interface Window { kakao?: KakaoWindow["kakao"]; }
 }
 
 const COLORS: Record<NonNullable<MapMarker["type"]>, string> = {
@@ -62,25 +102,25 @@ export default function KakaoMap({
   console.log(t("mymap.legend.my"));
   const ready = useKakao();
   const mapRef = useRef<HTMLDivElement | null>(null);
-  const mapObjRef = useRef<any>(null);
+  const mapObjRef = useRef<KM_Map | null>(null);  
 
   // 여행 코스 마커(갈아끼움)
-  const markerObjsRef = useRef<any[]>([]);
+  const markerObjsRef = useRef<KM_Marker[]>([]);  
 
   // 내 위치 마커(영구 유지)
-  const myMarkerRef = useRef<any | null>(null);
+  const myMarkerRef = useRef<KM_Marker | null>(null);
   const myMarkerBoundRef = useRef(false);
 
   // 호버 오버레이(공용 1개 재사용) + hide 타이머
-  const hoverOverlayRef = useRef<any | null>(null);
-  const hoverTimerRef = useRef<any | null>(null);
+  const hoverOverlayRef = useRef<KM_CustomOverlay | null>(null);
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const initTriedRef = useRef(false);
 
   useEffect(() => {
     if (!ready || !mapRef.current || initTriedRef.current) return;
 
-    const { kakao } = window as any;
+    const { kakao } = window as KakaoWindow;
     const init = () => {
       const centerLatLng = new kakao.maps.LatLng(center.lat, center.lng);
       const map = new kakao.maps.Map(mapRef.current!, { center: centerLatLng, level: 5 });
@@ -105,7 +145,7 @@ export default function KakaoMap({
   // center 이동
   useEffect(() => {
     if (!mapObjRef.current || !ready) return;
-    const { kakao } = window as any;
+    const { kakao } = window as KakaoWindow;
     mapObjRef.current.setCenter(new kakao.maps.LatLng(center.lat, center.lng));
   }, [center, ready]);
 
@@ -124,7 +164,7 @@ export default function KakaoMap({
   }, [myLocation, showMyLocation, ready]);
 
   function getMarkerImageByType(type: NonNullable<MapMarker["type"]>) {
-    const { kakao } = window as any;
+    const { kakao } = window as KakaoWindow;
     const size = new kakao.maps.Size(36, 36);
     const offset = new kakao.maps.Point(18, 34);
     return new kakao.maps.MarkerImage(markerImageDataURL(COLORS[type]), size, { offset });
@@ -145,7 +185,7 @@ export default function KakaoMap({
       borderRadius: "10px",
       boxShadow: "0 8px 24px rgba(0,0,0,.12)",
       overflow: "hidden",
-      width: isMy ? "min-width" : "220px",               
+      width: isMy ? "auto" : "220px",              
       userSelect: "none",
       marginBottom: isMy ? "18px" : 0
     } as CSSStyleDeclaration);
@@ -184,8 +224,8 @@ export default function KakaoMap({
     return wrap;
   }
 
-  function showOverlay(item: MapMarker, markerObj: any) {
-    const { kakao } = window as any;
+  function showOverlay(item: MapMarker, markerObj: KM_Marker) {
+    const { kakao } = window as KakaoWindow;
     const map = mapObjRef.current;
     if (!map) return;
 
@@ -215,7 +255,7 @@ export default function KakaoMap({
   }
 
   function applyMarkers() {
-    const { kakao } = window as any;
+    const { kakao } = window as KakaoWindow;
     const map = mapObjRef.current;
     if (!map || !kakao?.maps?.Marker) return;
 
@@ -254,7 +294,7 @@ export default function KakaoMap({
   }
 
   function applyMyLocation() {
-    const { kakao } = window as any;
+    const { kakao } = window as KakaoWindow;
     const map = mapObjRef.current;
     if (!map || !showMyLocation || !myLocation) {
       if (myMarkerRef.current) { myMarkerRef.current.setMap(null); myMarkerRef.current = null; }
@@ -273,10 +313,11 @@ export default function KakaoMap({
 
       // 호버 이벤트(내 위치) — 중복 바인딩 방지
       if (!myMarkerBoundRef.current) {
-        kakao.maps.event.addListener(myMarkerRef.current, "mouseover", () =>
-          showOverlay({ position: myLocation, title: t("mymap.myLocation"),  type: "MY" }, myMarkerRef.current)
+        const marker = myMarkerRef.current!;                                  
+        kakao.maps.event.addListener(marker, "mouseover", () =>
+          showOverlay({ position: myLocation, title: t("mymap.myLocation"), type: "MY" }, marker)
         );
-        kakao.maps.event.addListener(myMarkerRef.current, "mouseout", () => scheduleHideOverlay());
+        kakao.maps.event.addListener(marker, "mouseout", () => scheduleHideOverlay());
         myMarkerBoundRef.current = true;
       }
     } else {
@@ -287,7 +328,7 @@ export default function KakaoMap({
 
   const handleLocate = () => {
     onLocateClick?.();
-    const { kakao } = window as any;
+    const { kakao } = window as KakaoWindow;
     const map = mapObjRef.current;
     if (map && myLocation) {
       const pos = new kakao.maps.LatLng(myLocation.lat, myLocation.lng);
@@ -296,15 +337,19 @@ export default function KakaoMap({
       applyMyLocation();
     }
   };
-
+  
   useEffect(() => {
-  // @ts-ignore
-  import("@/i18n").then(({ default: i }) => {
-    const lng = i.resolvedLanguage || i.language;
-    console.log("[i18n] value(mymap) =", i.getResource(lng, "translation", "mymap"));
-    console.log("[i18n] value(mymap.legend.my) =", i.getResource(lng, "translation", "mymap.legend.my"));
-  });
-}, []);
+    import("@/i18n").then((mod) => {                               
+      const i = mod.default as {
+        resolvedLanguage?: string;
+        language?: string;
+        getResource: (lng: string, ns: string, key: string) => unknown;
+      };
+      const lng = i.resolvedLanguage || i.language || "ko";
+      console.log("[i18n] value(mymap) =", i.getResource(lng, "translation", "mymap"));
+      console.log("[i18n] value(mymap.legend.my) =", i.getResource(lng, "translation", "mymap.legend.my"));
+    });
+  }, []);
 
   return (
     <div style={{ position: "relative", width: "100%", height }}>

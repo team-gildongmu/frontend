@@ -15,7 +15,6 @@ import { useCreateLog } from "@/queries/travel/useCreateLog";
 import { useLanguages } from "@/hooks/useLang";
 import ModalPortal from "@/component/search/ModalPortal";
 import { useTranslation } from "react-i18next";
-import { error } from "console";
 
 const HEADER_H = 47;   
 const FOOTER_H = 47;    
@@ -39,7 +38,7 @@ export type Plan = {
       desc?: string;
       reason?: string;
       image?: string;
-      coords: { mapX: number; mapY: number };
+      coords: { mapx: number; mapy: number };
       provider?: "tourapi" | "google";
       source?: string;
     }[];
@@ -48,7 +47,7 @@ export type Plan = {
     title: string;
     desc?: string;
     image?: string;
-    coords: { mapX: number; mapY: number };
+    coords: { mapx: number; mapy: number };
     provider?: "tourapi" | "google";
     source?: string;
   }[];
@@ -69,7 +68,7 @@ export default function ChatSheet({ center, onPlan }: Props) {
   const { currentLocale } = useLanguages();
   const SID_KEY = "ai.sess";
   const router = useRouter();
-  const { mutateAsync: createLog, isPending: saving } = useCreateLog();
+  const { mutateAsync: createLog} = useCreateLog();
 
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmPhase, setConfirmPhase] = useState<"saving" | "done" | "error" | null>(null);
@@ -94,8 +93,10 @@ export default function ChatSheet({ center, onPlan }: Props) {
 
   // 시트 높이(드래그)
   const MIN_H = 220;
-  const MAX_H =
-    typeof window !== "undefined" ? Math.floor(window.innerHeight * 0.95) : 700;
+  const MAX_H = useMemo(
+    () => (typeof window !== "undefined" ? Math.floor(window.innerHeight * 0.95) : 700),
+    []
+  );
   const [height, setHeight] = useState<number>(MIN_H);
   const dragRef = useRef(false);
 
@@ -172,7 +173,7 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
 
     es.addEventListener("message", (ev: MessageEvent) => {
       try {
-        const data = JSON.parse(ev.data);
+        const data = JSON.parse(ev.data) as { step?: string; message?: string };
         const step: string = (data.step || "").toUpperCase();
         const message: string = data.message || "";
 
@@ -250,33 +251,93 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
       : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title || "")}`;
 
   // API Plan → 우리 Plan
+  // const normalizePlan = (p: ApiPlan): Plan => ({
+  //   title: p.title,
+  //   subtitle: p.subtitle,
+  //   keywords: p.keywords,
+  //   theme: p.theme as any,
+  //   days: (p.days || []).map((d: any) => ({
+  //     segments: (d.segments || []).map((s: any) => ({
+  //       type: s.type,
+  //       title: s.title,
+  //       desc: s.desc,
+  //       reason: s.reason,
+  //       image: s.image,
+  //       coords: s.coords,
+  //       provider: (s.provider as "tourapi" | "google") || "google",
+  //       source: ensureSource(s.title, s.source),
+  //     })),
+  //   })),
+  //   stays: (p.stays || []).map((s: any) => ({
+  //     title: s.title,
+  //     desc: s.desc,
+  //     image: s.image,
+  //     coords: s.coords,
+  //     provider: (s.provider as "tourapi" | "google") || "google",
+  //     source: ensureSource(s.title, s.source),
+  //   })),
+  //   summary: p.summary,
+  // });
+  // 좌표 키 (mapX/mapY 또는 mapx/mapy) 모두 입력 허용 → 우리 타입 (소문자)로 정규화
+  // type ApiCoords = { mapX?: number; mapY?: number; mapx?: number; mapy?: number };
+  // const toCoords = (c?: ApiCoords) => {
+  //   const mapx = typeof c?.mapx === "number" ? c!.mapx : (typeof c?.mapX === "number" ? c!.mapX : undefined);
+  //   const mapy = typeof c?.mapy === "number" ? c!.mapy : (typeof c?.mapY === "number" ? c!.mapY : undefined);
+  //   return { mapx: mapx ?? 0, mapy: mapy ?? 0 };
+  // };
+
+  type ApiCoordsLoose = {
+    mapX?: number | null;
+    mapY?: number | null;
+    mapx?: number | null;
+    mapy?: number | null;
+  };
+
+  const toCoords = (c?: ApiCoordsLoose) => {
+    const x = typeof c?.mapx === "number" ? c!.mapx
+          : typeof c?.mapX === "number" ? c!.mapX
+          : null;
+    const y = typeof c?.mapy === "number" ? c!.mapy
+          : typeof c?.mapY === "number" ? c!.mapY
+          : null;
+      return { mapx: x ?? 0, mapy: y ?? 0 };
+  };
+
+  function getImage(seg: unknown): string | undefined {
+    if (!seg || typeof seg !== "object") return undefined;
+    const s = seg as { image?: unknown; images?: unknown };
+    if (typeof s.image === "string") return s.image;
+    if (Array.isArray(s.images) && typeof s.images[0] === "string") return s.images[0];
+    return undefined;
+  }
+
   const normalizePlan = (p: ApiPlan): Plan => ({
-    title: p.title,
-    subtitle: p.subtitle,
-    keywords: p.keywords,
-    theme: p.theme as any,
-    days: (p.days || []).map((d: any) => ({
-      segments: (d.segments || []).map((s: any) => ({
-        type: s.type,
-        title: s.title,
-        desc: s.desc,
-        reason: s.reason,
-        image: s.image,
-        coords: s.coords,
-        provider: (s.provider as "tourapi" | "google") || "google",
-        source: ensureSource(s.title, s.source),
-      })),
-    })),
-    stays: (p.stays || []).map((s: any) => ({
-      title: s.title,
-      desc: s.desc,
-      image: s.image,
-      coords: s.coords,
-      provider: (s.provider as "tourapi" | "google") || "google",
-      source: ensureSource(s.title, s.source),
-    })),
-    summary: p.summary,
-  });
+     title: p.title,
+     subtitle: p.subtitle,
+     keywords: p.keywords,
+     theme: p.theme,                                     
+     days: (p.days ?? []).map((d) => ({
+       segments: (d.segments ?? []).map((s) => ({
+         type: s.type,
+         title: s.title,
+         desc: s.desc,
+         reason: s.reason,
+         image: getImage(s),
+         coords: toCoords((s as unknown as { coords?: ApiCoordsLoose }).coords),                  
+         provider: (s.provider as "tourapi" | "google") ?? "google",
+         source: ensureSource(s.title, s.source),
+       })),
+     })),
+     stays: (p.stays ?? []).map((s) => ({
+       title: s.title,
+       desc: s.desc,
+       image: getImage(s),  
+       coords: toCoords((s as unknown as { coords?: ApiCoordsLoose }).coords),                      
+       provider: (s.provider as "tourapi" | "google") ?? "google",
+       source: ensureSource(s.title, s.source),
+     })),
+     summary: p.summary,
+   });
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -299,7 +360,7 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
         
         const origin = center ? { mapX: center.lng, mapY: center.lat } : undefined;
         const { session_id } = await startSession(
-          { origin, lang:currentLocale as any },
+          { origin, lang:currentLocale }, //origin err
             token ?? ""
         );
         console.log("[AI] request body:", { message: q, origin, lang: currentLocale });
@@ -317,7 +378,7 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
       const origin = center ? { mapX: center.lng, mapY: center.lat } : undefined;
       const res = await sendMessage(
         sid!, 
-        { message: q, origin, lang: currentLocale as any }, 
+        { message: q, origin, lang: currentLocale},  //origin err
         token ?? ""
       );
       console.log("[AI] raw response:", res);
@@ -331,14 +392,14 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
       setHasPlan(true); // ✅ 결과가 생겼을 때만 버튼 노출
       // 어시스턴트 안내 한 줄
       setMsgs((m) => [...m, { role: "assistant", plan, ts: Date.now() }]);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       setRunning(null);
       setMsgs((m) => [
         ...m,
         {
           role: "assistant",
-          text: `${t("chat.errorGeneric")}\n(${String(err?.message || "Unknown error")})`,
+          text: `${t("chat.errorGeneric")}\n(${err instanceof Error ? err.message : "Unknown error"})`,
           ts: Date.now(),
         },
       ]);
@@ -354,10 +415,39 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
 
     try {
       console.log("저장", latestPlanRef.current);
-      await createLog(latestPlanRef.current as any);
+      // await createLog(latestPlanRef.current as any);
+        const plan = latestPlanRef.current!;                             
+        const payload = {
+          title: plan.title,
+          subtitle: plan.subtitle,
+          theme: plan.theme,
+          summary: plan.summary,
+          keywords: plan.keywords,
+          days: plan.days.map((d) => ({
+            segments: d.segments.map((s) => ({
+              type: s.type,
+              title: s.title,
+              desc: s.desc,
+              reason: s.reason,
+              image: s.image,
+              coords: { mapx: s.coords.mapx, mapy: s.coords.mapy },      
+              provider: s.provider ?? "google",
+              source: ensureSource(s.title, s.source),
+            })),
+          })),
+          stays: (plan.stays ?? []).map((s) => ({
+            title: s.title,
+            desc: s.desc,
+            image: s.image,
+            coords: { mapx: s.coords.mapx, mapy: s.coords.mapy },         
+            provider: s.provider ?? "google",
+            source: ensureSource(s.title, s.source),
+          })),
+        };
+      await createLog(payload);
       setConfirmPhase("done");
-    } catch (error) {
-      setConfirmPhase(error as any ? "error" : "done");
+    } catch {
+      setConfirmPhase( "error");
     }
   };
 
@@ -778,7 +868,7 @@ function Bubble({
   );
 }
 
-function PlanActions({ onFix, saving = false }: { onFix: () => void; saving?: boolean }) {
+function PlanActions({ onFix }: { onFix: () => void }) {
   const { t } = useTranslation();
   return (
     <div style={{ marginTop: 10, display: "flex", gap: 8 }}>
