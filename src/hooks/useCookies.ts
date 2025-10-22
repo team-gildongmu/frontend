@@ -31,4 +31,16 @@ const setCookie = (name: string, value: string, days: number = 365): void => {
   }
 };
 
-export { getCookie, setCookie };
+// 쿠키 삭제 함수
+const deleteCookie = (name: string): void => {
+  if (typeof document === "undefined" || !name) return;
+
+  try {
+    // 과거 날짜로 설정하여 쿠키 삭제
+    document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax`;
+  } catch (error) {
+    console.error("쿠키 삭제 오류:", error);
+  }
+};
+
+export { getCookie, setCookie, deleteCookie };

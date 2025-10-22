@@ -1,6 +1,6 @@
 import { C } from "@/constant";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { getCookie, setCookie } from "@/hooks/useCookies";
+import { getCookie, setCookie, deleteCookie } from "@/hooks/useCookies";
 
 const applyInterceptors = (axiosInstance: AxiosInstance) => {
   axiosInstance.interceptors.request.use(
@@ -34,6 +34,21 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
     refreshSubscribers.forEach((callback) => callback(token));
     refreshSubscribers = [];
     refreshFailureSubscribers = [];
+  };
+
+  // 모든 토큰 삭제 및 로그인 페이지로 리다이렉트
+  const clearAllTokensAndRedirect = () => {
+    // 모든 인증 관련 쿠키 삭제
+    deleteCookie(C.AUTH_TOKEN_KEY);
+    deleteCookie(C.REFRESH_TOKEN_KEY);
+    
+    // axios 인스턴스에서 Authorization 헤더 제거
+    delete axiosInstance.defaults.headers.common["Authorization"];
+    
+    // 로그인 페이지로 리다이렉트 (브라우저 환경에서만)
+    if (typeof window !== "undefined") {
+      window.location.href = "/login";
+    }
   };
 
   const onRefreshFailed = (error: Error) => {
@@ -89,12 +104,18 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
       } = error?.config ?? {};
       const status: number | undefined = error?.response?.status;
 
-      // refresh 엔드포인트 자체에서 에러가 난 경우는 그대로 종료
+      // refresh 엔드포인트 자체에서 에러가 난 경우 토큰 삭제 후 로그인 페이지로 리다이렉트
       const isRefreshEndpoint = (originalRequest?.url || "").includes(
         "/auth/refresh"
       );
 
-      if (status === 403 && !isRefreshEndpoint) {
+      if (isRefreshEndpoint && (status === 401 || status === 403)) {
+        // refresh API 호출 시 에러 발생 - 모든 토큰 삭제 후 로그인 페이지로 리다이렉트
+        clearAllTokensAndRedirect();
+        return Promise.reject(error);
+      }
+
+      if ((status === 401 || status === 403) && !isRefreshEndpoint) {
         // 무한 루프 방지
         if (originalRequest._retry) {
           return Promise.reject(error);
@@ -104,6 +125,8 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
         // refresh 토큰 없으면 바로 실패
         const refreshToken = getCookie(C.REFRESH_TOKEN_KEY);
         if (!refreshToken) {
+          // refresh token이 없으면 바로 토큰 삭제 후 로그인 페이지로 리다이렉트
+          clearAllTokensAndRedirect();
           return Promise.reject(error);
         }
 
@@ -134,6 +157,10 @@ const applyInterceptors = (axiosInstance: AxiosInstance) => {
             refreshError instanceof Error
               ? refreshError
               : new Error(String(refreshError));
+          
+          // refresh 실패 시 모든 토큰 삭제 및 로그인 페이지로 리다이렉트
+          clearAllTokensAndRedirect();
+          
           onRefreshFailed(error);
           return Promise.reject(refreshError);
         } finally {
