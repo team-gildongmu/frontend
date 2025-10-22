@@ -300,7 +300,7 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
     const y = typeof c?.mapy === "number" ? c!.mapy
           : typeof c?.mapY === "number" ? c!.mapY
           : null;
-      return { mapx: x ?? 0, mapy: y ?? 0 };
+      return { mapx: x, mapy: y };
   };
 
   function getImage(seg: unknown): string | undefined {
