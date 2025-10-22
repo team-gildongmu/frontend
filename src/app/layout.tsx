@@ -13,20 +13,23 @@ import { Layout } from "@/component/common/Layout";
 import LanguageInitializer from "@/app/language-initializer";
 
 export const metadata: Metadata = {
-  title: "길동무",
-  description: "길동무 프론트엔드 페이지입니다",
+  title: "길동무 - 여행의 모든 순간을 기록하세요",
+  description:
+    "여행 스탬프 수집, 여행 로그 작성, 리뷰 공유까지. 당신의 특별한 여행 이야기를 길동무와 함께 만들어보세요.",
   icons: {
     icon: "/seoImage.png",
   },
   openGraph: {
-    title: "길동무",
-    description: "길동무 프론트엔드 페이지입니다",
+    title: "길동무 - 여행의 모든 순간을 기록하세요",
+    description:
+      "여행 스탬프 수집, 여행 로그 작성, 리뷰 공유까지. 당신의 특별한 여행 이야기를 길동무와 함께 만들어보세요.",
     images: ["/seoImage.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "길동무",
-    description: "길동무 프론트엔드 페이지입니다",
+    title: "길동무 - 여행의 모든 순간을 기록하세요",
+    description:
+      "여행 스탬프 수집, 여행 로그 작성, 리뷰 공유까지. 당신의 특별한 여행 이야기를 길동무와 함께 만들어보세요.",
     images: ["/seoImage.png"],
   },
 };

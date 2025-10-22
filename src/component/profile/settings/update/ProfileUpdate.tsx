@@ -5,17 +5,17 @@ import * as P from "./ProfileUpdate.styles"
 import ProfileImage from "../../user-profile/ProfileImage";
 
 type Props = {
-  avatarPreview?: string | null;
-  onImageSelected: (file: File | null) => void;
-  comment: string;
-  onCommentChange: (text: string) => void;
+  profilePreview?: string | null;
+  onImageSelected: (file: string | null) => void;
+  intro: string;
+  onIntroChange: (text: string) => void;
 }
 
 export default function ProfileUpdate({
-  avatarPreview,
+  profilePreview,
   onImageSelected,
-  comment,
-  onCommentChange,
+  intro,
+  onIntroChange,
 }: Props) {
   const fileRef = useRef<HTMLInputElement | null>(null);
 
@@ -24,7 +24,7 @@ export default function ProfileUpdate({
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
+    const file = e.target.value ?? null;
     onImageSelected(file);
   };
 
@@ -32,10 +32,10 @@ export default function ProfileUpdate({
     <P.Section>
       <div>
         <P.AvatarButton onClick={handleAvatarClick} aria-label="프로필 사진 업로드">
-          {avatarPreview ? (
-            <P.AvatarImg src={avatarPreview} alt="avatar preview" />
+          {profilePreview ? (
+            <P.AvatarImg src={profilePreview} alt="profilePreview" />
           ) : (
-            <ProfileImage userInfo={2} image=""/>
+            <ProfileImage image=""/>
           )}
           <P.CameraOverlay>사진 변경</P.CameraOverlay>
         </P.AvatarButton>
@@ -49,14 +49,13 @@ export default function ProfileUpdate({
       </div>
 
       <P.Right>
-        <P.SmallLabel>여행 길잡이 멘트 (한 줄)</P.SmallLabel>
+        <P.SmallLabel>여행 길잡이 멘트</P.SmallLabel>
         <P.CommentInput
           type="text"
-        //   플레이스 홀더 부분 기존 사용자 멘트 가져오기 (있으면)
-          placeholder="한 줄 멘트를 입력하세요 (예: 천천히 걸어야 비로소 보이는 것들이 있다.)"
+          placeholder="한 줄 멘트를 입력하세요"
           maxLength={80}
-          value={comment}
-          onChange={(e) => onCommentChange(e.target.value)}
+          value={intro}
+          onChange={(e) => onIntroChange(e.target.value)}
         />
       </P.Right>
     </P.Section>

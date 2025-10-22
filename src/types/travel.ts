@@ -76,3 +76,67 @@ export type MapTravelLocation = {
   description: string;
   image: string;
 };
+
+// 여행 리뷰 디테일 응답값
+export type TravelReviewDetail = {
+  travel_review_id: number;
+  title: string;
+  score: number;
+  // 사용자 기분 - mood
+  mood: number;
+  date: string;
+  contents: string;
+  weather: string;
+  image: string;
+};
+
+
+// 여행 리뷰 업로드 데이터
+export type TravelReviewPost = {
+    travel_log_id: number;
+    title: string;
+    ai_rating: number;
+    started_at: string;
+    finished_at: string;
+    weather: keyof typeof WEATHER_LABELS;
+    mood: number;
+    tag: string[]; 
+    note: string;
+    song: string;
+    picture?: File[];
+}
+
+export type WeatherType = "sunny" | "cloudy" | "rainy" | "snowy";
+
+export type ReviewTagType =
+  | "clean_and_comfy"
+  | "tasty_food"
+  | "healing"
+  | "beautiful_view"
+  | "want_to_come_again"
+  | "kind_staff"
+  | "quiet_and_relaxing"
+  | "nice_atmosphere"
+  | "special_memory"
+  | "good_for_photos";
+
+  export const WEATHER_LABELS: Record<WeatherType, string> = {
+    sunny: "맑음",
+    cloudy: "흐림",
+    rainy: "비",
+    snowy: "눈",
+  };
+  
+  export const REVIEW_TAG_LABELS: Record<ReviewTagType, string> = {
+    clean_and_comfy: "깨끗하고 편안해요",
+    tasty_food: "음식이 맛있어요",
+    healing: "힐링하기 좋아요",
+    beautiful_view: "경치가 아름다워요",
+    want_to_come_again: "다시 오고 싶어요",
+    kind_staff: "직원들이 친절해요",
+    quiet_and_relaxing: "조용하고 여유로워요",
+    nice_atmosphere: "분위기가 좋아요",
+    special_memory: "특별한 추억이 생겨요",
+    good_for_photos: "사진 찍기 좋아요",
+  };
+  
