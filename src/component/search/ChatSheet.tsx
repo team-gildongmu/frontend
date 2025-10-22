@@ -415,36 +415,7 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
 
     try {
       console.log("저장", latestPlanRef.current);
-      // await createLog(latestPlanRef.current as any);
-        const plan = latestPlanRef.current!;                             
-        const payload = {
-          title: plan.title,
-          subtitle: plan.subtitle,
-          theme: plan.theme,
-          summary: plan.summary,
-          keywords: plan.keywords,
-          days: plan.days.map((d) => ({
-            segments: d.segments.map((s) => ({
-              type: s.type,
-              title: s.title,
-              desc: s.desc,
-              reason: s.reason,
-              image: s.image,
-              coords: { mapx: s.coords.mapx, mapy: s.coords.mapy },      
-              provider: s.provider ?? "google",
-              source: ensureSource(s.title, s.source),
-            })),
-          })),
-          stays: (plan.stays ?? []).map((s) => ({
-            title: s.title,
-            desc: s.desc,
-            image: s.image,
-            coords: { mapx: s.coords.mapx, mapy: s.coords.mapy },         
-            provider: s.provider ?? "google",
-            source: ensureSource(s.title, s.source),
-          })),
-        };
-      await createLog(payload);
+      await createLog(latestPlanRef.current!);
       setConfirmPhase("done");
     } catch {
       setConfirmPhase( "error");
