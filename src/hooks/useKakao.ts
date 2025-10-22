@@ -8,19 +8,14 @@ interface KakaoMapsGlobal {
   [key: string]: unknown;
 }
 
-declare global {
-  interface Window {
-    kakao?: KakaoMapsGlobal;
-  }
-}
-
 let kakaoPromise: Promise<KakaoMapsGlobal> | null = null;
 
 export default function useKakao(): boolean {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (window.kakao?.maps) {
+    const w = window as unknown as { kakao?: KakaoMapsGlobal };
+    if (w.kakao?.maps) {
       setIsReady(true);
       return;
     }
@@ -39,8 +34,9 @@ export default function useKakao(): boolean {
         document.head.appendChild(script);
 
         script.onload = () => {
-          window.kakao.maps.load(() => {
-            resolve(window.kakao);
+          const w = window as unknown as { kakao?: KakaoMapsGlobal };
+          w.kakao?.maps.load(() => {
+            resolve(w.kakao!);
           });
         };
         script.onerror = () => {

@@ -163,7 +163,7 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
       window.removeEventListener("touchmove", onMove);
       window.removeEventListener("touchend", stop);
     };
-  }, []);
+  }, [MAX_H]);
 
   // SSE 연결
   const ensureSSE = (sid: string) => {
@@ -208,6 +208,8 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
     };
   }, []);
 
+  type ServerHistoryItem = { role: "user"; text?: string; ts?: number } | { role: "assistant"; plan?: ApiPlan; ts?: number };
+
   useEffect(() => {
     // 토큰이 없으면 스킵
     if (!token) return
@@ -220,19 +222,19 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
       (async () => {
         try {
           const st = await getState(saved, token);
-          const hist = (st.state?.history || []) as Array<any>;
+          const hist = (st.state?.history || []) as ServerHistoryItem[];
           if (!hist.length) return
           // 화면 메시지로 변환
-          const restored = hist.map((h) =>
+          const restored: ChatMsg[] = hist.map((h) =>
             h.role === "user"
               ? ({ role: "user", text: h.text, ts: h.ts } as ChatMsg)
-              : ({ role: "assistant", plan: normalizePlan(h.plan), ts: h.ts } as ChatMsg)
-          )
+              : { role: "assistant", plan: normalizePlan((h as Extract<ServerHistoryItem, {role:"assistant"}>).plan as ApiPlan), ts: h.ts }
+          );
           setMsgs(restored);
           setSessionId(saved);
           ensureSSE(saved)
           // 마지막 플랜을 지도에 반영
-          const lastPlan = [...hist].reverse().find((h) => h.role === "assistant" && h.plan)?.plan;
+          const lastPlan = [...hist].reverse().find((h): h is Extract<ServerHistoryItem, {role:"assistant"}> => h.role === "assistant" && "plan" in h)?.plan;
           if (lastPlan) {
             onPlan?.(normalizePlan(lastPlan));
             setHasPlan(true);
