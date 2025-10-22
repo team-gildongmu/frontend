@@ -360,8 +360,8 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
         
         const origin = center ? { mapX: center.lng, mapY: center.lat } : undefined;
         const { session_id } = await startSession(
-          { origin, lang:currentLocale }, //origin err
-            token ?? ""
+          { origin, lang: currentLocale },
+          token ?? ""
         );
         console.log("[AI] request body:", { message: q, origin, lang: currentLocale });
         sid = session_id;
