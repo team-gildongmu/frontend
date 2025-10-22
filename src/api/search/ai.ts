@@ -67,9 +67,10 @@ export type MessageResponse = {
   status: { step: string; message: string };
 };
 
-export type StateResponse = {
-  state: Record<string, any>;
-};
+export type StateHistoryUser = { role: "user"; text: string; ts: number };
+export type StateHistoryAssistant = { role: "assistant"; plan: Plan; ts: number };
+export type StateSnapshot = { history?: Array<StateHistoryUser | StateHistoryAssistant> };
+export type StateResponse = { state: StateSnapshot };
 
 const BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
