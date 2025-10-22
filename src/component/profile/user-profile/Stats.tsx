@@ -1,16 +1,12 @@
 import ProfileImage from "./ProfileImage";
 import * as S from "./Stats.styles"
-type Props = {
-    userInfo: number;
-}
 
-export default function Stats ({userInfo}: Props){
-    const image=""
-    // const image = "/mind-test-image/mind-test-image.png"
+export default function Stats (){
+    const image = "/mind-test-image/mind-test-image.png"
 
     return(
          <S.StatsWrap>
-            <ProfileImage userInfo={userInfo} image={image} />
+            <ProfileImage image={image} />
             <S.List>
                 <S.ListItem>
                     <S.Caption>게시물</S.Caption>

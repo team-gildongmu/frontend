@@ -20,12 +20,15 @@ import { useLanguages } from "@/hooks/useLang";
 
 import { Font } from "@/styles/Typography";
 import { CenterRow } from "@/styles/BaseComponents";
+import useAuth from "@/hooks/useAuth";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
   const [isStampModalOpen, setIsStampModalOpen] = useState(false);
   const { languages, currentLanguage } = useLanguages();
+  const { getUserToken } = useAuth();
+  const token = getUserToken();
 
   const languageChange = useCallback(
     async (lang: string) => {
@@ -67,7 +70,9 @@ export const Header = () => {
       </HeaderLogo>
 
       <CenterRow gridGap="10px" width="auto" flexWrap="nowrap">
-        <StampDetectBtn onClick={() => setIsStampModalOpen(true)} />
+        {!!token && (
+          <StampDetectBtn onClick={() => setIsStampModalOpen(true)} />
+        )}
         <LanguageBtn
           onClick={() => !isChanging && setIsOpen((prev) => !prev)}
           disabled={isChanging}

@@ -11,13 +11,12 @@ interface Props {
 export default function ProfileScreen({ id }: Props) {
   const userInfo = 2;
   console.log("id 확인", id);
+
   return (
     <div>
       <ProfileHeader userInfo={userInfo} />
-      <Stats userInfo={userInfo} />
+      <Stats />
       <Description />
-
-      {/* TODO: 여기에 캘린더 부분 넣으면 됩니다! */}
       <ReviewCalendar />
     </div>
   );

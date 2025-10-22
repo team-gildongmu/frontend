@@ -3,42 +3,48 @@ import Image from "next/image";
 import * as C from "./MindCard.styles";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
+import useGetReviewDetailQuery from "@/queries/travel/useGetReviewDetail";
+import LoadingSpinner from "@/component/common/LoadingSpinner";
+import Empty from "@/component/common/Empty";
 
-type MindCardProps = {
-  id: number;
-  title: string;
-  score: number;
-  date: string;
-  weather: string;
-  image: string;
-};
+type Props = {
+  key : number, 
+  id : number
+}
 
-export function MindCard({
-  id,
-  title,
-  score,
-  date,
-  weather,
-  image,
-}: MindCardProps) {
+export function MindCard({key, id}: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  // TODO: key 수정필요
+  console.log("key", key)
+  const { t } = useTranslation();
+  const { data: listItemData, isLoading } = useGetReviewDetailQuery(id);
+      
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+  
+  if (!listItemData) {
+    return <Empty text={t("mind.loadingData")} />;
+  }
 
   return (
     <C.Wrap>
       <C.TitleWrap>
         <C.Title__l onClick={() => router.push(`/mind/${id}`)}>
-          <C.Title>{title}</C.Title>
+          <C.Title>{listItemData.title}</C.Title>
           <C.ScoreWrap>
             {[...Array(5)].map((_, index) => (
-              <C.Score key={index} filled={index < score}>
+              <C.Score key={index} filled={index < listItemData.score}>
                 ★
               </C.Score>
             ))}
           </C.ScoreWrap>
           <C.Date>
             <span>
-              {date}, {weather}
+              {listItemData.date}, {listItemData.weather}
             </span>
           </C.Date>
         </C.Title__l>
@@ -54,7 +60,7 @@ export function MindCard({
         </C.Title__r>
       </C.TitleWrap>
       <Image
-        src={image}
+        src={listItemData.image}
         width={500}
         height={300}
         alt="일기 사진"
