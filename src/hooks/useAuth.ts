@@ -22,6 +22,11 @@ export default function useAuth() {
       path: "/",
       expires: expirationDate,
     });
+
+    if (typeof window !== 'undefined') {
+      document.cookie = `${C.AUTH_TOKEN_KEY}=${token}; path=/; expires=${expirationDate.toUTCString()}`;
+      document.cookie = `${C.REFRESH_TOKEN_KEY}=${refreshToken}; path=/; expires=${expirationDate.toUTCString()}`;
+    }
   };
 
   const logout = (redirect = "/") => {

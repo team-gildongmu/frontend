@@ -1,10 +1,14 @@
-"use client"
+"use client";
 
-import SettingHeader from "@/component/profile/settings/list/SettingHeader"
+import SettingHeader from "@/component/profile/settings/list/SettingHeader";
 import { AccountActions } from "@/component/profile/settings/update/AccountActions";
-import ProfileUpdate from "@/component/profile/settings/update/ProfileUpdate"
+import ProfileUpdate from "@/component/profile/settings/update/ProfileUpdate";
 import { SubmitButton } from "@/component/profile/settings/update/SubmitButton";
 import UserInfoForm from "@/component/profile/settings/update/UserInfoForm";
+import useDeleteProfileMutation from "@/queries/profile/useDeleteProfileMutation";
+import useGetMyProfile from "@/queries/profile/useGetMyProfile";
+import usePatchProfileMutation from "@/queries/profile/usePatchProfileMutation";
+import { MyProfileRequest } from "@/types/profile";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 
@@ -14,67 +18,81 @@ const PageWrap = styled.main`
   flex-direction: column;
 `;
 
+export default function ProfileUpdateScreen() {
+  const { data } = useGetMyProfile();
 
-export default function ProfileUpdateScreen(){
-    const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-
-  const [comment, setComment] = useState<string>("천천히 걸어야 비로소 보이는 것들이 있다.");
-  const [nickname, setNickname] = useState<string>("길동무 친구들");
-  const [userId, setUserId] = useState<string>("abc@kakaoemail.com"); // 예: 아이디(이메일)
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [intro, setIntro] = useState<string>("");
+  const [nickname, setNickname] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
-    if (!avatarFile) {
-      setAvatarPreview(null);
-      return;
+    if (data) {
+      setIntro(data.intro ?? "");
+      setNickname(data.nickname ?? "");
+      setEmail(data.email ?? "");
     }
-    const url = URL.createObjectURL(avatarFile);
-    setAvatarPreview(url);
-    return () => {
-      URL.revokeObjectURL(url);
-    };
-  }, [avatarFile]);
+  }, [data]);
 
-  // 변경사항 체크(간단)
+  console.log("user data", data);
+
+  const { mutate: patchProfile } = usePatchProfileMutation();
+  const { mutate: deleteProfile } = useDeleteProfileMutation();
+
   const hasChange =
-    !!avatarFile || comment !== "천천히 걸어야 비로소 보이는 것들이 있다." || nickname !== "길동무 친구들";
+    !!photoUrl ||
+    intro !== (data?.intro ?? "") ||
+    nickname !== (data?.nickname ?? "")
 
   const handleSubmit = () => {
-    // TODO: 실제 API 호출 (FormData로 avatarFile과 텍스트 필드 전송)
-    const payload = {
-      nickname,
-      userId,
-      comment,
-      // avatarFile: avatarFile (파일은 FormData로)
-    };
-    console.log("submit payload", payload, avatarFile);
-    alert("변경 요청이 콘솔에 출력됩니다. (실제 API 연결 필요)");
+    const payload: Partial<MyProfileRequest> = {};
+     if (nickname !== (data?.nickname ?? "")) payload.nickname = nickname;
+    if (photoUrl !== (data?.profile_photo_url ?? "")) payload.profile_photo_url = photoUrl;
+    if (intro !== (data?.intro ?? "")) payload.intro = intro;
+
+    patchProfile(payload, {
+      onSuccess: () => {
+        alert("프로필이 성공적으로 수정되었습니다.");
+      },
+      onError: (error) => {
+        console.error(error);
+        alert("프로필 수정 중 오류가 발생했습니다.");
+      },
+    });
   };
 
   const handleWithdraw = () => {
-    if (confirm("정말로 회원탈퇴 하시겠습니까?")) {
-      // TODO: 회원탈퇴 API 호출
-      alert("회원탈퇴 처리 (샘플)");
+    if (window.confirm("정말로 회원탈퇴 하시겠습니까?")) {
+      deleteProfile(undefined, {
+        onSuccess: () => {
+          alert("회원탈퇴가 완료되었습니다.");
+        },
+        onError: (error) => {
+          console.error(error);
+          alert("회원탈퇴 중 오류가 발생했습니다.");
+        },
+      });
     }
   };
 
-    return (
-       <PageWrap>
-        <SettingHeader />
-        <ProfileUpdate 
-            avatarPreview={avatarPreview}
-            onImageSelected={(file) => setAvatarFile(file)}
-            comment={comment}
-            onCommentChange={setComment}/>
-        <UserInfoForm 
-            nickname={nickname}
-            userId={userId}
-            onChange={(field, value) => {
-            if (field === "nickname") setNickname(value);
-            if (field === "userId") setUserId(value);
-            }}/>
-        <AccountActions onWithdraw={handleWithdraw} />
-        <SubmitButton disabled={!hasChange} onClick={handleSubmit} />
-       </PageWrap>
-    )
+  return (
+    <PageWrap>
+      <SettingHeader />
+      <ProfileUpdate
+        profilePreview={photoUrl}
+        onImageSelected={(file) => setPhotoUrl(file)}
+        intro={intro}
+        onIntroChange={setIntro}
+      />
+      <UserInfoForm
+        nickname={nickname}
+        email={email}
+        onChange={(field, value) => {
+          if (field === "nickname") setNickname(value);
+        }}
+      />
+      <AccountActions onWithdraw={handleWithdraw} />
+      <SubmitButton disabled={!hasChange} onClick={handleSubmit} />
+    </PageWrap>
+  );
 }

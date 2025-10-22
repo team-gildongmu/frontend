@@ -3,13 +3,11 @@ import * as P from "./ProfileImage.styles"
 import Image from "next/image"
 
 type Props = {
-    //해당 유저의 고유 id 나 뭔가를 받아온 후 이미지를 꺼내서 사용하던가.
-    userInfo: number;
-    image: string;
+    image: string
 }
 
-export default function ProfileImage({userInfo, image}: Props){
-    console.log("userInfo", userInfo)
+
+export default function ProfileImage({image} : Props){
     return (
         <P.ImageWrap >
             {image ? 
