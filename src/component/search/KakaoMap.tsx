@@ -22,11 +22,11 @@ type Props = {
   onLocateClick?: () => void;
 };
 
-// declare global {
-//   interface Window {
-//     kakao: any;
-//   }
-// }
+type KakaoLike = { maps: KM_Constructors & { load?: (cb: () => void) => void } };
+
+function getKakao(): KakaoLike | undefined {
+  return (window as unknown as { kakao?: KakaoLike }).kakao;
+}
 
 interface KM_LatLng { __brand: "LatLng"; }  
 interface KM_Size   { __brand: "Size"; } 
@@ -61,12 +61,6 @@ interface KM_Constructors {
   Map: new (container: HTMLElement, opts: { center: KM_LatLng; level: number }) => KM_Map;
   event: { addListener(obj: KM_Marker, type: string, handler: () => void): void };
   load: (cb: () => void) => void;
-}
-type KakaoMaps = KM_Constructors;
-
-type KakaoWindow = { kakao: { maps: KakaoMaps } };
-declare global {
-  interface Window { kakao?: KakaoWindow["kakao"]; }
 }
 
 const COLORS: Record<NonNullable<MapMarker["type"]>, string> = {
@@ -120,7 +114,8 @@ export default function KakaoMap({
   useEffect(() => {
     if (!ready || !mapRef.current || initTriedRef.current) return;
 
-    const { kakao } = window as KakaoWindow;
+    const kakao = getKakao(); 
+    if (!kakao) return;
     const init = () => {
       const centerLatLng = new kakao.maps.LatLng(center.lat, center.lng);
       const map = new kakao.maps.Map(mapRef.current!, { center: centerLatLng, level: 5 });
@@ -145,7 +140,8 @@ export default function KakaoMap({
   // center 이동
   useEffect(() => {
     if (!mapObjRef.current || !ready) return;
-    const { kakao } = window as KakaoWindow;
+    const kakao = getKakao(); 
+    if (!kakao) return;
     mapObjRef.current.setCenter(new kakao.maps.LatLng(center.lat, center.lng));
   }, [center, ready]);
 
@@ -164,7 +160,8 @@ export default function KakaoMap({
   }, [myLocation, showMyLocation, ready]);
 
   function getMarkerImageByType(type: NonNullable<MapMarker["type"]>) {
-    const { kakao } = window as KakaoWindow;
+    const kakao = getKakao(); 
+    if (!kakao) return;
     const size = new kakao.maps.Size(36, 36);
     const offset = new kakao.maps.Point(18, 34);
     return new kakao.maps.MarkerImage(markerImageDataURL(COLORS[type]), size, { offset });
@@ -225,7 +222,8 @@ export default function KakaoMap({
   }
 
   function showOverlay(item: MapMarker, markerObj: KM_Marker) {
-    const { kakao } = window as KakaoWindow;
+    const kakao = getKakao(); 
+    if (!kakao) return;
     const map = mapObjRef.current;
     if (!map) return;
 
@@ -255,7 +253,8 @@ export default function KakaoMap({
   }
 
   function applyMarkers() {
-    const { kakao } = window as KakaoWindow;
+    const kakao = getKakao(); 
+    if (!kakao) return;
     const map = mapObjRef.current;
     if (!map || !kakao?.maps?.Marker) return;
 
@@ -294,7 +293,8 @@ export default function KakaoMap({
   }
 
   function applyMyLocation() {
-    const { kakao } = window as KakaoWindow;
+    const kakao = getKakao(); 
+    if (!kakao) return;
     const map = mapObjRef.current;
     if (!map || !showMyLocation || !myLocation) {
       if (myMarkerRef.current) { myMarkerRef.current.setMap(null); myMarkerRef.current = null; }
@@ -328,7 +328,8 @@ export default function KakaoMap({
 
   const handleLocate = () => {
     onLocateClick?.();
-    const { kakao } = window as KakaoWindow;
+    const kakao = getKakao(); 
+    if (!kakao) return;
     const map = mapObjRef.current;
     if (map && myLocation) {
       const pos = new kakao.maps.LatLng(myLocation.lat, myLocation.lng);
