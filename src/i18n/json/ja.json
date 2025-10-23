@@ -97,12 +97,12 @@
     }
   },
   "mind": {
-    "setting": " setting",
+    "setting": " 設定",
      "weather": {
-      "sunny": "맑음",
-      "cloudy" : "흐림",
-      "rainy": "비",
-      "snowy" : "눈"
+      "sunny": "晴れ",
+      "cloudy" : "曇り",
+      "rainy": "雨",
+      "snowy" : "雪"
     },
   "chat": {
     "greetings": [
