@@ -96,6 +96,46 @@
       "yearSuffix": "년"
     }
   },
+  "chat": {
+      "greetings": [
+        "오늘은 어떤 기분이세요? 신나게 놀고 싶으세요, 아니면 푹 쉬면서 힐링하고 싶으세요?",
+        "가고 싶은 장소가 있나요? 없다면 근처에서 알짜 코스도 추천해드릴 수 있어요 😊",
+        "먹방, 힐링, 액티비티! 지금 땡기는 여행 테마가 뭐예요?",
+        "오늘 하루, 어디서 어떻게 보내고 싶으세요? 제가 딱 맞는 코스를 짜드릴게요 ✨",
+        "친구랑 놀고 싶으세요? 혼자 힐링하고 싶으세요? 분위기만 말해주셔도 추천해드려요!"
+      ],
+      "newChat": "새 채팅하기",
+      "inputPlaceholder": "오늘은 어디로 떠나고 싶으세요? (예) 홍대에서 2일코스 + 맛집 추천해줘",
+      "status": { "waiting": "준비 중…" },
+      "errorGeneric": "문제가 발생했어요. 잠시 후 다시 시도해 주세요.",
+      "actions": { "confirmRoute": "루트 확정하기" }
+    },
+    "plan": {
+      "day": "Day {{n}}",
+      "stayRecommendations": "숙박 추천",
+      "summary": "✨ 요약",
+      "labels": { "place": "장소", "meal": "맛집", "stay": "숙박" }
+    },
+    "modal": {
+      "savingTitle": "여행 루트를 저장하고 있습니다",
+      "doneTitle": "루트 스탬프가 생성되었습니다!",
+      "confirm": "확인",
+      "errorTitle": "저장에 실패했어요",
+      "errorDesc": "잠시 후 다시 시도해주세요.",
+      "close": "닫기",
+      "retry": "다시 시도"
+    },
+    "provider": {
+      "tourapiTitle": "KTO(TourAPI) 데이터",
+      "googleTitle": "Google 데이터",
+      "tourapi": "TourAPI",
+      "google": "Google"
+    },
+    "mymap": {
+      "myLocation": "내 위치",
+      "locateBtnTitle": "내 위치로 이동",
+      "legend": { "place": "장소", "meal": "맛집", "stay": "숙박", "my": "내 위치" }
+    },
   "mind": {
     "loadingData": "여행 후기 데이터를 불러오는 중입니다."
     

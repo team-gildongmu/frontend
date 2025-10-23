@@ -1,10 +1,13 @@
 export type Origin = { mapX: number; mapY: number };
 
+export type Lang = "ko" | "en" | "ja";
+
 export type StartSessionRequest = {
   origin?: Origin;
   days?: number;
   mode?: "walk" | "drive" | "transit";
   tags?: string[];
+  lang?: Lang;
 };
 
 export type StartSessionResponse = {
@@ -17,6 +20,7 @@ export type MessageRequest = {
   days?: number | null;
   mode?: "walk" | "drive" | "transit" | null;
   tags?: string[] | null;
+  lang?: Lang;
 };
 
 export type Coords = { mapx: number | null; mapy: number | null };
@@ -63,9 +67,10 @@ export type MessageResponse = {
   status: { step: string; message: string };
 };
 
-export type StateResponse = {
-  state: Record<string, any>;
-};
+export type StateHistoryUser = { role: "user"; text: string; ts: number };
+export type StateHistoryAssistant = { role: "assistant"; plan: Plan; ts: number };
+export type StateSnapshot = { history?: Array<StateHistoryUser | StateHistoryAssistant> };
+export type StateResponse = { state: StateSnapshot };
 
 const BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
@@ -99,10 +104,12 @@ export async function startSession(
   body: StartSessionRequest,
   token: string
 ): Promise<StartSessionResponse> {
+  const lang = body.lang || "ko";
   return apiFetch<StartSessionResponse>("/ai/session/start", {
     method: "POST",
     body: JSON.stringify(body),
     token,
+    headers: lang ? { "Accept-Language": lang } : undefined,
   });
 }
 
@@ -111,10 +118,12 @@ export async function sendMessage(
   body: MessageRequest,
   token: string
 ): Promise<MessageResponse> {
+  const lang = body.lang || "ko";
   return apiFetch<MessageResponse>(`/ai/session/${sessionId}/message`, {
     method: "POST",
     body: JSON.stringify(body),
     token,
+    headers: lang ? { "Accept-Language": lang } : undefined,
   });
 }
 

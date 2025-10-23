@@ -10,7 +10,27 @@ import {
 } from "@/types/travel";
 
 // 여행 로그 생성 요청 페이로드
-export type TravelLogCreatePayload = any;
+// export type TravelLogCreatePayload = any;
+export type TravelLogCreateCoords = { mapx: number; mapy: number };
+export type TravelLogCreateSegment = {
+  type?: "POI" | "MEAL" | "STAY" | "MY";
+  title: string;
+  desc?: string;
+  reason?: string;
+  image?: string;
+  coords: TravelLogCreateCoords;
+  provider?: "tourapi" | "google";
+  source?: string;
+};
+export type TravelLogCreatePayload = {
+  title: string;
+  subtitle: string;
+  theme?: string | string[];
+  summary?: string;
+  keywords?: string[];
+  days: Array<{ segments: TravelLogCreateSegment[] }>;
+  stays?: TravelLogCreateSegment[];
+};
 // 응답 타입 
 export type TravelLogCreateResponse = { id: number };
 
@@ -18,13 +38,20 @@ export type TravelLogCreateResponse = { id: number };
  * @createTravelLog 확정 로그 생성 api
  * @returns {Promise<TravelLogCreateResponse>} - 생성된 로그 id
  */
-export const createTravelLog = async (payload: any) => {
+export const createTravelLog = async (
+  payload: TravelLogCreatePayload
+): Promise<TravelLogCreateResponse> => {
   try {
     const res = await baseApi.post<TravelLogCreateResponse>("/travel/log", payload);
     return res.data;
-  } catch (err: any) {
+  } catch (err: unknown) {
     // 422면 pydantic 에러가 detail에 들어옴
-    const detail = err?.response?.data ?? err?.message;
+    // const detail = err?.response?.data ?? err?.message;
+    let detail: unknown = "Request failed";
+    if (typeof err === "object" && err !== null) {
+      const e = err as { response?: { data?: unknown }; message?: string };
+      detail = e.response?.data ?? e.message ?? detail;
+    }    
     console.log(detail);
     throw new Error(typeof detail === "string" ? detail : JSON.stringify(detail));
   }
@@ -43,7 +70,7 @@ export const getLogList = async (theme?: string): Promise<TravelLogItem[]> => {
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(error.message);
+      throw error;
     } else {
       throw new Error("An unknown error occurred");
     }
