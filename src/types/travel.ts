@@ -81,19 +81,35 @@ export type MapTravelLocation = {
 export type TravelReviewDetail = {
   travel_review_id: number;
   title: string;
-  score: number;
-  // 사용자 기분 - mood
+  ai_rating: number;
+  start_date: string;
+  end_date: string;
+  weather: keyof typeof WEATHER_LABELS;
   mood: number;
-  date: string;
-  contents: string;
-  weather: string;
-  image: string;
+  tags: string[]; 
+  note: string;
+  images: string[];
 };
 
 
 // 여행 리뷰 업로드 데이터
 export type TravelReviewPost = {
     travel_log_id: number;
+    title: string;
+    ai_rating: number;
+    started_at: string;
+    finished_at: string;
+    weather: keyof typeof WEATHER_LABELS;
+    mood: number;
+    tag: string[]; 
+    note: string;
+    song: string;
+    picture?: File[];
+}
+
+// 여행 리뷰 수정 데이터
+export type TravelReviewPut = {
+    review_id: number;
     title: string;
     ai_rating: number;
     started_at: string;

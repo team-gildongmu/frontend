@@ -137,7 +137,14 @@
       "legend": { "place": "장소", "meal": "맛집", "stay": "숙박", "my": "내 위치" }
     },
   "mind": {
+      "setting": " 설정",
+      "weather": {
+        "sunny": "맑음",
+        "cloudy" : "흐림",
+        "rainy": "비",
+        "snowy" : "눈"
+      }
+    },
     "loadingData": "여행 후기 데이터를 불러오는 중입니다."
     
   }
-}

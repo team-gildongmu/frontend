@@ -3,20 +3,17 @@ import ReviewCalendar from "@/component/profile/ReviewCalendar";
 import Description from "@/component/profile/user-profile/Description";
 import ProfileHeader from "@/component/profile/user-profile/ProfileHeader";
 import Stats from "@/component/profile/user-profile/Stats";
+import useGetMyProfile from "@/queries/profile/useGetMyProfile";
 
-interface Props {
-  id: number;
-}
-
-export default function ProfileScreen({ id }: Props) {
-  const userInfo = 2;
-  console.log("id 확인", id);
+export default function ProfileScreen() {
+  const { data } = useGetMyProfile();
+  if(data == undefined) return;
 
   return (
     <div>
-      <ProfileHeader userInfo={userInfo} />
+      <ProfileHeader nickname={data.nickname} />
       <Stats />
-      <Description />
+      <Description nickname={data.nickname} intro={data.intro}/>
       <ReviewCalendar />
     </div>
   );

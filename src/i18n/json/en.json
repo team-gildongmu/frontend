@@ -135,5 +135,14 @@
       "myLocation": "My location",
       "locateBtnTitle": "Go to my location",
       "legend": { "place": "Place", "meal": "Food", "stay": "Stay", "my": "My location" }
-    }
+    },
+    "mind": {
+        "setting": " setting",
+         "weather": {
+          "sunny": "sunny",
+          "cloudy" : "cloudy",
+          "rainy": "rainy",
+          "snowy" : "snowy"
+        }
+      }
 }

@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   max-width: 987px;
+  width: 80%;
   margin: 2rem auto;
   padding: 2rem;
   background: ${colors.blue_300};
@@ -29,7 +30,8 @@ export const ProgressFill = styled.div<{ percent: number }>`
 
 export const StepBody = styled.div`
   min-height: 200px;
-  min-width: 350px;
+  min-width: 90%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,6 +42,7 @@ export const Title = styled.h2`
   font-size: 1.125rem;
   font-weight: 600;
   margin: 1rem 0;
+  padding: 0 15px;
 `;
 
 export const Description = styled.p`
@@ -85,7 +88,7 @@ export const StarButton = styled.button<{ selected: boolean }>`
 
 export const WeatherWrap = styled.div`
   display: flex;
-  gap: 1.5rem;
+  gap: .5rem;
   margin: 1rem 0;
 `;
 
@@ -145,8 +148,8 @@ export const DateText = styled.div`
 
 export const TagGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .5rem;
 `;
 
 export const TagLabel = styled.label`
@@ -166,7 +169,7 @@ export const TagLabel = styled.label`
   span {
     display: block;
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem .5rem;
     border-radius: 10px;
     border: 1px solid ${colors.gray_200 ?? "#e6e6e6"};
     background: ${colors.white ?? "#fff"};
@@ -190,11 +193,11 @@ export const PreviewGrid = styled.div`
   margin-top: 16px;
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr); // 태블릿 이하에서는 2칸
+    grid-template-columns: repeat(2, 1fr);
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: 1fr; // 모바일에서는 1칸
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -214,6 +217,20 @@ export const Button = styled.button`
   background: ${colors.blue_500};
   color: white;
   padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font: ${Config.variants.t02_m};
+  cursor: pointer;
+  &:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+`;
+
+export const SubmitButton = styled.button`
+  background: ${colors.blue_500};
+  color: white;
+  padding: 0.5rem 0.5rem;
   border: none;
   border-radius: 8px;
   font: ${Config.variants.t02_m};

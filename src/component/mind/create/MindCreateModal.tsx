@@ -8,14 +8,14 @@ import Icon from "@/component/common/IconifyIcon";
 import colors from "@/styles/Colors";
 import { REVIEW_TAG_LABELS, TravelReviewPost, WEATHER_LABELS } from "@/types/travel";
 import { postReview } from "@/api/travel";
+import { useRouter } from "next/navigation";
 
 type CreateModalProps = {
   travel_log_id: number;
 };
 
 export default function CreateModal({ travel_log_id }: CreateModalProps) {
-  // TODO: 나중에 작업
-  console.log("travel_log_id === 나중에 작업", travel_log_id)
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [preview, setPreview] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
     try {
       await postReview({
         ...data,
-        travel_log_id: 1,
+        travel_log_id: travel_log_id,
       });
       setSubmitted(true);
     } catch (error) {
@@ -141,7 +141,7 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
                   />
                 )}
               />
-              <p> / 10</p>
+              <p> {watch("mood")} / 10</p>
             </>
           )}
 
@@ -182,7 +182,7 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
           {step === 5 && (
             <>
               <C.Title>여행을 사진으로 추억하세요!</C.Title>
-              <Controller // 리액트 훅 폼 컨트롤러로 마이그레이션
+              <Controller
                 name="picture"
                 control={control}
                 render={({field}) => (
@@ -195,8 +195,8 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
                         const files = e.target.files;
                         if (files) {
                           const arr = Array.from(files);
-                          field.onChange(arr);      // 훅 폼으로 파일 저장
-                          setPreview(arr.map((f) => URL.createObjectURL(f))); // 미리보기 처리
+                          field.onChange(arr);
+                          setPreview(arr.map((f) => URL.createObjectURL(f)));
                         }
                       }}
                     />
@@ -244,18 +244,25 @@ export default function CreateModal({ travel_log_id }: CreateModalProps) {
 
         {/* Navigation */}
         <C.Nav>
-          {step > 0 && (
+          {step > 0 && !submitted && (
             <C.LButton type="button" onClick={prevStep}>
               <Icon icon="tdesign:chevron-left" width="16" height="16" color={colors.blue_500} />
             </C.LButton>
           )}
-          {step < 8 ? (
-            <C.Button type="button" onClick={() => setStep((s) => Math.min(s + 1, 8))}>
-              다음
-            </C.Button>
+
+          {!submitted ? (
+            step < 8 ? (
+              <C.Button type="button" onClick={() => setStep((s) => Math.min(s + 1, 8))}>
+                다음
+              </C.Button>
+            ) : (
+              <C.SubmitButton type="submit" disabled={loading}>
+                {loading ? "제출중..." : "제출하기"}
+              </C.SubmitButton>
+            )
           ) : (
-            <C.Button type="submit" disabled={loading}>
-              {loading ? "제출중..." : "제출하기"}
+            <C.Button type="button" onClick={() => router.push("/")}>
+              메인으로
             </C.Button>
           )}
         </C.Nav>

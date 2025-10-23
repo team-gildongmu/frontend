@@ -96,6 +96,14 @@
       "yearSuffix": "年"
     }
   },
+  "mind": {
+    "setting": " 設定",
+     "weather": {
+      "sunny": "晴れ",
+      "cloudy" : "曇り",
+      "rainy": "雨",
+      "snowy" : "雪"
+    },
   "chat": {
     "greetings": [
       "今日はどんな気分ですか？ワクワク遊びたいですか？それともゆっくり癒やされたいですか？",
@@ -136,4 +144,5 @@
     "locateBtnTitle": "現在地へ移動",
     "legend": { "place": "スポット", "meal": "グルメ", "stay": "宿泊", "my": "現在地" }
   }
+}
 }

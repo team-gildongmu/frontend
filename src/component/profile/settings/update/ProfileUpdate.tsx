@@ -5,8 +5,8 @@ import * as P from "./ProfileUpdate.styles"
 import ProfileImage from "../../user-profile/ProfileImage";
 
 type Props = {
-  profilePreview?: string | null;
-  onImageSelected: (file: string | null) => void;
+  profilePreview?: File | null;
+  onImageSelected: (file: File | null) => void;
   intro: string;
   onIntroChange: (text: string) => void;
 }
@@ -24,7 +24,7 @@ export default function ProfileUpdate({
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.value ?? null;
+    const file = e.target.files?.[0] ?? null;
     onImageSelected(file);
   };
 

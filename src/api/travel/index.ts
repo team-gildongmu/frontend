@@ -7,6 +7,7 @@ import {
   TravelReviewDetail,
   TravelReviewItem,
   TravelReviewPost,
+  TravelReviewPut,
 } from "@/types/travel";
 
 // 여행 로그 생성 요청 페이로드
@@ -205,17 +206,11 @@ export const postReview = async (reviewData: TravelReviewPost) => {
     formData.append("mood", reviewData.mood.toString());
     formData.append("note", reviewData.note);
     formData.append("song", reviewData.song);
-
     // 태그
     reviewData.tag.forEach((t) => formData.append("tag", t));
-
     // 파일
     reviewData.picture?.forEach((file) => formData.append("picture", file));
-
-    const response = await baseApi.post(`/travel/review`, formData);
-    console.log("리뷰 폼데이터 전송 확인 콘솔: " + response.data);
-    
-    return response.data;
+    await baseApi.post(`/travel/review`, formData);
     
   } catch (error) {
     if (error instanceof Error) {
@@ -227,11 +222,43 @@ export const postReview = async (reviewData: TravelReviewPost) => {
 };
 
 /**
+ * @putReview 여행 리뷰 수정 api
+ * @param {object} reviewData - 리뷰 내용 (ex: { content, rating })
+ */
+export const putReview = async (reviewData: TravelReviewPut) => {
+  try {
+    const formData = new FormData();
+
+    formData.append("review_id", reviewData.review_id.toString());
+    formData.append("title", reviewData.title);
+    formData.append("ai_rating", reviewData.ai_rating.toString());
+    formData.append("started_at", reviewData.started_at);
+    formData.append("finished_at", reviewData.finished_at);
+    formData.append("weather", reviewData.weather);
+    formData.append("mood", reviewData.mood.toString());
+    formData.append("note", reviewData.note);
+    formData.append("song", reviewData.song);
+    reviewData.tag.forEach((t) => formData.append("tag", t));
+    reviewData.picture?.forEach((file) => formData.append("picture", file));
+
+    await baseApi.put(`/travel/review`, formData);
+    
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+
+/**
  * @deleteReview 여행 리뷰 삭제 api
  */
-export const deleteReview = async (travel_review_id: number) => {
+export const deleteReview = async (review_id: number) => {
   try {
-    await baseApi.delete(`/travel/review?review_id=${travel_review_id}`);
+    await baseApi.delete(`/travel/review/${review_id}`);
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);
