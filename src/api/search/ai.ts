@@ -73,8 +73,7 @@ export type StateSnapshot = { history?: Array<StateHistoryUser | StateHistoryAss
 export type StateResponse = { state: StateSnapshot };
 
 const BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
-  "http://localhost:8000";
+  process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, "")
 
 async function apiFetch<T>(
   path: string,
