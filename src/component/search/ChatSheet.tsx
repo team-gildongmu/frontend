@@ -61,7 +61,7 @@ type Props = {
 };
 
 export default function ChatSheet({ center, onPlan }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   const { getUserToken } = useAuth();
   const token = getUserToken();
@@ -75,6 +75,19 @@ export default function ChatSheet({ center, onPlan }: Props) {
 
   const latestPlanRef = useRef<Plan | null>(null);
 
+  const GREETING_FALLBACK =
+    "오늘은 어떤 기분이세요? 신나게 놀고 싶으세요, 아니면 푹 쉬면서 힐링하고 싶으세요?"; 
+
+  const getGreetings = () =>
+    (t("chat.greetings", { returnObjects: true }) as string[]) || [];
+
+  const greetingByIndex = (idx: number) => {
+    const list = getGreetings();
+    if (!Array.isArray(list) || list.length === 0) return GREETING_FALLBACK;
+    const safe = ((idx % list.length) + list.length) % list.length;
+    return list[safe];
+  };
+
   const handleNewChat = () => {
     // SSE 끊기
     if (sseRef.current) {
@@ -85,8 +98,12 @@ export default function ChatSheet({ center, onPlan }: Props) {
     setSessionId(null);
     try { localStorage.removeItem(SID_KEY); } catch {}
 
+    const n = getGreetings().length;
+    const nextIdx = n > 0 ? Math.floor(Math.random() * n) : 0;
+    setGreetIdx(nextIdx);
+
     // 채팅/상태 초기화
-    setMsgs([{ role: "assistant", text: pickGreeting(), ts: Date.now() }]);
+    setMsgs([{ role: "assistant", text: greetingByIndex(nextIdx), ts: Date.now() }]);
     setHasPlan(false);
     setRunning(null);
   };
@@ -101,24 +118,29 @@ export default function ChatSheet({ center, onPlan }: Props) {
   const dragRef = useRef(false);
 
 // 랜덤 안내 멘트 목록
-const pickGreeting = () => {
-  const list = t("chat.greetings", { returnObjects: true }) as string[]; // ko/en/ja 배열
-  const arr = Array.isArray(list) && list.length ? list : [
-    // 안전장치(팩토리 기본값)
-    "오늘은 어떤 기분이세요? 신나게 놀고 싶으세요, 아니면 푹 쉬면서 힐링하고 싶으세요?"
-  ];
-  return arr[Math.floor(Math.random() * arr.length)];
-};
+// const pickGreeting = () => {
+//   const list = t("chat.greetings", { returnObjects: true }) as string[]; // ko/en/ja 배열
+//   const arr = Array.isArray(list) && list.length ? list : [
+//     // 안전장치(팩토리 기본값)
+//     "오늘은 어떤 기분이세요? 신나게 놀고 싶으세요, 아니면 푹 쉬면서 힐링하고 싶으세요?"
+//   ];
+//   return arr[Math.floor(Math.random() * arr.length)];
+// };
 
 // 채팅
-const [input, setInput] = useState("");
-const [msgs, setMsgs] = useState<ChatMsg[]>([
-  {
-    role: "assistant",
-    text: pickGreeting(),
-    ts: Date.now(), // ✅ number 로 통일
-  },
-]);
+  const [input, setInput] = useState("");
+  const [greetIdx, setGreetIdx] = useState(() => {
+    const n = getGreetings().length;
+    return n > 0 ? Math.floor(Math.random() * n) : 0;
+  });
+
+  const [msgs, setMsgs] = useState<ChatMsg[]>([
+    {
+      role: "assistant",
+      text: greetingByIndex(greetIdx),
+      ts: Date.now(), // ✅ number 로 통일
+    },
+  ]);
 
   // 진행 상태 (DONE 표시 X, RESULT 오면 로더 숨김)
   const [running, setRunning] = useState<null | { step: string; message: string }>(null);
@@ -246,6 +268,20 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
     } catch {}
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]); // token 준비되면 1회 시도
+
+  useEffect(() => {
+  setMsgs((m) => {
+    if (m.length === 1 && m[0].role === "assistant" && !m[0].plan) {
+      const list = (t("chat.greetings", { returnObjects: true }) as string[]) || [];
+      const fallback =
+        "오늘은 어떤 기분이세요? 신나게 놀고 싶으세요, 아니면 푹 쉬면서 힐링하고 싶으세요?";
+      const safeIdx = list.length ? ((greetIdx % list.length) + list.length) % list.length : 0;
+      const text = list[safeIdx] ?? fallback;
+      return [{ ...m[0], text }];
+    }
+    return m;
+  });
+}, [i18n.language, greetIdx, t]);
 
   const ensureSource = (title?: string, src?: string) =>
     src && src.trim().length > 0
@@ -459,7 +495,11 @@ const [msgs, setMsgs] = useState<ChatMsg[]>([
     try { localStorage.removeItem(SID_KEY); } catch {}
     if (sseRef.current) { sseRef.current.close(); sseRef.current = null; }
     setSessionId(null);
-    setMsgs([{ role: "assistant", text: pickGreeting(), ts: Date.now() }]);
+
+    const n = getGreetings().length;
+    const nextIdx = n > 0 ? Math.floor(Math.random() * n) : 0;
+    setGreetIdx(nextIdx);
+    setMsgs([{ role: "assistant", text: greetingByIndex(nextIdx), ts: Date.now() }]);
     router.push("/");
   };
   
