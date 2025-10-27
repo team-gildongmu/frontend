@@ -98,6 +98,7 @@
   },
   "mind": {
     "setting": " 設定",
+    "writeReview": "ルートレビューを書く",
      "weather": {
       "sunny": "晴れ",
       "cloudy" : "曇り",

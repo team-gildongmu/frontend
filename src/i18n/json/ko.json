@@ -138,6 +138,7 @@
     },
   "mind": {
       "setting": " 설정",
+      "writeReview": "루트 후기 작성하기",
       "weather": {
         "sunny": "맑음",
         "cloudy" : "흐림",

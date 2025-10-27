@@ -138,6 +138,7 @@
     },
     "mind": {
         "setting": " setting",
+        "writeReview": "Write route review",
          "weather": {
           "sunny": "sunny",
           "cloudy" : "cloudy",

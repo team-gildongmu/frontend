@@ -5,15 +5,25 @@ import { useRouter } from "next/navigation";
 import Icon from "@/component/common/IconifyIcon";
 import styled from "styled-components";
 import { Config } from "@/styles/FontVariants";
+import { useTranslation } from "react-i18next";
 
 export default function PlusButton({ logId }: { logId: number }) {
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
-    <PlusButtonWrap>
-      <Icon icon="tdesign:edit-2" width="20" height="20" color={colors.blue_500} />
-      <FloatingButton onClick={() => {
-          router.push(`/mind/create?travel_log_id=${logId}`)}}>루트 후기 작성하기</FloatingButton>
+    <PlusButtonWrap
+      onClick={() => {
+        router.push(`/mind/create?travel_log_id=${logId}`);
+      }}
+    >
+      <Icon
+        icon="tdesign:edit-2"
+        width="20"
+        height="20"
+        color={colors.blue_500}
+      />
+      <FloatingButton>{t("mind.writeReview")}</FloatingButton>
     </PlusButtonWrap>
   );
 }
@@ -35,7 +45,7 @@ const PlusButtonWrap = styled.button`
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 71, 171, 0.2);
   }
-`
+`;
 
 const FloatingButton = styled.span`
   display: block;
